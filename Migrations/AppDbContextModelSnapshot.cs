@@ -859,10 +859,22 @@ namespace GuidanceOfficeAPI.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("GradeYear")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
+
+                    b.Property<string>("Program")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<string>("StudentNumber")
                         .IsRequired()

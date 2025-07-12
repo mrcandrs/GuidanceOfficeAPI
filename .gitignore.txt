@@ -1,0 +1,28 @@
+# Ignore Visual Studio folder
+.vs/
+
+# Build results
+bin/
+obj/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# ASP.NET Core secrets
+secrets.json
+
+# Rider
+.idea/
+
+# Node (if using front-end)
+node_modules/
+
+# Logs
+*.log
+
+# OS-specific
+Thumbs.db
+.DS_Store
