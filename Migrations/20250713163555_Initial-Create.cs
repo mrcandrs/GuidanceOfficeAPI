@@ -78,7 +78,7 @@ namespace GuidanceOfficeAPI.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     GradeYear = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Email = table.Column<string>(type: "longtext", nullable: false)
+                    Email = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Username = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -784,6 +784,18 @@ namespace GuidanceOfficeAPI.Migrations
                 name: "IX_Siblings_InventoryFormId",
                 table: "Siblings",
                 column: "InventoryFormId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Students_Email",
+                table: "Students",
+                column: "Email",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Students_StudentNumber",
+                table: "Students",
+                column: "StudentNumber",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_WorkExperiences_InventoryFormId",

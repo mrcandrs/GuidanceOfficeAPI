@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using GuidanceOfficeAPI.Data;
 using GuidanceOfficeAPI.Dtos;
 using GuidanceOfficeAPI.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace GuidanceOfficeAPI.Controllers
 {
@@ -12,11 +13,14 @@ namespace GuidanceOfficeAPI.Controllers
     public class StudentAuthController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly ILogger<StudentAuthController> _logger;
 
-        public StudentAuthController(AppDbContext context)
+        public StudentAuthController(AppDbContext context, ILogger<StudentAuthController> logger)
         {
             _context = context;
+            _logger = logger;
         }
+
 
         private static DateTime ConvertToManilaTime(DateTime utcDateTime)
         {
@@ -35,33 +39,55 @@ namespace GuidanceOfficeAPI.Controllers
                 return BadRequest(new { message = "Validation failed", errors });
             }
 
-            // Save student
-            _context.Students.Add(dto.Student);
-            await _context.SaveChangesAsync();
+            try
+            {
+                // 🔒 Check for duplicate email or student number
+                bool emailExists = _context.Students.Any(s => s.Email == dto.Student.Email);
+                bool studentNumberExists = _context.Students.Any(s => s.StudentNumber == dto.Student.StudentNumber);
 
-            int studentId = dto.Student.StudentId;
+                if (emailExists || studentNumberExists)
+                {
+                    return BadRequest(new
+                    {
+                        message = "Duplicate found.",
+                        emailExists,
+                        studentNumberExists
+                    });
+                }
 
-            // Assign foreign keys
-            dto.ConsentForm.StudentId = studentId;
-            dto.InventoryForm.StudentId = studentId;
-            dto.CareerPlanningForm.StudentId = studentId;
+                // Save student
+                _context.Students.Add(dto.Student);
+                await _context.SaveChangesAsync();
 
-            // Set timestamps
-            dto.ConsentForm.SignedDate = DateTime.Now;
-            dto.InventoryForm.SubmissionDate = DateTime.Now;
-            dto.CareerPlanningForm.SubmittedAt = DateTime.Now;
+                int studentId = dto.Student.StudentId;
 
-            // Save consent and inventory (siblings and work experience included)
-            _context.ConsentForms.Add(dto.ConsentForm);
-            _context.InventoryForms.Add(dto.InventoryForm);
-            await _context.SaveChangesAsync();
+                // Set foreign keys
+                dto.ConsentForm.StudentId = studentId;
+                dto.InventoryForm.StudentId = studentId;
+                dto.CareerPlanningForm.StudentId = studentId;
 
-            // Save career planning form last
-            _context.CareerPlanningForms.Add(dto.CareerPlanningForm);
-            await _context.SaveChangesAsync();
+                dto.ConsentForm.SignedDate = DateTime.UtcNow;
+                dto.InventoryForm.SubmissionDate = DateTime.UtcNow;
+                dto.CareerPlanningForm.SubmittedAt = DateTime.UtcNow;
 
-            return Ok(new { message = "Registration successful." });
+                _context.ConsentForms.Add(dto.ConsentForm);
+                _context.InventoryForms.Add(dto.InventoryForm);
+                await _context.SaveChangesAsync();
+
+                _context.CareerPlanningForms.Add(dto.CareerPlanningForm);
+                await _context.SaveChangesAsync();
+
+                return Ok(new { message = "Registration successful." });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("🔴 Registration error: " + ex.Message);
+                Console.WriteLine("🔴 Stack trace: " + ex.StackTrace);
+                return StatusCode(500, new { message = "Server error occurred.", error = ex.Message });
+            }
         }
+
+
 
 
 
@@ -120,6 +146,23 @@ namespace GuidanceOfficeAPI.Controllers
 
             return Ok(dto);
         }
+
+        // GET: api/student/check-duplicate
+        [HttpGet("check-duplicate")]
+        public IActionResult CheckDuplicate(string studentNumber, string email)
+        {
+            bool studentNumberExists = _context.Students.Any(s => s.StudentNumber == studentNumber);
+            bool emailExists = _context.Students.Any(s => s.Email == email);
+
+            return Ok(new
+            {
+                studentNumberExists,
+                emailExists
+            });
+        }
+
+
+
     }
 
     public class LoginRequest

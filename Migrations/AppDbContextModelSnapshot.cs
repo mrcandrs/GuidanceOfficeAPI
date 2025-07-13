@@ -857,7 +857,7 @@ namespace GuidanceOfficeAPI.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("FullName")
                         .IsRequired()
@@ -886,6 +886,12 @@ namespace GuidanceOfficeAPI.Migrations
                         .HasColumnType("longtext");
 
                     b.HasKey("StudentId");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("StudentNumber")
+                        .IsUnique();
 
                     b.ToTable("Students");
                 });

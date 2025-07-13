@@ -3243,6 +3243,34 @@
         }
       }
     },
+    "/api/student/check-duplicate": {
+      "get": {
+        "tags": [
+          "StudentAuth"
+        ],
+        "parameters": [
+          {
+            "name": "studentNumber",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "email",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/WeatherForecast": {
       "get": {
         "tags": [
@@ -4277,6 +4305,18 @@
             "maxLength": 11,
             "minLength": 1,
             "type": "string"
+          },
+          "fullName": {
+            "type": "string",
+            "nullable": true
+          },
+          "program": {
+            "type": "string",
+            "nullable": true
+          },
+          "gradeYear": {
+            "type": "string",
+            "nullable": true
           },
           "email": {
             "type": "string",

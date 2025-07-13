@@ -3,9 +3,13 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
+using Microsoft.EntityFrameworkCore;
 
 namespace GuidanceOfficeAPI.Models
 {
+
+    [Index(nameof(StudentNumber), IsUnique = true)]
+    [Index(nameof(Email), IsUnique = true)]
     public class Student
     {
         [Key]
