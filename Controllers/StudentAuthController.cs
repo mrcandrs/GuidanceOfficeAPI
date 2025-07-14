@@ -141,8 +141,11 @@ namespace GuidanceOfficeAPI.Controllers
             {
                 StudentId = student.StudentId,
                 StudentNumber = student.StudentNumber,
+                Name = student.FullName,
                 Username = student.Username,
                 Email = student.Email,
+                Program = student.Program,
+                YearLevel = student.GradeYear,
                 DateRegistered = ConvertToManilaTime(student.DateRegistered)
             };
 
