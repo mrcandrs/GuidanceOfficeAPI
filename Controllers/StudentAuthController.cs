@@ -44,14 +44,16 @@ namespace GuidanceOfficeAPI.Controllers
                 // 🔒 Check for duplicate email or student number
                 bool emailExists = _context.Students.Any(s => s.Email == dto.Student.Email);
                 bool studentNumberExists = _context.Students.Any(s => s.StudentNumber == dto.Student.StudentNumber);
+                bool userNameExists = _context.Students.Any(s => s.Username == dto.Student.Username);
 
-                if (emailExists || studentNumberExists)
+                if (emailExists || studentNumberExists || userNameExists)
                 {
                     return BadRequest(new
                     {
                         message = "Duplicate found.",
                         emailExists,
-                        studentNumberExists
+                        studentNumberExists,
+                        userNameExists
                     });
                 }
 
