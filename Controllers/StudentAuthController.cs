@@ -90,9 +90,6 @@ namespace GuidanceOfficeAPI.Controllers
         }
 
 
-
-
-
         // POST: api/student/register
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] Student student)
@@ -141,7 +138,7 @@ namespace GuidanceOfficeAPI.Controllers
             {
                 StudentId = student.StudentId,
                 StudentNumber = student.StudentNumber,
-                Name = student.FullName,
+                FullName = student.FullName,
                 Username = student.Username,
                 Email = student.Email,
                 Program = student.Program,
@@ -194,6 +191,28 @@ namespace GuidanceOfficeAPI.Controllers
             await _context.SaveChangesAsync();
             return Ok();
         }
+
+        [HttpPost("update-profile-with-image")]
+        public async Task<IActionResult> UpdateProfileWithImage([FromForm] StudentUpdateWithImageDto dto)
+        {
+            var student = await _context.Students.FindAsync(dto.StudentId);
+            if (student == null) return NotFound();
+
+            student.Email = dto.Email;
+            student.Username = dto.Username;
+            student.Password = dto.Password;
+
+            if (dto.ProfileImage != null)
+            {
+                using var ms = new MemoryStream();
+                await dto.ProfileImage.CopyToAsync(ms);
+                student.ProfileImage = ms.ToArray();
+            }
+
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+
 
 
     }

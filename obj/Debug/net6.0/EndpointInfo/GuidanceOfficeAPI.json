@@ -3330,6 +3330,63 @@
         }
       }
     },
+    "/api/student/update-profile-with-image": {
+      "post": {
+        "tags": [
+          "StudentAuth"
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "StudentId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "Email": {
+                    "type": "string"
+                  },
+                  "Username": {
+                    "type": "string"
+                  },
+                  "Password": {
+                    "type": "string"
+                  },
+                  "ProfileImage": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "StudentId": {
+                  "style": "form"
+                },
+                "Email": {
+                  "style": "form"
+                },
+                "Username": {
+                  "style": "form"
+                },
+                "Password": {
+                  "style": "form"
+                },
+                "ProfileImage": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/WeatherForecast": {
       "get": {
         "tags": [
@@ -4389,6 +4446,11 @@
             "maxLength": 255,
             "minLength": 1,
             "type": "string"
+          },
+          "profileImage": {
+            "type": "string",
+            "format": "byte",
+            "nullable": true
           },
           "dateRegistered": {
             "type": "string",

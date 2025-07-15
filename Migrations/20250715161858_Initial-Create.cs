@@ -84,6 +84,7 @@ namespace GuidanceOfficeAPI.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Password = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    ProfileImage = table.Column<byte[]>(type: "longblob", nullable: true),
                     DateRegistered = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>

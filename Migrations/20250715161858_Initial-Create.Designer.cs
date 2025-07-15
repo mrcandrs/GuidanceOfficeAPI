@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GuidanceOfficeAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250714144650_Initial-Create")]
+    [Migration("20250715161858_Initial-Create")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -873,6 +873,9 @@ namespace GuidanceOfficeAPI.Migrations
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
+
+                    b.Property<byte[]>("ProfileImage")
+                        .HasColumnType("longblob");
 
                     b.Property<string>("Program")
                         .IsRequired()

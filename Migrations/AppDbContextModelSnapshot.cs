@@ -872,6 +872,9 @@ namespace GuidanceOfficeAPI.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
 
+                    b.Property<byte[]>("ProfileImage")
+                        .HasColumnType("longblob");
+
                     b.Property<string>("Program")
                         .IsRequired()
                         .HasColumnType("longtext");

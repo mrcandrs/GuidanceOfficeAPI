@@ -31,6 +31,8 @@ namespace GuidanceOfficeAPI.Models
         [Required, MaxLength(255)]
         public string Password { get; set; }
 
+        public byte[]? ProfileImage { get; set; } // Save image as byte[]
+
         public DateTime DateRegistered { get; set; } = DateTime.Now;
     }
 
