@@ -166,6 +166,34 @@ namespace GuidanceOfficeAPI.Controllers
             });
         }
 
+        // GET: api/student/check-email-username
+        [HttpGet("check-email-username")]
+        public IActionResult CheckEmailOrUsername([FromQuery] string email, [FromQuery] string username)
+        {
+            bool emailExists = _context.Students.Any(s => s.Email == email);
+            bool usernameExists = _context.Students.Any(s => s.Username == username);
+
+            return Ok(new
+            {
+                emailExists,
+                usernameExists
+            });
+        }
+
+
+        [HttpPost("update-profile")]
+        public async Task<IActionResult> UpdateProfile([FromBody] StudentUpdateDto dto)
+        {
+            var student = await _context.Students.FindAsync(dto.StudentId);
+            if (student == null) return NotFound();
+
+            student.Email = dto.Email;
+            student.Username = dto.Username;
+            student.Password = dto.Password;
+
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
 
 
     }

@@ -1875,6 +1875,27 @@
   },
   {
     "ContainingType": "GuidanceOfficeAPI.Controllers.StudentAuthController",
+    "Method": "CheckEmailOrUsername",
+    "RelativePath": "api/student/check-email-username",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "username",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.StudentAuthController",
     "Method": "Login",
     "RelativePath": "api/student/login",
     "HttpMethod": "POST",
@@ -1916,6 +1937,22 @@
       {
         "Name": "dto",
         "Type": "GuidanceOfficeAPI.Dtos.FullRegistrationDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.StudentAuthController",
+    "Method": "UpdateProfile",
+    "RelativePath": "api/student/update-profile",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "GuidanceOfficeAPI.Dtos.StudentUpdateDto",
         "IsRequired": true
       }
     ],
