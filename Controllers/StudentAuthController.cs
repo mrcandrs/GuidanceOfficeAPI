@@ -165,15 +165,15 @@ namespace GuidanceOfficeAPI.Controllers
 
         // GET: api/student/check-email-username
         [HttpGet("check-email-username")]
-        public IActionResult CheckEmailOrUsername([FromQuery] string email, [FromQuery] string username)
+        public IActionResult CheckEmailOrUsername([FromQuery] string email, [FromQuery] string username, [FromQuery] int studentId)
         {
-            bool emailExists = _context.Students.Any(s => s.Email == email);
-            bool usernameExists = _context.Students.Any(s => s.Username == username);
+            bool emailExists = _context.Students.Any(s => s.Email == email && s.StudentId != studentId);
+            bool usernameExists = _context.Students.Any(s => s.Username == username && s.StudentId != studentId);
 
             return Ok(new
             {
                 emailExists,
-                usernameExists
+                userNameExists = usernameExists
             });
         }
 
