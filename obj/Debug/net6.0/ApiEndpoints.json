@@ -654,6 +654,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.ExitInterviewController",
+    "Method": "Submit",
+    "RelativePath": "api/exitinterview/submit",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "model",
+        "Type": "GuidanceOfficeAPI.Models.ExitInterviewForm",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "GuidanceOfficeAPI.Controllers.CrudController\u00601[[GuidanceOfficeAPI.Models.ExitInterviewForm, GuidanceOfficeAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
     "Method": "GetAll",
     "RelativePath": "api/ExitInterviewForm",

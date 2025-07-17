@@ -33,6 +33,41 @@ namespace GuidanceOfficeAPI.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "ExitInterviewForms",
+                columns: table => new
+                {
+                    ExitFormId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    StudentId = table.Column<int>(type: "int", nullable: false),
+                    SubmittedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    MainReason = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    SpecificReasons = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    OtherReason = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    PlansAfterLeaving = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ValuesLearned = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    SkillsLearned = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ServiceResponsesJson = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    OtherServicesDetail = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    OtherActivitiesDetail = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Comments = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ExitInterviewForms", x => x.ExitFormId);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "MoodSupports",
                 columns: table => new
                 {
@@ -304,53 +339,6 @@ namespace GuidanceOfficeAPI.Migrations
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_EndorsementCustodyForms_Students_StudentId",
-                        column: x => x.StudentId,
-                        principalTable: "Students",
-                        principalColumn: "StudentId",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "ExitInterviewForms",
-                columns: table => new
-                {
-                    ExitId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    StudentId = table.Column<int>(type: "int", nullable: false),
-                    InterviewDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    ReasonGraduating = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    ReasonWithdrawal = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    ReasonTransferSchool = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    ReasonLeaveAbsence = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    WithdrawFinancial = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    WithdrawHealth = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    WithdrawResidence = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    WithdrawFamily = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    WithdrawWork = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    WithdrawDissatisfaction = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    WithdrawPersonal = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    WithdrawTeacher = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    WithdrawShifting = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    WithdrawOthers = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    WithdrawOtherText = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    PlansAfterLeaving = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ValuesLearnedFromSTI = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    SkillsLearnedFromSTI = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    AvailedServicesActivities = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    CounselorNotes = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ExitInterviewForms", x => x.ExitId);
-                    table.ForeignKey(
-                        name: "FK_ExitInterviewForms_Students_StudentId",
                         column: x => x.StudentId,
                         principalTable: "Students",
                         principalColumn: "StudentId",
@@ -729,11 +717,6 @@ namespace GuidanceOfficeAPI.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_EndorsementCustodyForms_StudentId",
                 table: "EndorsementCustodyForms",
-                column: "StudentId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ExitInterviewForms_StudentId",
-                table: "ExitInterviewForms",
                 column: "StudentId");
 
             migrationBuilder.CreateIndex(

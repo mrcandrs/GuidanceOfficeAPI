@@ -340,36 +340,31 @@ namespace GuidanceOfficeAPI.Models
     public class ExitInterviewForm
     {
         [Key]
-        public int ExitId { get; set; }
+        public int ExitFormId { get; set; }
 
         public int StudentId { get; set; }
-        public DateTime InterviewDate { get; set; }
-
-        public bool ReasonGraduating { get; set; }
-        public bool ReasonWithdrawal { get; set; }
-        public bool ReasonTransferSchool { get; set; }
-        public bool ReasonLeaveAbsence { get; set; }
-
-        public bool WithdrawFinancial { get; set; }
-        public bool WithdrawHealth { get; set; }
-        public bool WithdrawResidence { get; set; }
-        public bool WithdrawFamily { get; set; }
-        public bool WithdrawWork { get; set; }
-        public bool WithdrawDissatisfaction { get; set; }
-        public bool WithdrawPersonal { get; set; }
-        public bool WithdrawTeacher { get; set; }
-        public bool WithdrawShifting { get; set; }
-        public bool WithdrawOthers { get; set; }
-        public string WithdrawOtherText { get; set; }
-
-        public string PlansAfterLeaving { get; set; }
-        public string ValuesLearnedFromSTI { get; set; }
-        public string SkillsLearnedFromSTI { get; set; }
-        public string AvailedServicesActivities { get; set; }
-        public string CounselorNotes { get; set; }
 
         [ForeignKey("StudentId")]
-        public Student Student { get; set; }
+
+        public DateTime SubmittedAt { get; set; }
+
+        // Step 1
+        public string? MainReason { get; set; }
+        public string? SpecificReasons { get; set; }
+        public string? OtherReason { get; set; }
+        public string? PlansAfterLeaving { get; set; }
+
+        // Step 2
+        public string? ValuesLearned { get; set; }
+        public string? SkillsLearned { get; set; }
+
+        // Step 3
+        public string? ServiceResponsesJson { get; set; }
+        public string? OtherServicesDetail { get; set; }
+        public string? OtherActivitiesDetail { get; set; }
+
+        // Step 4
+        public string? Comments { get; set; }
     }
 
     public class ReferralForm

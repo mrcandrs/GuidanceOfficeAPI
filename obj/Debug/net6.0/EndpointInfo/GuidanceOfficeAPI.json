@@ -1115,6 +1115,37 @@
         }
       }
     },
+    "/api/exitinterview/submit": {
+      "post": {
+        "tags": [
+          "ExitInterview"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExitInterviewForm"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExitInterviewForm"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExitInterviewForm"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/api/ExitInterviewForm": {
       "get": {
         "tags": [
@@ -3799,7 +3830,7 @@
       "ExitInterviewForm": {
         "type": "object",
         "properties": {
-          "exitId": {
+          "exitFormId": {
             "type": "integer",
             "format": "int32"
           },
@@ -3807,53 +3838,19 @@
             "type": "integer",
             "format": "int32"
           },
-          "interviewDate": {
+          "submittedAt": {
             "type": "string",
             "format": "date-time"
           },
-          "reasonGraduating": {
-            "type": "boolean"
+          "mainReason": {
+            "type": "string",
+            "nullable": true
           },
-          "reasonWithdrawal": {
-            "type": "boolean"
+          "specificReasons": {
+            "type": "string",
+            "nullable": true
           },
-          "reasonTransferSchool": {
-            "type": "boolean"
-          },
-          "reasonLeaveAbsence": {
-            "type": "boolean"
-          },
-          "withdrawFinancial": {
-            "type": "boolean"
-          },
-          "withdrawHealth": {
-            "type": "boolean"
-          },
-          "withdrawResidence": {
-            "type": "boolean"
-          },
-          "withdrawFamily": {
-            "type": "boolean"
-          },
-          "withdrawWork": {
-            "type": "boolean"
-          },
-          "withdrawDissatisfaction": {
-            "type": "boolean"
-          },
-          "withdrawPersonal": {
-            "type": "boolean"
-          },
-          "withdrawTeacher": {
-            "type": "boolean"
-          },
-          "withdrawShifting": {
-            "type": "boolean"
-          },
-          "withdrawOthers": {
-            "type": "boolean"
-          },
-          "withdrawOtherText": {
+          "otherReason": {
             "type": "string",
             "nullable": true
           },
@@ -3861,24 +3858,29 @@
             "type": "string",
             "nullable": true
           },
-          "valuesLearnedFromSTI": {
+          "valuesLearned": {
             "type": "string",
             "nullable": true
           },
-          "skillsLearnedFromSTI": {
+          "skillsLearned": {
             "type": "string",
             "nullable": true
           },
-          "availedServicesActivities": {
+          "serviceResponsesJson": {
             "type": "string",
             "nullable": true
           },
-          "counselorNotes": {
+          "otherServicesDetail": {
             "type": "string",
             "nullable": true
           },
-          "student": {
-            "$ref": "#/components/schemas/Student"
+          "otherActivitiesDetail": {
+            "type": "string",
+            "nullable": true
+          },
+          "comments": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false

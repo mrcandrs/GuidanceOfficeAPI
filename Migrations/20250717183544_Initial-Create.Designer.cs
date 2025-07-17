@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GuidanceOfficeAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250715161858_Initial-Create")]
+    [Migration("20250717183544_Initial-Create")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -360,85 +360,47 @@ namespace GuidanceOfficeAPI.Migrations
 
             modelBuilder.Entity("GuidanceOfficeAPI.Models.ExitInterviewForm", b =>
                 {
-                    b.Property<int>("ExitId")
+                    b.Property<int>("ExitFormId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("AvailedServicesActivities")
-                        .IsRequired()
+                    b.Property<string>("Comments")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("CounselorNotes")
-                        .IsRequired()
+                    b.Property<string>("MainReason")
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime>("InterviewDate")
-                        .HasColumnType("datetime(6)");
+                    b.Property<string>("OtherActivitiesDetail")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("OtherReason")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("OtherServicesDetail")
+                        .HasColumnType("longtext");
 
                     b.Property<string>("PlansAfterLeaving")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<bool>("ReasonGraduating")
-                        .HasColumnType("tinyint(1)");
+                    b.Property<string>("ServiceResponsesJson")
+                        .HasColumnType("longtext");
 
-                    b.Property<bool>("ReasonLeaveAbsence")
-                        .HasColumnType("tinyint(1)");
+                    b.Property<string>("SkillsLearned")
+                        .HasColumnType("longtext");
 
-                    b.Property<bool>("ReasonTransferSchool")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<bool>("ReasonWithdrawal")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("SkillsLearnedFromSTI")
-                        .IsRequired()
+                    b.Property<string>("SpecificReasons")
                         .HasColumnType("longtext");
 
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
 
-                    b.Property<string>("ValuesLearnedFromSTI")
-                        .IsRequired()
+                    b.Property<DateTime>("SubmittedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("ValuesLearned")
                         .HasColumnType("longtext");
 
-                    b.Property<bool>("WithdrawDissatisfaction")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<bool>("WithdrawFamily")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<bool>("WithdrawFinancial")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<bool>("WithdrawHealth")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("WithdrawOtherText")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<bool>("WithdrawOthers")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<bool>("WithdrawPersonal")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<bool>("WithdrawResidence")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<bool>("WithdrawShifting")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<bool>("WithdrawTeacher")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<bool>("WithdrawWork")
-                        .HasColumnType("tinyint(1)");
-
-                    b.HasKey("ExitId");
-
-                    b.HasIndex("StudentId");
+                    b.HasKey("ExitFormId");
 
                     b.ToTable("ExitInterviewForms");
                 });
@@ -997,17 +959,6 @@ namespace GuidanceOfficeAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("Counselor");
-
-                    b.Navigation("Student");
-                });
-
-            modelBuilder.Entity("GuidanceOfficeAPI.Models.ExitInterviewForm", b =>
-                {
-                    b.HasOne("GuidanceOfficeAPI.Models.Student", "Student")
-                        .WithMany()
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
 
                     b.Navigation("Student");
                 });
