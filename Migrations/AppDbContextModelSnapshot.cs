@@ -829,6 +829,9 @@ namespace GuidanceOfficeAPI.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<DateTime?>("LastLogin")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasMaxLength(255)

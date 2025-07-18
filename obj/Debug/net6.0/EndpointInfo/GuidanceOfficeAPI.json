@@ -4465,6 +4465,11 @@
           "dateRegistered": {
             "type": "string",
             "format": "date-time"
+          },
+          "lastLogin": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
           }
         },
         "additionalProperties": false

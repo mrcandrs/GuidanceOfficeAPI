@@ -120,7 +120,8 @@ namespace GuidanceOfficeAPI.Migrations
                     Password = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ProfileImage = table.Column<byte[]>(type: "longblob", nullable: true),
-                    DateRegistered = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                    DateRegistered = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    LastLogin = table.Column<DateTime>(type: "datetime(6)", nullable: true)
                 },
                 constraints: table =>
                 {

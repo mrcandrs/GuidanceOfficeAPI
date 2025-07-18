@@ -18,6 +18,7 @@ namespace GuidanceOfficeAPI.Dtos
         public string Username { get; set; }
         public string Email { get; set; }
         public DateTime DateRegistered { get; set; }
+        public DateTime? LastLogin { get; set; }
     }
 
 }

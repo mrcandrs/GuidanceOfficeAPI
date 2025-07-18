@@ -134,6 +134,12 @@ namespace GuidanceOfficeAPI.Controllers
             if (student == null)
                 return Unauthorized(new { message = "Invalid credentials." });
 
+            //✅ Set LastLogin to Asia/Manila time
+            var manilaTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Asia/Manila");
+            student.LastLogin = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, manilaTimeZone);
+
+            _context.SaveChanges(); //✅ Save to DB
+
             var dto = new LoginDto
             {
                 StudentId = student.StudentId,
@@ -143,7 +149,8 @@ namespace GuidanceOfficeAPI.Controllers
                 Email = student.Email,
                 Program = student.Program,
                 YearLevel = student.GradeYear,
-                DateRegistered = ConvertToManilaTime(student.DateRegistered)
+                DateRegistered = ConvertToManilaTime(student.DateRegistered),
+                LastLogin = student.LastLogin
             };
 
             return Ok(dto);

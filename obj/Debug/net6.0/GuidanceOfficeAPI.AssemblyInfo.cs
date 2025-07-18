@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GuidanceOfficeAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+730bdfc8fdec3a49b8261c2c39d6760080ddb872")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f272ea43f0ec81795bf10ae8ced72934c47a0c0c")]
 [assembly: System.Reflection.AssemblyProductAttribute("GuidanceOfficeAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GuidanceOfficeAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

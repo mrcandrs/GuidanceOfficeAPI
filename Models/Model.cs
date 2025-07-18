@@ -34,6 +34,7 @@ namespace GuidanceOfficeAPI.Models
         public byte[]? ProfileImage { get; set; } // Save image as byte[]
 
         public DateTime DateRegistered { get; set; } = DateTime.Now;
+        public DateTime? LastLogin { get; set; }
     }
 
     public class ConsentForm

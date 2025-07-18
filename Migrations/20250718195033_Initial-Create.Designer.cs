@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GuidanceOfficeAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250717183544_Initial-Create")]
+    [Migration("20250718195033_Initial-Create")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -830,6 +830,9 @@ namespace GuidanceOfficeAPI.Migrations
                     b.Property<string>("GradeYear")
                         .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("LastLogin")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Password")
                         .IsRequired()

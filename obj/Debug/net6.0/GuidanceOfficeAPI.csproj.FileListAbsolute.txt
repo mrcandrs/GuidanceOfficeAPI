@@ -45,3 +45,45 @@ C:\Users\Windows 10\source\repos\GuidanceOfficeAPI\bin\Debug\net6.0\Microsoft.En
 C:\Users\Windows 10\source\repos\GuidanceOfficeAPI\bin\Debug\net6.0\Microsoft.Extensions.DependencyInjection.dll
 C:\Users\Windows 10\source\repos\GuidanceOfficeAPI\bin\Debug\net6.0\System.Diagnostics.DiagnosticSource.dll
 C:\Users\Windows 10\source\repos\GuidanceOfficeAPI\obj\Debug\net6.0\GuidanceOfficeAPI.sourcelink.json
+C:\Users\Elijah C Espinosa\source\repos\GuidanceOfficeAPI\bin\Debug\net6.0\appsettings.Development.json
+C:\Users\Elijah C Espinosa\source\repos\GuidanceOfficeAPI\bin\Debug\net6.0\appsettings.json
+C:\Users\Elijah C Espinosa\source\repos\GuidanceOfficeAPI\bin\Debug\net6.0\GuidanceOfficeAPI.staticwebassets.endpoints.json
+C:\Users\Elijah C Espinosa\source\repos\GuidanceOfficeAPI\bin\Debug\net6.0\GuidanceOfficeAPI.exe
+C:\Users\Elijah C Espinosa\source\repos\GuidanceOfficeAPI\bin\Debug\net6.0\GuidanceOfficeAPI.deps.json
+C:\Users\Elijah C Espinosa\source\repos\GuidanceOfficeAPI\bin\Debug\net6.0\GuidanceOfficeAPI.runtimeconfig.json
+C:\Users\Elijah C Espinosa\source\repos\GuidanceOfficeAPI\bin\Debug\net6.0\GuidanceOfficeAPI.dll
+C:\Users\Elijah C Espinosa\source\repos\GuidanceOfficeAPI\bin\Debug\net6.0\GuidanceOfficeAPI.pdb
+C:\Users\Elijah C Espinosa\source\repos\GuidanceOfficeAPI\bin\Debug\net6.0\Humanizer.dll
+C:\Users\Elijah C Espinosa\source\repos\GuidanceOfficeAPI\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.dll
+C:\Users\Elijah C Espinosa\source\repos\GuidanceOfficeAPI\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Abstractions.dll
+C:\Users\Elijah C Espinosa\source\repos\GuidanceOfficeAPI\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Design.dll
+C:\Users\Elijah C Espinosa\source\repos\GuidanceOfficeAPI\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Relational.dll
+C:\Users\Elijah C Espinosa\source\repos\GuidanceOfficeAPI\bin\Debug\net6.0\Microsoft.Extensions.Caching.Memory.dll
+C:\Users\Elijah C Espinosa\source\repos\GuidanceOfficeAPI\bin\Debug\net6.0\Microsoft.Extensions.DependencyInjection.dll
+C:\Users\Elijah C Espinosa\source\repos\GuidanceOfficeAPI\bin\Debug\net6.0\Microsoft.OpenApi.dll
+C:\Users\Elijah C Espinosa\source\repos\GuidanceOfficeAPI\bin\Debug\net6.0\MySqlConnector.dll
+C:\Users\Elijah C Espinosa\source\repos\GuidanceOfficeAPI\bin\Debug\net6.0\Pomelo.EntityFrameworkCore.MySql.dll
+C:\Users\Elijah C Espinosa\source\repos\GuidanceOfficeAPI\bin\Debug\net6.0\Swashbuckle.AspNetCore.Swagger.dll
+C:\Users\Elijah C Espinosa\source\repos\GuidanceOfficeAPI\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Users\Elijah C Espinosa\source\repos\GuidanceOfficeAPI\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\Users\Elijah C Espinosa\source\repos\GuidanceOfficeAPI\bin\Debug\net6.0\System.Diagnostics.DiagnosticSource.dll
+C:\Users\Elijah C Espinosa\source\repos\GuidanceOfficeAPI\obj\Debug\net6.0\GuidanceOfficeAPI.csproj.AssemblyReference.cache
+C:\Users\Elijah C Espinosa\source\repos\GuidanceOfficeAPI\obj\Debug\net6.0\GuidanceOfficeAPI.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Elijah C Espinosa\source\repos\GuidanceOfficeAPI\obj\Debug\net6.0\GuidanceOfficeAPI.AssemblyInfoInputs.cache
+C:\Users\Elijah C Espinosa\source\repos\GuidanceOfficeAPI\obj\Debug\net6.0\GuidanceOfficeAPI.AssemblyInfo.cs
+C:\Users\Elijah C Espinosa\source\repos\GuidanceOfficeAPI\obj\Debug\net6.0\GuidanceOfficeAPI.csproj.CoreCompileInputs.cache
+C:\Users\Elijah C Espinosa\source\repos\GuidanceOfficeAPI\obj\Debug\net6.0\GuidanceOfficeAPI.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\Elijah C Espinosa\source\repos\GuidanceOfficeAPI\obj\Debug\net6.0\GuidanceOfficeAPI.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\Elijah C Espinosa\source\repos\GuidanceOfficeAPI\obj\Debug\net6.0\GuidanceOfficeAPI.sourcelink.json
+C:\Users\Elijah C Espinosa\source\repos\GuidanceOfficeAPI\obj\Debug\net6.0\scopedcss\bundle\GuidanceOfficeAPI.styles.css
+C:\Users\Elijah C Espinosa\source\repos\GuidanceOfficeAPI\obj\Debug\net6.0\staticwebassets.build.json
+C:\Users\Elijah C Espinosa\source\repos\GuidanceOfficeAPI\obj\Debug\net6.0\staticwebassets.build.json.cache
+C:\Users\Elijah C Espinosa\source\repos\GuidanceOfficeAPI\obj\Debug\net6.0\staticwebassets.development.json
+C:\Users\Elijah C Espinosa\source\repos\GuidanceOfficeAPI\obj\Debug\net6.0\staticwebassets.build.endpoints.json
+C:\Users\Elijah C Espinosa\source\repos\GuidanceOfficeAPI\obj\Debug\net6.0\staticwebassets.upToDateCheck.txt
+C:\Users\Elijah C Espinosa\source\repos\GuidanceOfficeAPI\obj\Debug\net6.0\Guidance.694BAA1A.Up2Date
+C:\Users\Elijah C Espinosa\source\repos\GuidanceOfficeAPI\obj\Debug\net6.0\GuidanceOfficeAPI.dll
+C:\Users\Elijah C Espinosa\source\repos\GuidanceOfficeAPI\obj\Debug\net6.0\refint\GuidanceOfficeAPI.dll
+C:\Users\Elijah C Espinosa\source\repos\GuidanceOfficeAPI\obj\Debug\net6.0\GuidanceOfficeAPI.pdb
+C:\Users\Elijah C Espinosa\source\repos\GuidanceOfficeAPI\obj\Debug\net6.0\GuidanceOfficeAPI.genruntimeconfig.cache
+C:\Users\Elijah C Espinosa\source\repos\GuidanceOfficeAPI\obj\Debug\net6.0\ref\GuidanceOfficeAPI.dll
