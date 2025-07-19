@@ -1988,22 +1988,22 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "StudentId",
+        "Name": "studentId",
         "Type": "System.Int32",
         "IsRequired": false
       },
       {
-        "Name": "Email",
+        "Name": "email",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "Username",
+        "Name": "username",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "Password",
+        "Name": "password",
         "Type": "System.String",
         "IsRequired": false
       },

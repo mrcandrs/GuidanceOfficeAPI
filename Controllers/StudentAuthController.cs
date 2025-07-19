@@ -202,14 +202,24 @@ namespace GuidanceOfficeAPI.Controllers
         [HttpPost("update-profile-with-image")]
         public async Task<IActionResult> UpdateProfileWithImage([FromForm] StudentUpdateWithImageDto dto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState); // Helps debug what caused 400
+            }
+
             var student = await _context.Students.FindAsync(dto.StudentId);
             if (student == null) return NotFound();
 
             student.Email = dto.Email;
             student.Username = dto.Username;
-            student.Password = dto.Password;
 
-            if (dto.ProfileImage != null)
+            // Update password only if not empty
+            if (!string.IsNullOrWhiteSpace(dto.Password))
+            {
+                student.Password = dto.Password;
+            }
+
+            if (dto.ProfileImage != null && dto.ProfileImage.Length > 0)
             {
                 using var ms = new MemoryStream();
                 await dto.ProfileImage.CopyToAsync(ms);
@@ -219,9 +229,6 @@ namespace GuidanceOfficeAPI.Controllers
             await _context.SaveChangesAsync();
             return Ok();
         }
-
-
-
     }
 
     public class LoginRequest

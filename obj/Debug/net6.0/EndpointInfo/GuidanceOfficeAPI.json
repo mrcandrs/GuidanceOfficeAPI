@@ -3380,17 +3380,17 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "StudentId": {
+                  "studentId": {
                     "type": "integer",
                     "format": "int32"
                   },
-                  "Email": {
+                  "email": {
                     "type": "string"
                   },
-                  "Username": {
+                  "username": {
                     "type": "string"
                   },
-                  "Password": {
+                  "password": {
                     "type": "string"
                   },
                   "ProfileImage": {
@@ -3400,16 +3400,16 @@
                 }
               },
               "encoding": {
-                "StudentId": {
+                "studentId": {
                   "style": "form"
                 },
-                "Email": {
+                "email": {
                   "style": "form"
                 },
-                "Username": {
+                "username": {
                   "style": "form"
                 },
-                "Password": {
+                "password": {
                   "style": "form"
                 },
                 "ProfileImage": {
