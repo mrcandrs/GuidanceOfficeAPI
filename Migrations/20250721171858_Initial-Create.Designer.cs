@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GuidanceOfficeAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250719132451_Initial-Create")]
+    [Migration("20250721171858_Initial-Create")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -758,19 +758,95 @@ namespace GuidanceOfficeAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("FeedbackText")
+                    b.Property<string>("AcademicLevel")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Reason")
+                    b.Property<string>("ActionRequested")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime>("ReferralDate")
+                    b.Property<string>("ActionRequestedOtherDetail")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ActionsTakenBefore")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("Age")
+                        .HasColumnType("int");
+
+                    b.Property<string>("AreasOfConcern")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("AreasOfConcernOtherDetail")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("CounselorActionsTaken")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("CounselorFeedbackDateReferred")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<string>("CounselorFeedbackStudentName")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("CounselorInitialAction")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("CounselorName")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("CounselorSessionDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("DateReferred")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Gender")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("PersonWhoReferred")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("PriorityDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("PriorityLevel")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Program")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ReferralReasons")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ReferredBy")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
+
+                    b.Property<string>("StudentNumber")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("SubmissionDate")
+                        .HasColumnType("datetime(6)");
 
                     b.HasKey("ReferralId");
 

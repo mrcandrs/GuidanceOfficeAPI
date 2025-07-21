@@ -2811,6 +2811,60 @@
         }
       }
     },
+    "/api/referral/submit-referral": {
+      "post": {
+        "tags": [
+          "Referral"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReferralForm"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReferralForm"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReferralForm"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/referral/student/{studentId}/latest": {
+      "get": {
+        "tags": [
+          "Referral"
+        ],
+        "parameters": [
+          {
+            "name": "studentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/api/ReferralForm": {
       "get": {
         "tags": [
@@ -4363,20 +4417,107 @@
             "type": "integer",
             "format": "int32"
           },
-          "reason": {
+          "student": {
+            "$ref": "#/components/schemas/Student"
+          },
+          "fullName": {
             "type": "string",
             "nullable": true
           },
-          "feedbackText": {
+          "studentNumber": {
             "type": "string",
             "nullable": true
           },
-          "referralDate": {
+          "program": {
+            "type": "string",
+            "nullable": true
+          },
+          "age": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "gender": {
+            "type": "string",
+            "nullable": true
+          },
+          "academicLevel": {
+            "type": "string",
+            "nullable": true
+          },
+          "referredBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "areasOfConcern": {
+            "type": "string",
+            "nullable": true
+          },
+          "areasOfConcernOtherDetail": {
+            "type": "string",
+            "nullable": true
+          },
+          "actionRequested": {
+            "type": "string",
+            "nullable": true
+          },
+          "actionRequestedOtherDetail": {
+            "type": "string",
+            "nullable": true
+          },
+          "priorityLevel": {
+            "type": "string",
+            "nullable": true
+          },
+          "priorityDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "actionsTakenBefore": {
+            "type": "string",
+            "nullable": true
+          },
+          "referralReasons": {
+            "type": "string",
+            "nullable": true
+          },
+          "counselorInitialAction": {
+            "type": "string",
+            "nullable": true
+          },
+          "personWhoReferred": {
+            "type": "string",
+            "nullable": true
+          },
+          "dateReferred": {
             "type": "string",
             "format": "date-time"
           },
-          "student": {
-            "$ref": "#/components/schemas/Student"
+          "counselorFeedbackStudentName": {
+            "type": "string",
+            "nullable": true
+          },
+          "counselorFeedbackDateReferred": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "counselorSessionDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "counselorActionsTaken": {
+            "type": "string",
+            "nullable": true
+          },
+          "counselorName": {
+            "type": "string",
+            "nullable": true
+          },
+          "submissionDate": {
+            "type": "string",
+            "format": "date-time"
           }
         },
         "additionalProperties": false

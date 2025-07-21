@@ -371,15 +371,53 @@ namespace GuidanceOfficeAPI.Models
     public class ReferralForm
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ReferralId { get; set; }
-        public int StudentId { get; set; }
-        public string Reason { get; set; }
-        public string FeedbackText { get; set; }
-        public DateTime ReferralDate { get; set; }
 
+        //Relationship
+        public int StudentId { get; set; }
         [ForeignKey("StudentId")]
-        public Student Student { get; set; }
+        public Student? Student { get; set; }
+
+        //Basic Info
+        public string FullName { get; set; }
+        public string StudentNumber { get; set; }
+        public string Program { get; set; }
+        public int Age { get; set; }
+        public string Gender { get; set; }
+
+        //Academic Level (from your chip logic)
+        public string AcademicLevel { get; set; } // e.g., "Junior High", "Grade 11", etc.
+
+        //Chips - These should be comma-separated lists or a separate table if normalized
+        public string ReferredBy { get; set; } //e.g., "Student, Parent"
+        public string AreasOfConcern { get; set; }
+        public string AreasOfConcernOtherDetail { get; set; } //if "Others" selected
+        public string ActionRequested { get; set; }
+        public string ActionRequestedOtherDetail { get; set; } //if "Others" selected
+
+        public string PriorityLevel { get; set; } //"Emergency", "ASAP", "Before this Date"
+        public DateTime? PriorityDate { get; set; } //nullable, only used if "Before this Date" is selected
+
+        //Text Fields
+        public string ActionsTakenBefore { get; set; }
+        public string ReferralReasons { get; set; }
+        public string CounselorInitialAction { get; set; }
+
+        //Footer Info
+        public string PersonWhoReferred { get; set; }
+        public DateTime DateReferred { get; set; }
+
+        //Counselor Feedback (populated from admin/web)
+        public string? CounselorFeedbackStudentName { get; set; }
+        public DateTime? CounselorFeedbackDateReferred { get; set; }
+        public DateTime? CounselorSessionDate { get; set; }
+        public string? CounselorActionsTaken { get; set; }
+        public string? CounselorName { get; set; }
+
+        public DateTime SubmissionDate { get; set; } = DateTime.Now;
     }
+
 
     public class EndorsementCustodyForm
     {
