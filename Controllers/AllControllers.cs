@@ -115,11 +115,4 @@ namespace GuidanceOfficeAPI.Controllers
     {
         public MotivationalQuoteController(AppDbContext context) : base(context) { }
     }
-
-    [ApiController]
-    [Route("api/[controller]")]
-    public class JournalEntryController : CrudController<JournalEntry>
-    {
-        public JournalEntryController(AppDbContext context) : base(context) { }
-    }
 }

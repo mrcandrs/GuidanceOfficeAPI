@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GuidanceOfficeAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250721171858_Initial-Create")]
+    [Migration("20250725171147_Initial-Create")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -674,7 +674,7 @@ namespace GuidanceOfficeAPI.Migrations
 
             modelBuilder.Entity("GuidanceOfficeAPI.Models.JournalEntry", b =>
                 {
-                    b.Property<int>("EntryId")
+                    b.Property<int>("JournalId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
@@ -682,15 +682,22 @@ namespace GuidanceOfficeAPI.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime>("EntryDate")
-                        .HasColumnType("datetime(6)");
+                    b.Property<string>("Date")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Mood")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
 
-                    b.HasKey("EntryId");
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
-                    b.HasIndex("StudentId");
+                    b.HasKey("JournalId");
 
                     b.ToTable("JournalEntries");
                 });
@@ -1092,17 +1099,6 @@ namespace GuidanceOfficeAPI.Migrations
                 });
 
             modelBuilder.Entity("GuidanceOfficeAPI.Models.InventoryForm", b =>
-                {
-                    b.HasOne("GuidanceOfficeAPI.Models.Student", "Student")
-                        .WithMany()
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Student");
-                });
-
-            modelBuilder.Entity("GuidanceOfficeAPI.Models.JournalEntry", b =>
                 {
                     b.HasOne("GuidanceOfficeAPI.Models.Student", "Student")
                         .WithMany()

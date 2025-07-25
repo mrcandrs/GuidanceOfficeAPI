@@ -2071,43 +2071,7 @@
         }
       }
     },
-    "/api/JournalEntry": {
-      "get": {
-        "tags": [
-          "JournalEntry"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/JournalEntry"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/JournalEntry"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/JournalEntry"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
+    "/api/journalentry/submit-entry": {
       "post": {
         "tags": [
           "JournalEntry"
@@ -2116,139 +2080,21 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/JournalEntry"
+                "$ref": "#/components/schemas/JournalEntryDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/JournalEntry"
+                "$ref": "#/components/schemas/JournalEntryDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/JournalEntry"
+                "$ref": "#/components/schemas/JournalEntryDto"
               }
             }
           }
         },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/JournalEntry"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/JournalEntry"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/JournalEntry"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/JournalEntry/{id}": {
-      "get": {
-        "tags": [
-          "JournalEntry"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/JournalEntry"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/JournalEntry"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/JournalEntry"
-                }
-              }
-            }
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "JournalEntry"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/JournalEntry"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/JournalEntry"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/JournalEntry"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success"
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "JournalEntry"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "Success"
@@ -4310,27 +4156,28 @@
         },
         "additionalProperties": false
       },
-      "JournalEntry": {
+      "JournalEntryDto": {
         "type": "object",
         "properties": {
-          "entryId": {
-            "type": "integer",
-            "format": "int32"
-          },
           "studentId": {
             "type": "integer",
             "format": "int32"
           },
-          "entryDate": {
+          "date": {
             "type": "string",
-            "format": "date-time"
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
           },
           "content": {
             "type": "string",
             "nullable": true
           },
-          "student": {
-            "$ref": "#/components/schemas/Student"
+          "mood": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false

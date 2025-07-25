@@ -501,13 +501,20 @@ namespace GuidanceOfficeAPI.Models
     public class JournalEntry
     {
         [Key]
-        public int EntryId { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)] // ✅ Important to auto-generate ID
+        public int JournalId { get; set; }
 
         public int StudentId { get; set; }
-        public DateTime EntryDate { get; set; }
+
+        [Required]
+        public string Date { get; set; }
+
+        [Required]
+        public string Title { get; set; }
+
+        [Required]
         public string Content { get; set; }
 
-        [ForeignKey("StudentId")]
-        public Student Student { get; set; }
+        public string Mood { get; set; }
     }
 }
