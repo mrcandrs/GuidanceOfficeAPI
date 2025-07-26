@@ -1216,6 +1216,22 @@
   },
   {
     "ContainingType": "GuidanceOfficeAPI.Controllers.JournalEntryController",
+    "Method": "DeleteEntry",
+    "RelativePath": "api/journalentry/delete/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.JournalEntryController",
     "Method": "SubmitEntry",
     "RelativePath": "api/journalentry/submit-entry",
     "HttpMethod": "POST",

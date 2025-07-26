@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GuidanceOfficeAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250725190752_Initial-Create")]
+    [Migration("20250726045630_Initial-Create")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

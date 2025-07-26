@@ -60,5 +60,21 @@ namespace GuidanceOfficeAPI.Controllers
             return Ok(new { message = "Journal entry updated successfully!" });
         }
 
+        // DELETE: api/journalentry/delete/{id}
+        [HttpDelete("delete/{id}")]
+        public IActionResult DeleteEntry(int id)
+        {
+            var entry = _context.JournalEntries.FirstOrDefault(j => j.JournalId == id);
+            if (entry == null)
+            {
+                return NotFound(new { message = "Journal entry not found." });
+            }
+
+            _context.JournalEntries.Remove(entry);
+            _context.SaveChanges();
+
+            return Ok(new { message = "Journal entry deleted successfully." });
+        }
+
     }
 }
