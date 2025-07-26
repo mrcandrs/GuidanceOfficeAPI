@@ -1231,6 +1231,27 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.JournalEntryController",
+    "Method": "UpdateEntry",
+    "RelativePath": "api/journalentry/update/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "GuidanceOfficeAPI.Dtos.JournalEntryDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "GuidanceOfficeAPI.Controllers.CrudController\u00601[[GuidanceOfficeAPI.Models.MoodSupport, GuidanceOfficeAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
     "Method": "GetAll",
     "RelativePath": "api/MoodSupport",
