@@ -1232,6 +1232,22 @@
   },
   {
     "ContainingType": "GuidanceOfficeAPI.Controllers.JournalEntryController",
+    "Method": "GetJournalEntriesByStudent",
+    "RelativePath": "api/journalentry/student/{studentId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "studentId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.JournalEntryController",
     "Method": "SubmitEntry",
     "RelativePath": "api/journalentry/submit-entry",
     "HttpMethod": "POST",

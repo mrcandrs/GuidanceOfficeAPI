@@ -2,6 +2,7 @@
 using GuidanceOfficeAPI.Data;
 using GuidanceOfficeAPI.Dtos;
 using GuidanceOfficeAPI.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace GuidanceOfficeAPI.Controllers
 {
@@ -36,6 +37,18 @@ namespace GuidanceOfficeAPI.Controllers
             _context.SaveChanges();
 
             return Ok(entry); // ✅ This returns the new journalId
+        }
+
+        // GET: api/journalentry/student/{studentId}
+        [HttpGet("student/{studentId}")]
+        public async Task<IActionResult> GetJournalEntriesByStudent(int studentId)
+        {
+            var entries = await _context.JournalEntries
+                .Where(e => e.StudentId == studentId)
+                .OrderByDescending(e => e.Date)
+                .ToListAsync();
+
+            return Ok(entries);
         }
 
 
