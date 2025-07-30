@@ -2376,42 +2376,6 @@
       }
     },
     "/api/MoodTracker": {
-      "get": {
-        "tags": [
-          "MoodTracker"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/MoodTracker"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/MoodTracker"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/MoodTracker"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
       "post": {
         "tags": [
           "MoodTracker"
@@ -2420,139 +2384,21 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/MoodTracker"
+                "$ref": "#/components/schemas/MoodTrackerDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/MoodTracker"
+                "$ref": "#/components/schemas/MoodTrackerDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/MoodTracker"
+                "$ref": "#/components/schemas/MoodTrackerDto"
               }
             }
           }
         },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/MoodTracker"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MoodTracker"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MoodTracker"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/MoodTracker/{id}": {
-      "get": {
-        "tags": [
-          "MoodTracker"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/MoodTracker"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MoodTracker"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MoodTracker"
-                }
-              }
-            }
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "MoodTracker"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/MoodTracker"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/MoodTracker"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/MoodTracker"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success"
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "MoodTracker"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "Success"
@@ -4302,13 +4148,9 @@
         },
         "additionalProperties": false
       },
-      "MoodTracker": {
+      "MoodTrackerDto": {
         "type": "object",
         "properties": {
-          "moodId": {
-            "type": "integer",
-            "format": "int32"
-          },
           "studentId": {
             "type": "integer",
             "format": "int32"
@@ -4316,13 +4158,6 @@
           "moodLevel": {
             "type": "string",
             "nullable": true
-          },
-          "entryDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "student": {
-            "$ref": "#/components/schemas/Student"
           }
         },
         "additionalProperties": false

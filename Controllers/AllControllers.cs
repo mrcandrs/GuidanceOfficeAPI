@@ -39,12 +39,12 @@ namespace GuidanceOfficeAPI.Controllers
         public InitialAssessmentFormController(AppDbContext context) : base(context) { }
     }
 
-    [ApiController]
+    /*[ApiController]
     [Route("api/[controller]")]
     public class MoodTrackerController : CrudController<MoodTracker>
     {
         public MoodTrackerController(AppDbContext context) : base(context) { }
-    }
+    }*/
 
     [ApiController]
     [Route("api/[controller]")]

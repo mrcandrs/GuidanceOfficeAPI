@@ -292,12 +292,17 @@ namespace GuidanceOfficeAPI.Models
         [Key]
         public int MoodId { get; set; }
 
+        [Required]
         public int StudentId { get; set; }
-        public string MoodLevel { get; set; }
-        public DateTime EntryDate { get; set; }
 
-        [ForeignKey("StudentId")]
-        public Student Student { get; set; }
+        [Required]
+        [MaxLength(50)]
+        public string MoodLevel { get; set; }
+
+        public DateTime EntryDate { get; set; } = DateTime.Now;
+
+        /*[ForeignKey("StudentId")]
+        public Student Student { get; set; }*/
     }
 
     public class AppointmentRequest

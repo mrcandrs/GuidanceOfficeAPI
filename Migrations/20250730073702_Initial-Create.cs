@@ -107,6 +107,23 @@ namespace GuidanceOfficeAPI.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "MoodTrackers",
+                columns: table => new
+                {
+                    MoodId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    StudentId = table.Column<int>(type: "int", nullable: false),
+                    MoodLevel = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    EntryDate = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MoodTrackers", x => x.MoodId);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "MotivationalQuotes",
                 columns: table => new
                 {
@@ -547,29 +564,6 @@ namespace GuidanceOfficeAPI.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "MoodTrackers",
-                columns: table => new
-                {
-                    MoodId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    StudentId = table.Column<int>(type: "int", nullable: false),
-                    MoodLevel = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    EntryDate = table.Column<DateTime>(type: "datetime(6)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_MoodTrackers", x => x.MoodId);
-                    table.ForeignKey(
-                        name: "FK_MoodTrackers_Students_StudentId",
-                        column: x => x.StudentId,
-                        principalTable: "Students",
-                        principalColumn: "StudentId",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "ReferralForms",
                 columns: table => new
                 {
@@ -784,11 +778,6 @@ namespace GuidanceOfficeAPI.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_InventoryForms_StudentId",
                 table: "InventoryForms",
-                column: "StudentId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_MoodTrackers_StudentId",
-                table: "MoodTrackers",
                 column: "StudentId");
 
             migrationBuilder.CreateIndex(

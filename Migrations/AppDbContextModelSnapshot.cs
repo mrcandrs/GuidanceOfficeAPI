@@ -730,14 +730,13 @@ namespace GuidanceOfficeAPI.Migrations
 
                     b.Property<string>("MoodLevel")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
 
                     b.HasKey("MoodId");
-
-                    b.HasIndex("StudentId");
 
                     b.ToTable("MoodTrackers");
                 });
@@ -1097,17 +1096,6 @@ namespace GuidanceOfficeAPI.Migrations
                 });
 
             modelBuilder.Entity("GuidanceOfficeAPI.Models.InventoryForm", b =>
-                {
-                    b.HasOne("GuidanceOfficeAPI.Models.Student", "Student")
-                        .WithMany()
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Student");
-                });
-
-            modelBuilder.Entity("GuidanceOfficeAPI.Models.MoodTracker", b =>
                 {
                     b.HasOne("GuidanceOfficeAPI.Models.Student", "Student")
                         .WithMany()
