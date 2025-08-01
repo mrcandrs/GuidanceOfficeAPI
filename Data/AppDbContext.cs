@@ -14,7 +14,7 @@
         public DbSet<CareerPlanningForm> CareerPlanningForms { get; set; }
         public DbSet<InitialAssessmentForm> InitialAssessmentForms { get; set; }
         public DbSet<MoodTracker> MoodTrackers { get; set; }
-        public DbSet<AppointmentRequest> AppointmentRequests { get; set; }
+        public DbSet<GuidanceAppointment> GuidanceAppointments { get; set; }
         public DbSet<GuidancePass> GuidancePasses { get; set; }
 
         public DbSet<ExitInterviewForm> ExitInterviewForms { get; set; }

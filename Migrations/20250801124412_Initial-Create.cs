@@ -68,6 +68,32 @@ namespace GuidanceOfficeAPI.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "GuidanceAppointments",
+                columns: table => new
+                {
+                    AppointmentId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    StudentId = table.Column<int>(type: "int", nullable: false),
+                    StudentName = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ProgramSection = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Reason = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Date = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Time = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Status = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GuidanceAppointments", x => x.AppointmentId);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "JournalEntries",
                 columns: table => new
                 {
@@ -169,33 +195,31 @@ namespace GuidanceOfficeAPI.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "AppointmentRequests",
+                name: "GuidancePasses",
                 columns: table => new
                 {
-                    AppointmentId = table.Column<int>(type: "int", nullable: false)
+                    PassId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    StudentId = table.Column<int>(type: "int", nullable: false),
-                    PreferredDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    PreferredTime = table.Column<TimeSpan>(type: "time(6)", nullable: false),
-                    ReasonAcademics = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    ReasonSocial = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    ReasonPersonal = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    ReasonCareer = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    ReasonOthers = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    OtherReasonText = table.Column<string>(type: "longtext", nullable: false)
+                    AppointmentId = table.Column<int>(type: "int", nullable: false),
+                    IssuedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Notes = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Status = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    SubmittedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                    CounselorId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AppointmentRequests", x => x.AppointmentId);
+                    table.PrimaryKey("PK_GuidancePasses", x => x.PassId);
                     table.ForeignKey(
-                        name: "FK_AppointmentRequests_Students_StudentId",
-                        column: x => x.StudentId,
-                        principalTable: "Students",
-                        principalColumn: "StudentId",
+                        name: "FK_GuidancePasses_Counselors_CounselorId",
+                        column: x => x.CounselorId,
+                        principalTable: "Counselors",
+                        principalColumn: "CounselorId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_GuidancePasses_GuidanceAppointments_AppointmentId",
+                        column: x => x.AppointmentId,
+                        principalTable: "GuidanceAppointments",
+                        principalColumn: "AppointmentId",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
@@ -626,36 +650,6 @@ namespace GuidanceOfficeAPI.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "GuidancePasses",
-                columns: table => new
-                {
-                    PassId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    AppointmentId = table.Column<int>(type: "int", nullable: false),
-                    IssuedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    Notes = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    CounselorId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_GuidancePasses", x => x.PassId);
-                    table.ForeignKey(
-                        name: "FK_GuidancePasses_AppointmentRequests_AppointmentId",
-                        column: x => x.AppointmentId,
-                        principalTable: "AppointmentRequests",
-                        principalColumn: "AppointmentId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_GuidancePasses_Counselors_CounselorId",
-                        column: x => x.CounselorId,
-                        principalTable: "Counselors",
-                        principalColumn: "CounselorId",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "Siblings",
                 columns: table => new
                 {
@@ -709,11 +703,6 @@ namespace GuidanceOfficeAPI.Migrations
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AppointmentRequests_StudentId",
-                table: "AppointmentRequests",
-                column: "StudentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CareerPlanningForms_StudentId",
@@ -856,10 +845,10 @@ namespace GuidanceOfficeAPI.Migrations
                 name: "WorkExperiences");
 
             migrationBuilder.DropTable(
-                name: "AppointmentRequests");
+                name: "Counselors");
 
             migrationBuilder.DropTable(
-                name: "Counselors");
+                name: "GuidanceAppointments");
 
             migrationBuilder.DropTable(
                 name: "InventoryForms");

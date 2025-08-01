@@ -305,26 +305,22 @@ namespace GuidanceOfficeAPI.Models
         public Student Student { get; set; }*/
     }
 
-    public class AppointmentRequest
+    public class GuidanceAppointment
     {
         [Key]
         public int AppointmentId { get; set; }
+        public int StudentId { get; set; }  // <-- Important
+        public string StudentName { get; set; }
+        public string ProgramSection { get; set; }
+        public string Reason { get; set; }
+        public string Date { get; set; }
+        public string Time { get; set; }
+        public string Status { get; set; } = "pending";
 
-        public int StudentId { get; set; }
-        public DateTime PreferredDate { get; set; }
-        public TimeSpan PreferredTime { get; set; }
-        public bool ReasonAcademics { get; set; }
-        public bool ReasonSocial { get; set; }
-        public bool ReasonPersonal { get; set; }
-        public bool ReasonCareer { get; set; }
-        public bool ReasonOthers { get; set; }
-        public string OtherReasonText { get; set; }
-        public string Status { get; set; }
-        public DateTime SubmittedAt { get; set; }
-
-        [ForeignKey("StudentId")]
-        public Student Student { get; set; }
+        // Optional: Foreign key relationship (if you have a Student table)
+        // public Student Student { get; set; }
     }
+
 
     public class GuidancePass
     {
@@ -337,7 +333,7 @@ namespace GuidanceOfficeAPI.Models
         public int CounselorId { get; set; }
 
         [ForeignKey("AppointmentId")]
-        public AppointmentRequest Appointment { get; set; }
+        public GuidanceAppointment Appointment { get; set; }
 
         [ForeignKey("CounselorId")]
         public Counselor Counselor { get; set; }

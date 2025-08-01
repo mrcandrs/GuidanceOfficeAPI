@@ -46,12 +46,12 @@ namespace GuidanceOfficeAPI.Controllers
         public MoodTrackerController(AppDbContext context) : base(context) { }
     }*/
 
-    [ApiController]
+    /*[ApiController]
     [Route("api/[controller]")]
     public class AppointmentRequestController : CrudController<AppointmentRequest>
     {
         public AppointmentRequestController(AppDbContext context) : base(context) { }
-    }
+    }*/
 
     [ApiController]
     [Route("api/[controller]")]

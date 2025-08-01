@@ -19,54 +19,6 @@ namespace GuidanceOfficeAPI.Migrations
                 .HasAnnotation("ProductVersion", "6.0.21")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("GuidanceOfficeAPI.Models.AppointmentRequest", b =>
-                {
-                    b.Property<int>("AppointmentId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("OtherReasonText")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime>("PreferredDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<TimeSpan>("PreferredTime")
-                        .HasColumnType("time(6)");
-
-                    b.Property<bool>("ReasonAcademics")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<bool>("ReasonCareer")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<bool>("ReasonOthers")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<bool>("ReasonPersonal")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<bool>("ReasonSocial")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("SubmittedAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.HasKey("AppointmentId");
-
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("AppointmentRequests");
-                });
-
             modelBuilder.Entity("GuidanceOfficeAPI.Models.CareerPlanningForm", b =>
                 {
                     b.Property<int>("CareerId")
@@ -401,6 +353,44 @@ namespace GuidanceOfficeAPI.Migrations
                     b.HasKey("ExitFormId");
 
                     b.ToTable("ExitInterviewForms");
+                });
+
+            modelBuilder.Entity("GuidanceOfficeAPI.Models.GuidanceAppointment", b =>
+                {
+                    b.Property<int>("AppointmentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Date")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ProgramSection")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StudentName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Time")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("AppointmentId");
+
+                    b.ToTable("GuidanceAppointments");
                 });
 
             modelBuilder.Entity("GuidanceOfficeAPI.Models.GuidanceNote", b =>
@@ -971,17 +961,6 @@ namespace GuidanceOfficeAPI.Migrations
                     b.ToTable("WorkExperiences");
                 });
 
-            modelBuilder.Entity("GuidanceOfficeAPI.Models.AppointmentRequest", b =>
-                {
-                    b.HasOne("GuidanceOfficeAPI.Models.Student", "Student")
-                        .WithMany()
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Student");
-                });
-
             modelBuilder.Entity("GuidanceOfficeAPI.Models.CareerPlanningForm", b =>
                 {
                     b.HasOne("GuidanceOfficeAPI.Models.Student", "Student")
@@ -1067,7 +1046,7 @@ namespace GuidanceOfficeAPI.Migrations
 
             modelBuilder.Entity("GuidanceOfficeAPI.Models.GuidancePass", b =>
                 {
-                    b.HasOne("GuidanceOfficeAPI.Models.AppointmentRequest", "Appointment")
+                    b.HasOne("GuidanceOfficeAPI.Models.GuidanceAppointment", "Appointment")
                         .WithMany()
                         .HasForeignKey("AppointmentId")
                         .OnDelete(DeleteBehavior.Cascade)
