@@ -21,18 +21,26 @@
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<ExitInterviewForm>()
                 .Property(e => e.SpecificReasons)
                 .HasConversion(
                     v => v,
-                    v => v); // string, already comma-separated
+                    v => v);
 
             modelBuilder.Entity<ExitInterviewForm>()
                 .Property(e => e.ServiceResponsesJson)
                 .HasConversion(
                     v => v,
-                    v => v); // stringified JSON
+                    v => v);
+
+            // ✅ Add this unique index:
+            modelBuilder.Entity<CareerPlanningForm>()
+                .HasIndex(f => f.StudentId)
+                .IsUnique();
         }
+
 
         public DbSet<ReferralForm> ReferralForms { get; set; }
         public DbSet<EndorsementCustodyForm> EndorsementCustodyForms { get; set; }

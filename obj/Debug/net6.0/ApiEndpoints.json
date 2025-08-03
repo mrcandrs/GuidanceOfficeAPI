@@ -1,5 +1,52 @@
 [
   {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.CareerPlanningController",
+    "Method": "GetCareerPlanningForm",
+    "RelativePath": "api/CareerPlanning/{studentId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "studentId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "GuidanceOfficeAPI.Models.CareerPlanningForm",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.CareerPlanningController",
+    "Method": "UpdateCareerPlanningForm",
+    "RelativePath": "api/CareerPlanning/{studentId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "studentId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "updatedForm",
+        "Type": "GuidanceOfficeAPI.Models.CareerPlanningForm",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "GuidanceOfficeAPI.Controllers.CrudController\u00601[[GuidanceOfficeAPI.Models.CareerPlanningForm, GuidanceOfficeAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
     "Method": "GetAll",
     "RelativePath": "api/CareerPlanningForm",

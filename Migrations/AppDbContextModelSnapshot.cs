@@ -187,7 +187,8 @@ namespace GuidanceOfficeAPI.Migrations
 
                     b.HasKey("CareerId");
 
-                    b.HasIndex("StudentId");
+                    b.HasIndex("StudentId")
+                        .IsUnique();
 
                     b.ToTable("CareerPlanningForms");
                 });

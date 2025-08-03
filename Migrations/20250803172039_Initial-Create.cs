@@ -707,7 +707,8 @@ namespace GuidanceOfficeAPI.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_CareerPlanningForms_StudentId",
                 table: "CareerPlanningForms",
-                column: "StudentId");
+                column: "StudentId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_ConsentForms_CounselorId",
