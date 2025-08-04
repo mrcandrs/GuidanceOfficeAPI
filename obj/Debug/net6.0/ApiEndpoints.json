@@ -1682,6 +1682,32 @@
   },
   {
     "ContainingType": "GuidanceOfficeAPI.Controllers.StudentAuthController",
+    "Method": "CheckDuplicateEmail",
+    "RelativePath": "api/student/check-duplicate-email",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "email1",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "email2",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "studentId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.StudentAuthController",
     "Method": "CheckEmailOrUsername",
     "RelativePath": "api/student/check-email-username",
     "HttpMethod": "GET",

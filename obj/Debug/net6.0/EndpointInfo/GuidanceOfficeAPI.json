@@ -2957,6 +2957,42 @@
         }
       }
     },
+    "/api/student/check-duplicate-email": {
+      "get": {
+        "tags": [
+          "StudentAuth"
+        ],
+        "parameters": [
+          {
+            "name": "email1",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "email2",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "studentId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/api/student/check-email-username": {
       "get": {
         "tags": [

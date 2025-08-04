@@ -170,6 +170,25 @@ namespace GuidanceOfficeAPI.Controllers
             });
         }
 
+        // GET: api/student/check-duplicate-email
+        [HttpGet("check-duplicate-email")]
+        public IActionResult CheckDuplicateEmail(string email1, string email2, int studentId)
+        {
+            var existingEmails = _context.Students
+                .Where(s => s.StudentId != studentId && (s.Email == email1 || s.Email == email2))
+                .Select(s => s.Email)
+                .ToList();
+
+            return Ok(new
+            {
+                email1Exists = existingEmails.Contains(email1),
+                email2Exists = existingEmails.Contains(email2)
+            });
+        }
+
+
+
+
         // GET: api/student/check-email-username
         [HttpGet("check-email-username")]
         public IActionResult CheckEmailOrUsername([FromQuery] string email, [FromQuery] string username, [FromQuery] int studentId)
