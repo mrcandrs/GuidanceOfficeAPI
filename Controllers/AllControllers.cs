@@ -18,12 +18,12 @@ namespace GuidanceOfficeAPI.Controllers
         public ConsentFormController(AppDbContext context) : base(context) { }
     }
 
-    [ApiController]
+    /*[ApiController]
     [Route("api/[controller]")]
     public class InventoryFormController : CrudController<InventoryForm>
     {
         public InventoryFormController(AppDbContext context) : base(context) { }
-    }
+    }*/
 
     [ApiController]
     [Route("api/[controller]")]

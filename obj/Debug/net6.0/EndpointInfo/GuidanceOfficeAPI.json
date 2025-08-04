@@ -1812,98 +1812,14 @@
         }
       }
     },
-    "/api/InventoryForm": {
+    "/api/Inventory/{studentId}": {
       "get": {
         "tags": [
-          "InventoryForm"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/InventoryForm"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/InventoryForm"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/InventoryForm"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "InventoryForm"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/InventoryForm"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/InventoryForm"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/InventoryForm"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/InventoryForm"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InventoryForm"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InventoryForm"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/InventoryForm/{id}": {
-      "get": {
-        "tags": [
-          "InventoryForm"
+          "Inventory"
         ],
         "parameters": [
           {
-            "name": "id",
+            "name": "studentId",
             "in": "path",
             "required": true,
             "schema": {
@@ -1937,11 +1853,11 @@
       },
       "put": {
         "tags": [
-          "InventoryForm"
+          "Inventory"
         ],
         "parameters": [
           {
-            "name": "id",
+            "name": "studentId",
             "in": "path",
             "required": true,
             "schema": {
@@ -1969,27 +1885,6 @@
             }
           }
         },
-        "responses": {
-          "200": {
-            "description": "Success"
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "InventoryForm"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "Success"
