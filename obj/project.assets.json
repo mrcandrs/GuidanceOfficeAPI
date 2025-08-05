@@ -1241,7 +1241,7 @@
   },
   "packageFolders": {
     "C:\\Users\\Windows 10\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\Windows 10\\.nuget\\packages": {}
   },
   "project": {
     "version": "1.0.0",
@@ -1253,7 +1253,7 @@
       "outputPath": "C:\\Users\\Windows 10\\source\\repos\\GuidanceOfficeAPI\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        "C:\\Users\\Windows 10\\.nuget\\packages"
       ],
       "configFilePaths": [
         "C:\\Users\\Windows 10\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -1265,6 +1265,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "https://api.nuget.org/v3/index.json": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {

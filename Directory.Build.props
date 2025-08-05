@@ -1,6 +1,10 @@
 <Project>
   <PropertyGroup>
-    <RestoreNoFallbackFolder>true</RestoreNoFallbackFolder>
-    <RestoreFallbackFolders></RestoreFallbackFolders>
+    <RestoreAdditionalProjectSources>
+      https://api.nuget.org/v3/index.json
+    </RestoreAdditionalProjectSources>
+    <RestoreFallbackFolders>
+      $(UserProfile)/.nuget/packages
+    </RestoreFallbackFolders>
   </PropertyGroup>
 </Project>

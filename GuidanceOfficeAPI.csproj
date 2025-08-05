@@ -19,7 +19,8 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
-    <PropertyGroup>
-		<RestoreNoFallbackFolder>true</RestoreNoFallbackFolder>
+	<PropertyGroup>
+		<RestoreFallbackFolders>$(UserProfile)/.nuget/packages</RestoreFallbackFolders>
 	</PropertyGroup>
+
 </Project>
