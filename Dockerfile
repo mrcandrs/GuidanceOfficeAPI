@@ -1,69 +1,107 @@
-# Build stage
+# Build stage with extensive debugging
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# Create necessary directories
-RUN mkdir -p /.nuget/packages
+# Debug: Show initial state
+RUN echo "=== Initial environment ===" && \
+    dotnet --version && \
+    pwd && \
+    ls -la
 
-# Set environment variables for NuGet
+# Create directories
+RUN mkdir -p /.nuget/packages && \
+    mkdir -p /app/publish
+
+# Set environment variables
 ENV NUGET_PACKAGES=/.nuget/packages
 ENV DOTNET_NUGET_SIGNATURE_VERIFICATION=false
 
-# Create a clean NuGet.config
-RUN cat > NuGet.config << 'EOF'
-<?xml version="1.0" encoding="utf-8"?>
-<configuration>
-  <packageSources>
-    <clear />
-    <add key="nuget.org" value="https://api.nuget.org/v3/index.json" protocolVersion="3" />
-  </packageSources>
-  <config>
-    <add key="globalPackagesFolder" value="/.nuget/packages" />
-  </config>
-</configuration>
-EOF
+# Debug: Show all existing NuGet configs
+RUN echo "=== Finding existing NuGet configs ===" && \
+    find / -name "*.config" 2>/dev/null | grep -i nuget || echo "No existing NuGet configs found"
 
-# Copy project files first (for better Docker layer caching)
+# Create clean NuGet.config
+RUN echo '<?xml version="1.0" encoding="utf-8"?>' > NuGet.config && \
+    echo '<configuration>' >> NuGet.config && \
+    echo '  <packageSources>' >> NuGet.config && \
+    echo '    <clear />' >> NuGet.config && \
+    echo '    <add key="nuget.org" value="https://api.nuget.org/v3/index.json" protocolVersion="3" />' >> NuGet.config && \
+    echo '  </packageSources>' >> NuGet.config && \
+    echo '  <config>' >> NuGet.config && \
+    echo '    <add key="globalPackagesFolder" value="/.nuget/packages" />' >> NuGet.config && \
+    echo '  </config>' >> NuGet.config && \
+    echo '</configuration>' >> NuGet.config
+
+# Debug: Show our NuGet config
+RUN echo "=== Our NuGet.config ===" && \
+    cat NuGet.config
+
+# Copy project files
 COPY *.csproj ./
 COPY *.sln ./
 
-# Restore packages
-RUN dotnet restore /src/GuidanceOfficeAPI.sln \
+# Debug: Show copied files and project content
+RUN echo "=== Copied project files ===" && \
+    ls -la && \
+    echo "=== Project file content ===" && \
+    cat *.csproj
+
+# Clear any cached NuGet data
+RUN dotnet nuget locals all --clear
+
+# Restore with detailed logging
+RUN echo "=== Starting restore ===" && \
+    dotnet restore /src/GuidanceOfficeAPI.sln \
     --packages /.nuget/packages \
     --configfile ./NuGet.config \
     --no-cache \
     --force \
-    --verbosity normal
+    --verbosity detailed
 
-# Copy all source code
+# Debug: Verify restore worked
+RUN echo "=== After restore ===" && \
+    ls -la /.nuget/packages
+
+# Copy source code
 COPY . .
 
-# Build the project
-RUN dotnet build /src/GuidanceOfficeAPI.sln \
+# Debug: Show all files
+RUN echo "=== All source files ===" && \
+    find . -type f -name "*.cs" | head -10
+
+# Build with logging
+RUN echo "=== Starting build ===" && \
+    dotnet build /src/GuidanceOfficeAPI.sln \
     --configuration Release \
     --no-restore \
-    --verbosity normal
+    --verbosity detailed
 
-# Publish the application
-RUN dotnet publish /src/GuidanceOfficeAPI.csproj \
+# Publish with logging
+RUN echo "=== Starting publish ===" && \
+    dotnet publish /src/GuidanceOfficeAPI.csproj \
     --configuration Release \
     --no-build \
     --output /app/publish \
-    --verbosity normal
+    --verbosity detailed
 
-# Verify publish directory exists
-RUN ls -la /app/publish
+# Verify publish directory
+RUN echo "=== Published files ===" && \
+    ls -la /app/publish && \
+    echo "=== Published DLL check ===" && \
+    ls -la /app/publish/*.dll
 
 # Runtime stage
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 
-# Copy published app from build stage
+# Copy from build stage
 COPY --from=build /app/publish .
 
-# Expose port (adjust as needed)
+# Final verification
+RUN echo "=== Final app directory ===" && \
+    ls -la
+
 EXPOSE 80
 EXPOSE 443
 
-# Set entry point
 ENTRYPOINT ["dotnet", "GuidanceOfficeAPI.dll"]
