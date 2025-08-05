@@ -7,8 +7,8 @@ WORKDIR /src
 
 COPY . .
 
-# Use project-specific NuGet.config
-RUN dotnet restore --configfile NuGet.config
+# Use the default nuget source and skip custom config
+RUN dotnet restore
 
 RUN dotnet publish -c Release -o /app/publish
 
