@@ -1,44 +1,36 @@
+# Build stage
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
 
-# Show initial state
-RUN echo "=== Initial environment ===" && \
-    dotnet --version && \
-    pwd && \
-    ls -la
-
-# Copy everything
+# Copy everything (since the debug version worked)
 COPY . .
 
-# Show what we copied
-RUN echo "=== After copying files ===" && \
-    ls -la && \
-    echo "=== Project file content ===" && \
-    cat *.csproj && \
-    echo "=== Solution file ===" && \
-    cat *.sln || echo "No .sln file found"
-
 # Clean any existing build artifacts
-RUN echo "=== Cleaning build artifacts ===" && \
-    rm -rf obj bin || true && \
+RUN rm -rf obj bin || true && \
     dotnet clean || true
 
 # Clear NuGet cache
-RUN echo "=== Clearing NuGet cache ===" && \
-    dotnet nuget locals all --clear
+RUN dotnet nuget locals all --clear
 
-# Try restore with verbose output
-RUN echo "=== Attempting restore ===" && \
-    dotnet restore --verbosity diagnostic || \
-    echo "Restore failed, trying with different approach"
+# Restore packages
+RUN dotnet restore
 
-# Check what restore created
-RUN echo "=== After restore attempt ===" && \
-    ls -la && \
-    ls -la obj/ || echo "No obj directory" && \
-    find . -name "project.assets.json" || echo "No project.assets.json found"
+# Build the application
+RUN dotnet build --configuration Release --no-restore
 
-# Try building
-RUN echo "=== Attempting build ===" && \
-    dotnet build --verbosity diagnostic || \
-    echo "Build failed"
+# Publish the application
+RUN dotnet publish --configuration Release --no-build --output /app/publish
+
+# Runtime stage
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+WORKDIR /app
+
+# Copy the published application from build stage
+COPY --from=build /app/publish .
+
+# Expose ports
+EXPOSE 80
+EXPOSE 443
+
+# Set the entry point
+ENTRYPOINT ["dotnet", "GuidanceOfficeAPI.dll"]
