@@ -87,6 +87,7 @@ namespace GuidanceOfficeAPI.Controllers
                     {
                         foreach (var sibling in dto.InventoryForm.Siblings)
                         {
+                            sibling.SiblingId = 0; // 👈 Force EF to treat it as a new record
                             sibling.InventoryFormId = inventoryFormId;
                             _context.Siblings.Add(sibling);
                         }
@@ -98,6 +99,7 @@ namespace GuidanceOfficeAPI.Controllers
                     {
                         foreach (var work in dto.InventoryForm.WorkExperience)
                         {
+                            work.WorkId = 0;
                             work.InventoryFormId = inventoryFormId;
                             _context.WorkExperiences.Add(work);
                         }
