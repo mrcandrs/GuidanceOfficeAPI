@@ -76,8 +76,6 @@ namespace GuidanceOfficeAPI.Controllers
                     // 3. Save InventoryForm
                     dto.InventoryForm.StudentId = studentId;
                     dto.InventoryForm.SubmissionDate = DateTime.UtcNow;
-                    dto.InventoryForm.Siblings = null;
-                    dto.InventoryForm.WorkExperience = null;
                     _context.InventoryForms.Add(dto.InventoryForm);
                     await _context.SaveChangesAsync();
 
@@ -85,7 +83,7 @@ namespace GuidanceOfficeAPI.Controllers
                     int inventoryFormId = dto.InventoryForm.InventoryId;
 
                     // 4. Save Siblings if they exist
-                    if (dto.InventoryForm.Siblings != null && dto.InventoryForm.Siblings.Any())
+                    /*if (dto.InventoryForm.Siblings != null && dto.InventoryForm.Siblings.Any())
                     {
                         foreach (var sibling in dto.InventoryForm.Siblings)
                         {
@@ -94,10 +92,10 @@ namespace GuidanceOfficeAPI.Controllers
                             _context.Siblings.Add(sibling);
                         }
                         await _context.SaveChangesAsync();
-                    }
+                    }*/
 
                     // 5. Save Work Experience if they exist
-                    if (dto.InventoryForm.WorkExperience != null && dto.InventoryForm.WorkExperience.Any())
+                    /*if (dto.InventoryForm.WorkExperience != null && dto.InventoryForm.WorkExperience.Any())
                     {
                         foreach (var work in dto.InventoryForm.WorkExperience)
                         {
@@ -106,7 +104,7 @@ namespace GuidanceOfficeAPI.Controllers
                             _context.WorkExperiences.Add(work);
                         }
                         await _context.SaveChangesAsync();
-                    }
+                    }*/
 
                     // 6. Save CareerPlanningForm
                     dto.CareerPlanningForm.StudentId = studentId;
