@@ -1246,11 +1246,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Windows 10\\Source\\Repos\\GuidanceOfficeAPI\\GuidanceOfficeAPI.csproj",
+      "projectUniqueName": "C:\\Users\\Windows 10\\source\\repos\\GuidanceOfficeAPI\\GuidanceOfficeAPI.csproj",
       "projectName": "GuidanceOfficeAPI",
-      "projectPath": "C:\\Users\\Windows 10\\Source\\Repos\\GuidanceOfficeAPI\\GuidanceOfficeAPI.csproj",
+      "projectPath": "C:\\Users\\Windows 10\\source\\repos\\GuidanceOfficeAPI\\GuidanceOfficeAPI.csproj",
       "packagesPath": "C:\\Users\\Windows 10\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Windows 10\\Source\\Repos\\GuidanceOfficeAPI\\obj\\",
+      "outputPath": "C:\\Users\\Windows 10\\source\\repos\\GuidanceOfficeAPI\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
