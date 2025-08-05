@@ -10,8 +10,10 @@ COPY . .
 # Use the default nuget source and skip custom config
 RUN dotnet restore /src/GuidanceOfficeAPI.sln \
     --source "https://api.nuget.org/v3/index.json" \
-    --disable-parallel \
-    --no-cache
+    --no-cache \
+    --force \
+    --ignore-failed-sources
+
 
 RUN dotnet publish -c Release -o /app/publish
 
