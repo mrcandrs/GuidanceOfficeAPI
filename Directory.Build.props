@@ -1,0 +1,5 @@
+<Project>
+  <PropertyGroup>
+    <RestoreNoFallbackFolder>true</RestoreNoFallbackFolder>
+  </PropertyGroup>
+</Project>
