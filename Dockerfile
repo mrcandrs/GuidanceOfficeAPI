@@ -2,76 +2,67 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# Create necessary directories
-RUN mkdir -p /.nuget/packages
-
-# Set environment variables for NuGet
-ENV NUGET_PACKAGES=/.nuget/packages
+# Set up clean NuGet environment
+ENV NUGET_PACKAGES=/nuget
 ENV DOTNET_NUGET_SIGNATURE_VERIFICATION=false
 
-# Create a clean NuGet.config
-RUN echo '<?xml version="1.0" encoding="utf-8"?>' > NuGet.config && \
-    echo '<configuration>' >> NuGet.config && \
-    echo '  <packageSources>' >> NuGet.config && \
-    echo '    <clear />' >> NuGet.config && \
-    echo '    <add key="nuget.org" value="https://api.nuget.org/v3/index.json" protocolVersion="3" />' >> NuGet.config && \
-    echo '  </packageSources>' >> NuGet.config && \
-    echo '  <config>' >> NuGet.config && \
-    echo '    <add key="globalPackagesFolder" value="/.nuget/packages" />' >> NuGet.config && \
-    echo '  </config>' >> NuGet.config && \
-    echo '</configuration>' >> NuGet.config
+# Create NuGet packages directory
+RUN mkdir -p /nuget
 
-# Copy project files first (for better Docker layer caching)
+# Clear any existing NuGet configuration
+RUN dotnet nuget locals all --clear || true
+
+# Create minimal NuGet.config
+RUN echo '<?xml version="1.0" encoding="utf-8"?>' > nuget.config && \
+    echo '<configuration>' >> nuget.config && \
+    echo '  <packageSources>' >> nuget.config && \
+    echo '    <clear />' >> nuget.config && \
+    echo '    <add key="nuget.org" value="https://api.nuget.org/v3/index.json" />' >> nuget.config && \
+    echo '  </packageSources>' >> nuget.config && \
+    echo '</configuration>' >> nuget.config
+
+# Copy project file(s) for restore
 COPY *.csproj ./
 COPY *.sln ./
 
-# CRITICAL: Remove any obj/bin directories that might contain Windows-specific cache
-RUN find . -name "obj" -type d -exec rm -rf {} + 2>/dev/null || true && \
-    find . -name "bin" -type d -exec rm -rf {} + 2>/dev/null || true
+# Restore packages using the solution file
+RUN dotnet restore GuidanceOfficeAPI.sln \
+    --configfile nuget.config \
+    --packages /nuget \
+    --runtime linux-x64
 
-# Clear all NuGet caches completely
-RUN dotnet nuget locals all --clear
+# Copy the rest of the source code
+COPY . ./
 
-# Restore packages with clean environment
-RUN dotnet restore /src/GuidanceOfficeAPI.sln \
-    --packages /.nuget/packages \
-    --configfile ./NuGet.config \
-    --no-cache \
-    --force \
-    --ignore-failed-sources
-
-# Copy all source code
-COPY . .
-
-# Remove obj/bin again after copying source (in case they were copied)
-RUN find . -name "obj" -type d -exec rm -rf {} + 2>/dev/null || true && \
-    find . -name "bin" -type d -exec rm -rf {} + 2>/dev/null || true
-
-# Build the project with clean slate
-RUN dotnet build /src/GuidanceOfficeAPI.sln \
+# Build the application
+RUN dotnet build GuidanceOfficeAPI.sln \
     --configuration Release \
-    --no-restore \
-    --force
+    --no-restore
 
 # Publish the application
-RUN dotnet publish /src/GuidanceOfficeAPI.csproj \
+RUN dotnet publish GuidanceOfficeAPI.csproj \
     --configuration Release \
     --no-build \
-    --output /app/publish
+    --runtime linux-x64 \
+    --self-contained false \
+    --output /app/out
 
-# Verify publish directory exists
-RUN ls -la /app/publish
-
-# Runtime stage
+# Final stage - runtime
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 
-# Copy published app from build stage
-COPY --from=build /app/publish .
+# Create a non-root user
+RUN adduser --disabled-password --gecos '' appuser
 
-# Expose port (adjust as needed)
-EXPOSE 80
-EXPOSE 443
+# Copy the published application
+COPY --from=build /app/out .
 
-# Set entry point
+# Change ownership to the app user
+RUN chown -R appuser:appuser /app
+USER appuser
+
+# Expose the port
+EXPOSE 8080
+
+# Set the entry point
 ENTRYPOINT ["dotnet", "GuidanceOfficeAPI.dll"]
