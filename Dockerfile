@@ -1,68 +1,44 @@
-# Build stage
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /src
-
-# Set up clean NuGet environment
-ENV NUGET_PACKAGES=/nuget
-ENV DOTNET_NUGET_SIGNATURE_VERIFICATION=false
-
-# Create NuGet packages directory
-RUN mkdir -p /nuget
-
-# Clear any existing NuGet configuration
-RUN dotnet nuget locals all --clear || true
-
-# Create minimal NuGet.config
-RUN echo '<?xml version="1.0" encoding="utf-8"?>' > nuget.config && \
-    echo '<configuration>' >> nuget.config && \
-    echo '  <packageSources>' >> nuget.config && \
-    echo '    <clear />' >> nuget.config && \
-    echo '    <add key="nuget.org" value="https://api.nuget.org/v3/index.json" />' >> nuget.config && \
-    echo '  </packageSources>' >> nuget.config && \
-    echo '</configuration>' >> nuget.config
-
-# Copy project file(s) for restore
-COPY *.csproj ./
-COPY *.sln ./
-
-# Restore packages using the solution file
-RUN dotnet restore GuidanceOfficeAPI.sln \
-    --configfile nuget.config \
-    --packages /nuget \
-    --runtime linux-x64
-
-# Copy the rest of the source code
-COPY . ./
-
-# Build the application
-RUN dotnet build GuidanceOfficeAPI.sln \
-    --configuration Release \
-    --no-restore
-
-# Publish the application
-RUN dotnet publish GuidanceOfficeAPI.csproj \
-    --configuration Release \
-    --no-build \
-    --runtime linux-x64 \
-    --self-contained false \
-    --output /app/out
-
-# Final stage - runtime
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 
-# Create a non-root user
-RUN adduser --disabled-password --gecos '' appuser
+# Show initial state
+RUN echo "=== Initial environment ===" && \
+    dotnet --version && \
+    pwd && \
+    ls -la
 
-# Copy the published application
-COPY --from=build /app/out .
+# Copy everything
+COPY . .
 
-# Change ownership to the app user
-RUN chown -R appuser:appuser /app
-USER appuser
+# Show what we copied
+RUN echo "=== After copying files ===" && \
+    ls -la && \
+    echo "=== Project file content ===" && \
+    cat *.csproj && \
+    echo "=== Solution file ===" && \
+    cat *.sln || echo "No .sln file found"
 
-# Expose the port
-EXPOSE 8080
+# Clean any existing build artifacts
+RUN echo "=== Cleaning build artifacts ===" && \
+    rm -rf obj bin || true && \
+    dotnet clean || true
 
-# Set the entry point
-ENTRYPOINT ["dotnet", "GuidanceOfficeAPI.dll"]
+# Clear NuGet cache
+RUN echo "=== Clearing NuGet cache ===" && \
+    dotnet nuget locals all --clear
+
+# Try restore with verbose output
+RUN echo "=== Attempting restore ===" && \
+    dotnet restore --verbosity diagnostic || \
+    echo "Restore failed, trying with different approach"
+
+# Check what restore created
+RUN echo "=== After restore attempt ===" && \
+    ls -la && \
+    ls -la obj/ || echo "No obj directory" && \
+    find . -name "project.assets.json" || echo "No project.assets.json found"
+
+# Try building
+RUN echo "=== Attempting build ===" && \
+    dotnet build --verbosity diagnostic || \
+    echo "Build failed"
