@@ -9,8 +9,8 @@ COPY . .
 
 # Copy NuGet config first
 COPY NuGet.config ./
-# Then restore
-RUN dotnet restore /src/GuidanceOfficeAPI.sln --no-cache --force
+# Use the config file explicitly
+RUN dotnet restore /src/GuidanceOfficeAPI.sln --configfile ./NuGet.config --no-cache --force
 
 RUN dotnet publish -c Release -o /app/publish
 
