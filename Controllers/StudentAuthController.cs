@@ -41,7 +41,7 @@ namespace GuidanceOfficeAPI.Controllers
 
             try
             {
-                // 🔒 Check for duplicate email or student number
+                // Check for duplicates
                 bool emailExists = _context.Students.Any(s => s.Email == dto.Student.Email);
                 bool studentNumberExists = _context.Students.Any(s => s.StudentNumber == dto.Student.StudentNumber);
                 bool userNameExists = _context.Students.Any(s => s.Username == dto.Student.Username);
@@ -57,35 +57,82 @@ namespace GuidanceOfficeAPI.Controllers
                     });
                 }
 
-                // Save student
-                _context.Students.Add(dto.Student);
-                await _context.SaveChangesAsync();
+                // Start transaction for data integrity
+                using var transaction = await _context.Database.BeginTransactionAsync();
 
-                int studentId = dto.Student.StudentId;
+                try
+                {
+                    // 1. Save Student first
+                    _context.Students.Add(dto.Student);
+                    await _context.SaveChangesAsync();
+                    int studentId = dto.Student.StudentId;
 
-                // Set foreign keys
-                dto.ConsentForm.StudentId = studentId;
-                dto.InventoryForm.StudentId = studentId;
-                dto.CareerPlanningForm.StudentId = studentId;
+                    // 2. Save ConsentForm
+                    dto.ConsentForm.StudentId = studentId;
+                    dto.ConsentForm.SignedDate = DateTime.UtcNow;
+                    _context.ConsentForms.Add(dto.ConsentForm);
+                    await _context.SaveChangesAsync();
 
-                dto.ConsentForm.SignedDate = DateTime.UtcNow;
-                dto.InventoryForm.SubmissionDate = DateTime.UtcNow;
-                dto.CareerPlanningForm.SubmittedAt = DateTime.UtcNow;
+                    // 3. Save InventoryForm
+                    dto.InventoryForm.StudentId = studentId;
+                    dto.InventoryForm.SubmissionDate = DateTime.UtcNow;
+                    _context.InventoryForms.Add(dto.InventoryForm);
+                    await _context.SaveChangesAsync();
 
-                _context.ConsentForms.Add(dto.ConsentForm);
-                _context.InventoryForms.Add(dto.InventoryForm);
-                await _context.SaveChangesAsync();
+                    // Get the generated InventoryForm ID
+                    int inventoryFormId = dto.InventoryForm.InventoryId;
 
-                _context.CareerPlanningForms.Add(dto.CareerPlanningForm);
-                await _context.SaveChangesAsync();
+                    // 4. Save Siblings if they exist
+                    if (dto.InventoryForm.Siblings != null && dto.InventoryForm.Siblings.Any())
+                    {
+                        foreach (var sibling in dto.InventoryForm.Siblings)
+                        {
+                            sibling.InventoryFormId = inventoryFormId;
+                            _context.Siblings.Add(sibling);
+                        }
+                        await _context.SaveChangesAsync();
+                    }
 
-                return Ok(new { message = "Registration successful." });
+                    // 5. Save Work Experience if they exist
+                    if (dto.InventoryForm.WorkExperience != null && dto.InventoryForm.WorkExperience.Any())
+                    {
+                        foreach (var work in dto.InventoryForm.WorkExperience)
+                        {
+                            work.InventoryFormId = inventoryFormId;
+                            _context.WorkExperiences.Add(work);
+                        }
+                        await _context.SaveChangesAsync();
+                    }
+
+                    // 6. Save CareerPlanningForm
+                    dto.CareerPlanningForm.StudentId = studentId;
+                    dto.CareerPlanningForm.SubmittedAt = DateTime.UtcNow;
+                    _context.CareerPlanningForms.Add(dto.CareerPlanningForm);
+                    await _context.SaveChangesAsync();
+
+                    // Commit transaction
+                    await transaction.CommitAsync();
+
+                    return Ok(new { message = "Registration successful." });
+                }
+                catch (Exception ex)
+                {
+                    await transaction.RollbackAsync();
+                    _logger.LogError(ex, "Error during transaction");
+                    throw;
+                }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("🔴 Registration error: " + ex.Message);
-                Console.WriteLine("🔴 Stack trace: " + ex.StackTrace);
-                return StatusCode(500, new { message = "Server error occurred.", error = ex.Message });
+                _logger.LogError(ex, "Registration error: {Message}", ex.Message);
+                _logger.LogError(ex, "Stack trace: {StackTrace}", ex.StackTrace);
+
+                return StatusCode(500, new
+                {
+                    message = "Server error occurred.",
+                    error = ex.Message,
+                    innerError = ex.InnerException?.Message
+                });
             }
         }
 
