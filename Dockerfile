@@ -8,7 +8,7 @@ WORKDIR /src
 COPY . .
 
 # Use the default nuget source and skip custom config
-RUN dotnet restore
+RUN dotnet restore -s https://api.nuget.org/v3/index.json
 
 RUN dotnet publish -c Release -o /app/publish
 
