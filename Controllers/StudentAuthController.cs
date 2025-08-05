@@ -76,6 +76,8 @@ namespace GuidanceOfficeAPI.Controllers
                     // 3. Save InventoryForm
                     dto.InventoryForm.StudentId = studentId;
                     dto.InventoryForm.SubmissionDate = DateTime.UtcNow;
+                    dto.InventoryForm.Siblings = null;
+                    dto.InventoryForm.WorkExperience = null;
                     _context.InventoryForms.Add(dto.InventoryForm);
                     await _context.SaveChangesAsync();
 
