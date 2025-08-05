@@ -7,6 +7,8 @@ WORKDIR /src
 
 COPY . .
 
+# Clear any existing NuGet configuration
+RUN dotnet nuget locals all --clear
 # Use the default nuget source and skip custom config
 RUN dotnet restore /src/GuidanceOfficeAPI.sln \
     --source "https://api.nuget.org/v3/index.json" \
