@@ -7,15 +7,10 @@ WORKDIR /src
 
 COPY . .
 
-# Clear any existing NuGet configuration
-RUN dotnet nuget locals all --clear
-# Use the default nuget source and skip custom config
-RUN dotnet restore /src/GuidanceOfficeAPI.sln \
-    --source "https://api.nuget.org/v3/index.json" \
-    --no-cache \
-    --force \
-    --ignore-failed-sources
-
+# Copy NuGet config first
+COPY NuGet.config ./
+# Then restore
+RUN dotnet restore /src/GuidanceOfficeAPI.sln --no-cache --force
 
 RUN dotnet publish -c Release -o /app/publish
 
