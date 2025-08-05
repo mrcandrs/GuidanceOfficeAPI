@@ -8,7 +8,9 @@ WORKDIR /src
 COPY . .
 
 # Use the default nuget source and skip custom config
-RUN dotnet restore --no-cache --force --ignore-failed-sources -s https://api.nuget.org/v3/index.json
+RUN dotnet restore /src/GuidanceOfficeAPI.sln \
+    /p:RestoreSources="https://api.nuget.org/v3/index.json" \
+    --no-cache
 
 RUN dotnet publish -c Release -o /app/publish
 
