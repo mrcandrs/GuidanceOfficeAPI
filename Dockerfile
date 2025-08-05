@@ -1,8 +1,8 @@
 # Build stage
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /app
 
-# Copy everything (since the debug version worked)
+# Copy everything
 COPY . .
 
 # Clean any existing build artifacts
@@ -36,8 +36,8 @@ RUN dotnet build --configuration Release --no-restore
 # Publish the application
 RUN dotnet publish --configuration Release --no-build --output /app/publish
 
-# Runtime stage
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+# Runtime stage - Use .NET 6.0 runtime to match your application
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS final
 WORKDIR /app
 
 # Copy the published application from build stage
