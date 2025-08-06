@@ -27,18 +27,29 @@ namespace GuidanceOfficeAPI.Controllers
         {
             try
             {
+                Console.WriteLine($"Login attempt for {dto.Email}");
+
                 var counselor = await _context.Counselors
                     .FirstOrDefaultAsync(c => c.Email == dto.Email);
 
-                if (counselor == null || counselor.Password != dto.Password)
+                if (counselor == null)
+                {
+                    Console.WriteLine("Counselor not found.");
                     return Unauthorized(new { message = "Invalid email or password." });
+                }
+
+                if (counselor.Password != dto.Password)
+                {
+                    Console.WriteLine("Invalid password.");
+                    return Unauthorized(new { message = "Invalid email or password." });
+                }
 
                 var claims = new[]
                 {
-                    new Claim(ClaimTypes.NameIdentifier, counselor.CounselorId.ToString()),
-                    new Claim(ClaimTypes.Email, counselor.Email),
-                    new Claim(ClaimTypes.Name, counselor.Name)
-                };
+            new Claim(ClaimTypes.NameIdentifier, counselor.CounselorId.ToString()),
+            new Claim(ClaimTypes.Email, counselor.Email),
+            new Claim(ClaimTypes.Name, counselor.Name)
+        };
 
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
                 var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -50,6 +61,8 @@ namespace GuidanceOfficeAPI.Controllers
                     expires: DateTime.UtcNow.AddHours(1),
                     signingCredentials: creds
                 );
+
+                Console.WriteLine("Login successful.");
 
                 return Ok(new
                 {
@@ -64,9 +77,11 @@ namespace GuidanceOfficeAPI.Controllers
             }
             catch (Exception ex)
             {
+                Console.WriteLine("Login exception: " + ex.Message);
                 return StatusCode(500, new { message = "Server error", error = ex.Message });
             }
         }
+
 
     }
 }
