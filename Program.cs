@@ -26,11 +26,14 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // cors
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowFrontend", policy =>
+    options.AddPolicy(name: MyAllowSpecificOrigins, 
+    policy =>
     {
-        policy.WithOrigins("https://your-vercel-domain.vercel.app") // replace with your actual frontend URL
-              .AllowAnyMethod()
-              .AllowAnyHeader();
+        policy.WithOrigins(
+                    "https://guidance-counselor-web-app.vercel.app"
+               )
+              .AllowAnyHeader()
+              .AllowAnyMethod();
     });
 });
 
@@ -53,9 +56,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 var app = builder.Build();
 
-app.UseCors("AllowFrontend");
 
-// Automatically apply pending migrations on startup
+//Automatically apply pending migrations on startup
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
@@ -69,10 +71,9 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 }
 
 app.UseHttpsRedirection();
-
+app.UseCors(MyAllowSpecificOrigins);
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();
