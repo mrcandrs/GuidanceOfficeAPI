@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 // Add services to the container.
 builder.Logging.ClearProviders();
@@ -22,14 +23,16 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     )
 );
 
+// cors
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
     {
         policy
-            .AllowAnyOrigin() // or .WithOrigins("http://localhost:3000") for strict policy
+            .WithOrigins("http://localhost:3000")
             .AllowAnyHeader()
-            .AllowAnyMethod();
+            .AllowAnyMethod()
+            .AllowCredentials();
     });
 });
 
