@@ -297,6 +297,31 @@ namespace GuidanceOfficeAPI.Controllers
             await _context.SaveChangesAsync();
             return Ok();
         }
+
+        // GET: api/student/students-with-mood
+        [HttpGet("students-with-mood")]
+        public async Task<IActionResult> GetStudentsWithLastMood()
+        {
+            var studentsWithMood = await _context.Students
+                .Select(s => new
+                {
+                    id = s.StudentId,
+                    name = s.FullName,
+                    studentno = s.StudentNumber,
+                    program = s.Program,
+                    section = s.GradeYear,
+                    status = "Active", // For now, static value
+                    lastMood = _context.MoodTrackers
+                        .Where(m => m.StudentId == s.StudentId)
+                        .OrderByDescending(m => m.EntryDate)
+                        .Select(m => m.MoodLevel)
+                        .FirstOrDefault()
+                })
+                .ToListAsync();
+
+            return Ok(studentsWithMood);
+        }
+
     }
 
     public class LoginRequest
