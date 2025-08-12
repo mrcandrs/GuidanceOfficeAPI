@@ -310,6 +310,8 @@ namespace GuidanceOfficeAPI.Controllers
                     studentno = s.StudentNumber,
                     program = s.Program,
                     section = s.GradeYear,
+                    dateregistered = s.DateRegistered,
+                    lastlogin = s.LastLogin,
                     status = "Active", // For now, static value
                     lastMood = _context.MoodTrackers
                         .Where(m => m.StudentId == s.StudentId)
