@@ -85,6 +85,7 @@ namespace GuidanceOfficeAPI.Controllers
         }
 
         // GET: api/counselor/me
+        [Authorize]
         [HttpGet("me")]
         public async Task<IActionResult> GetCurrentCounselor()
         {
