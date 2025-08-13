@@ -75,7 +75,7 @@ namespace GuidanceOfficeAPI.Controllers
                 .GroupBy(m => m.EntryDate.Date)
                 .Select(g => new
                 {
-                    date = g.Key, //DateTime
+                    date = g.Key,
                     mild = g.Count(x => x.MoodLevel == "MILD"),
                     moderate = g.Count(x => x.MoodLevel == "MODERATE"),
                     high = g.Count(x => x.MoodLevel == "HIGH"),
@@ -91,7 +91,7 @@ namespace GuidanceOfficeAPI.Controllers
                 var found = grouped.FirstOrDefault(g => g.date == day);
                 return new
                 {
-                    date = day.ToString("yyyy-MM-dd"),
+                    date = day.ToString("MMM dd"),
                     mild = found?.mild ?? 0,
                     moderate = found?.moderate ?? 0,
                     high = found?.high ?? 0,
