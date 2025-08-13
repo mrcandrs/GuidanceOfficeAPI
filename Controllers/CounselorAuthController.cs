@@ -1,5 +1,6 @@
 ﻿using GuidanceOfficeAPI.Data;
 using GuidanceOfficeAPI.Dtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -11,6 +12,7 @@ namespace GuidanceOfficeAPI.Controllers
 {
     [ApiController]
     [Route("api/counselor")]
+    [Authorize] // everything here requires a valid JWT unless an action overrides it
     public class CounselorAuthController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -82,6 +84,37 @@ namespace GuidanceOfficeAPI.Controllers
             }
         }
 
+        // GET: api/counselor/me
+        [HttpGet("me")]
+        public async Task<IActionResult> GetCurrentCounselor()
+        {
+            try
+            {
+                var idStr = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(idStr)) return Unauthorized(new { message = "Invalid token." });
+
+                int counselorId = int.Parse(idStr);
+
+                var counselor = await _context.Counselors
+                    .Where(c => c.CounselorId == counselorId)
+                    .Select(c => new
+                    {
+                        id = c.CounselorId,
+                        email = c.Email,
+                        ame = c.Name,
+                    })
+                    .FirstOrDefaultAsync();
+
+                if (counselor == null)
+                    return NotFound(new { message = "Counselor not found." });
+
+                return Ok(counselor);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Server error", error = ex.Message });
+            }
+        }
 
     }
 }
