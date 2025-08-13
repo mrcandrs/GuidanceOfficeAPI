@@ -12,7 +12,6 @@ namespace GuidanceOfficeAPI.Controllers
 {
     [ApiController]
     [Route("api/counselor")]
-    [Authorize] // everything here requires a valid JWT unless an action overrides it
     public class CounselorAuthController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -85,7 +84,6 @@ namespace GuidanceOfficeAPI.Controllers
         }
 
         // GET: api/counselor/me
-        [Authorize]
         [HttpGet("me")]
         public async Task<IActionResult> GetCurrentCounselor()
         {
