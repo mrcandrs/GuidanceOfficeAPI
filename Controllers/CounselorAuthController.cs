@@ -100,7 +100,7 @@ namespace GuidanceOfficeAPI.Controllers
                     {
                         id = c.CounselorId,
                         email = c.Email,
-                        ame = c.Name,
+                        name = c.Name,
                     })
                     .FirstOrDefaultAsync();
 
