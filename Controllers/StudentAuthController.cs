@@ -300,9 +300,17 @@ namespace GuidanceOfficeAPI.Controllers
 
         // GET: api/student/students-with-mood
         [HttpGet("students-with-mood")]
-        public async Task<IActionResult> GetStudentsWithLastMood()
+        public async Task<IActionResult> GetStudentsWithLastMood([FromQuery] string program = null)
         {
-            var studentsWithMood = await _context.Students
+            var query = _context.Students.AsQueryable();
+
+            // Apply program filter if provided
+            if (!string.IsNullOrEmpty(program) && !program.Equals("ALL", StringComparison.OrdinalIgnoreCase))
+            {
+                query = query.Where(s => s.Program.ToUpper().Contains(program.ToUpper()));
+            }
+
+            var studentsWithMood = await query
                 .Select(s => new
                 {
                     id = s.StudentId,
