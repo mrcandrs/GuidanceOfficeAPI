@@ -300,36 +300,37 @@ namespace GuidanceOfficeAPI.Controllers
 
         // GET: api/student/students-with-mood
         [HttpGet("students-with-mood")]
-        public async Task<IActionResult> GetStudentsWithLastMood([FromQuery] string program = null)
+        public async Task<IActionResult> GetStudentsWithLastMood()
         {
-            var query = _context.Students.AsQueryable();
-
-            // Apply program filter if provided
-            if (!string.IsNullOrEmpty(program) && !program.Equals("ALL", StringComparison.OrdinalIgnoreCase))
+            try
             {
-                query = query.Where(s => s.Program.ToUpper().Contains(program.ToUpper()));
+                var studentsWithMood = await _context.Students
+                    .Select(s => new
+                    {
+                        id = s.StudentId,
+                        name = s.FullName,
+                        studentno = s.StudentNumber,
+                        program = s.Program,
+                        section = s.GradeYear,
+                        dateregistered = s.DateRegistered,
+                        lastlogin = s.LastLogin,
+                        status = "Active", // For now, static value
+                        lastMood = _context.MoodTrackers
+                            .Where(m => m.StudentId == s.StudentId)
+                            .OrderByDescending(m => m.EntryDate)
+                            .Select(m => m.MoodLevel)
+                            .FirstOrDefault()
+                    })
+                    .ToListAsync();
+
+                return Ok(studentsWithMood);
             }
-
-            var studentsWithMood = await query
-                .Select(s => new
-                {
-                    id = s.StudentId,
-                    name = s.FullName,
-                    studentno = s.StudentNumber,
-                    program = s.Program,
-                    section = s.GradeYear,
-                    dateregistered = s.DateRegistered,
-                    lastlogin = s.LastLogin,
-                    status = "Active", // For now, static value
-                    lastMood = _context.MoodTrackers
-                        .Where(m => m.StudentId == s.StudentId)
-                        .OrderByDescending(m => m.EntryDate)
-                        .Select(m => m.MoodLevel)
-                        .FirstOrDefault()
-                })
-                .ToListAsync();
-
-            return Ok(studentsWithMood);
+            catch (Exception ex)
+            {
+                // Log the error
+                Console.WriteLine($"Error fetching students: {ex.Message}");
+                return StatusCode(500, "Internal server error");
+            }
         }
 
     }
