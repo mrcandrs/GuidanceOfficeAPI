@@ -11,10 +11,25 @@ namespace GuidanceOfficeAPI.Controllers
     public class MoodTrackerController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly TimeZoneInfo _philippinesTimeZone;
 
         public MoodTrackerController(AppDbContext context)
         {
             _context = context;
+            // Initialize Philippines timezone
+            _philippinesTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Asia/Manila");
+        }
+
+        // Helper method to get current Philippines time
+        private DateTime GetPhilippinesNow()
+        {
+            return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _philippinesTimeZone);
+        }
+
+        // Helper method to get Philippines date (for date comparisons)
+        private DateTime GetPhilippinesDate()
+        {
+            return GetPhilippinesNow().Date;
         }
 
         [HttpPost]
@@ -29,7 +44,7 @@ namespace GuidanceOfficeAPI.Controllers
                 {
                     StudentId = dto.StudentId,
                     MoodLevel = dto.MoodLevel,
-                    EntryDate = DateTime.Now
+                    EntryDate = GetPhilippinesNow() // Use Philippines time
                 };
 
                 _context.MoodTrackers.Add(mood);
@@ -62,29 +77,37 @@ namespace GuidanceOfficeAPI.Controllers
         }
 
         // GET: api/moodtracker/daily-trends
-        //Returns last 7 days (including today) aggregated by day
+        // Returns last 7 days (including today) aggregated by day using Philippines timezone
         [HttpGet("daily-trends")]
         public async Task<IActionResult> GetDailyTrends()
         {
-            var startDate = DateTime.UtcNow.Date.AddDays(-6); //last 7 days
+            var philippinesNow = GetPhilippinesNow();
+            var startDate = philippinesNow.Date.AddDays(-6); // last 7 days in Philippines time
+
             var raw = await _context.MoodTrackers
                 .Where(m => m.EntryDate >= startDate)
-                .ToListAsync(); //load recent records then group in memory (safe for small/medium datasets)
+                .ToListAsync(); // load recent records then group in memory
 
+            // Convert stored UTC dates to Philippines timezone for grouping
             var grouped = raw
-                .GroupBy(m => m.EntryDate.Date)
+                .Select(m => new
+                {
+                    OriginalEntry = m,
+                    PhilippinesDate = TimeZoneInfo.ConvertTimeFromUtc(m.EntryDate, _philippinesTimeZone).Date
+                })
+                .GroupBy(m => m.PhilippinesDate)
                 .Select(g => new
                 {
                     date = g.Key,
-                    mild = g.Count(x => x.MoodLevel == "MILD"),
-                    moderate = g.Count(x => x.MoodLevel == "MODERATE"),
-                    high = g.Count(x => x.MoodLevel == "HIGH"),
-                    na = g.Count(x => string.IsNullOrWhiteSpace(x.MoodLevel))
+                    mild = g.Count(x => x.OriginalEntry.MoodLevel == "MILD"),
+                    moderate = g.Count(x => x.OriginalEntry.MoodLevel == "MODERATE"),
+                    high = g.Count(x => x.OriginalEntry.MoodLevel == "HIGH"),
+                    na = g.Count(x => string.IsNullOrWhiteSpace(x.OriginalEntry.MoodLevel))
                 })
                 .OrderBy(x => x.date)
                 .ToList();
 
-            // Ensure every day in range has an entry (fill zeroes)
+            // Ensure every day in range has an entry (fill zeroes) using Philippines dates
             var result = Enumerable.Range(0, 7).Select(i =>
             {
                 var day = startDate.AddDays(i);
@@ -103,17 +126,24 @@ namespace GuidanceOfficeAPI.Controllers
         }
 
         // GET: api/moodtracker/alerts
-        //Returns simple alert messages (example rule based)
+        // Returns simple alert messages using Philippines timezone
         [HttpGet("alerts")]
         public async Task<IActionResult> GetAlerts()
         {
-            var oneWeekAgo = DateTime.UtcNow.Date.AddDays(-6);
+            var philippinesNow = GetPhilippinesNow();
+            var oneWeekAgo = philippinesNow.Date.AddDays(-6);
+
             var recent = await _context.MoodTrackers
                 .Where(m => m.EntryDate >= oneWeekAgo)
                 .ToListAsync();
 
-            var highCount = recent.Count(m => m.MoodLevel == "HIGH");
-            var moderateCount = recent.Count(m => m.MoodLevel == "MODERATE");
+            // Filter based on Philippines timezone dates
+            var recentInPhilippinesTime = recent
+                .Where(m => TimeZoneInfo.ConvertTimeFromUtc(m.EntryDate, _philippinesTimeZone).Date >= oneWeekAgo.Date)
+                .ToList();
+
+            var highCount = recentInPhilippinesTime.Count(m => m.MoodLevel == "HIGH");
+            var moderateCount = recentInPhilippinesTime.Count(m => m.MoodLevel == "MODERATE");
 
             var alerts = new System.Collections.Generic.List<object>();
 
@@ -128,7 +158,7 @@ namespace GuidanceOfficeAPI.Controllers
             }
 
             // example: list students who reported HIGH in last 7 days (limit 10)
-            var highStudents = recent
+            var highStudents = recentInPhilippinesTime
                 .Where(m => m.MoodLevel == "HIGH")
                 .Select(m => m.StudentId)
                 .Distinct()
@@ -144,6 +174,7 @@ namespace GuidanceOfficeAPI.Controllers
         }
 
         // GET: api/moodtracker/monthly-reports?month=8&year=2024
+        // Uses Philippines timezone for month boundaries
         [HttpGet("monthly-reports")]
         public async Task<IActionResult> GetMonthlyReports([FromQuery] int month, [FromQuery] int year)
         {
@@ -155,21 +186,26 @@ namespace GuidanceOfficeAPI.Controllers
                     return BadRequest("Month must be between 1 and 12");
                 }
 
-                if (year < 2020 || year > DateTime.Now.Year + 1)
+                var currentPhilippinesYear = GetPhilippinesNow().Year;
+                if (year < 2020 || year > currentPhilippinesYear + 1)
                 {
                     return BadRequest("Invalid year provided");
                 }
 
-                // Get the first day of the month and the first day of next month
+                // Create month boundaries in Philippines timezone
                 var startDate = new DateTime(year, month, 1);
                 var endDate = startDate.AddMonths(1);
 
+                // Convert to UTC for database query (assuming stored dates are in UTC)
+                var startDateUtc = TimeZoneInfo.ConvertTimeToUtc(startDate, _philippinesTimeZone);
+                var endDateUtc = TimeZoneInfo.ConvertTimeToUtc(endDate, _philippinesTimeZone);
+
                 // Fetch all mood entries for the specified month
                 var monthlyEntries = await _context.MoodTrackers
-                    .Where(m => m.EntryDate >= startDate && m.EntryDate < endDate)
+                    .Where(m => m.EntryDate >= startDateUtc && m.EntryDate < endDateUtc)
                     .ToListAsync();
 
-                // Group by weeks within the month
+                // Group by weeks within the month using Philippines timezone
                 var weeklyData = new List<object>();
                 var currentWeekStart = startDate;
                 int weekNumber = 1;
@@ -181,9 +217,13 @@ namespace GuidanceOfficeAPI.Controllers
                     if (currentWeekEnd > endDate)
                         currentWeekEnd = endDate;
 
+                    // Convert week boundaries to UTC for filtering
+                    var currentWeekStartUtc = TimeZoneInfo.ConvertTimeToUtc(currentWeekStart, _philippinesTimeZone);
+                    var currentWeekEndUtc = TimeZoneInfo.ConvertTimeToUtc(currentWeekEnd, _philippinesTimeZone);
+
                     // Filter entries for this week
                     var weekEntries = monthlyEntries
-                        .Where(m => m.EntryDate >= currentWeekStart && m.EntryDate < currentWeekEnd)
+                        .Where(m => m.EntryDate >= currentWeekStartUtc && m.EntryDate < currentWeekEndUtc)
                         .ToList();
 
                     // Count mood levels for this week
@@ -213,7 +253,5 @@ namespace GuidanceOfficeAPI.Controllers
                 return StatusCode(500, $"Server error: {ex.Message}");
             }
         }
-
     }
-
 }
