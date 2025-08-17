@@ -143,6 +143,77 @@ namespace GuidanceOfficeAPI.Controllers
             return Ok(alerts);
         }
 
+        // GET: api/moodtracker/monthly-reports?month=8&year=2024
+        [HttpGet("monthly-reports")]
+        public async Task<IActionResult> GetMonthlyReports([FromQuery] int month, [FromQuery] int year)
+        {
+            try
+            {
+                // Validate input parameters
+                if (month < 1 || month > 12)
+                {
+                    return BadRequest("Month must be between 1 and 12");
+                }
+
+                if (year < 2020 || year > DateTime.Now.Year + 1)
+                {
+                    return BadRequest("Invalid year provided");
+                }
+
+                // Get the first day of the month and the first day of next month
+                var startDate = new DateTime(year, month, 1);
+                var endDate = startDate.AddMonths(1);
+
+                // Fetch all mood entries for the specified month
+                var monthlyEntries = await _context.MoodTrackers
+                    .Where(m => m.EntryDate >= startDate && m.EntryDate < endDate)
+                    .ToListAsync();
+
+                // Group by weeks within the month
+                var weeklyData = new List<object>();
+                var currentWeekStart = startDate;
+                int weekNumber = 1;
+
+                while (currentWeekStart < endDate)
+                {
+                    // Calculate the end of the current week (or end of month if sooner)
+                    var currentWeekEnd = currentWeekStart.AddDays(7);
+                    if (currentWeekEnd > endDate)
+                        currentWeekEnd = endDate;
+
+                    // Filter entries for this week
+                    var weekEntries = monthlyEntries
+                        .Where(m => m.EntryDate >= currentWeekStart && m.EntryDate < currentWeekEnd)
+                        .ToList();
+
+                    // Count mood levels for this week
+                    var weekData = new
+                    {
+                        week = $"Week {weekNumber}",
+                        weekStart = currentWeekStart.ToString("MMM dd"),
+                        weekEnd = currentWeekEnd.AddDays(-1).ToString("MMM dd"),
+                        mild = weekEntries.Count(x => x.MoodLevel == "MILD"),
+                        moderate = weekEntries.Count(x => x.MoodLevel == "MODERATE"),
+                        high = weekEntries.Count(x => x.MoodLevel == "HIGH"),
+                        na = weekEntries.Count(x => string.IsNullOrWhiteSpace(x.MoodLevel) || x.MoodLevel == "N/A"),
+                        totalEntries = weekEntries.Count
+                    };
+
+                    weeklyData.Add(weekData);
+
+                    // Move to next week
+                    currentWeekStart = currentWeekEnd;
+                    weekNumber++;
+                }
+
+                return Ok(weeklyData);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Server error: {ex.Message}");
+            }
+        }
+
     }
 
 }
