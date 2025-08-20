@@ -15,6 +15,13 @@ namespace GuidanceOfficeAPI.Controllers
             _context = context;
         }
 
+        // Helper method to get Philippines time
+        private DateTime GetPhilippinesTime()
+        {
+            var philippinesTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Asia/Manila");
+            return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, philippinesTimeZone);
+        }
+
         // GET: api/guidanceappointment/all-appointments
         [HttpGet("all-appointments")]
         public IActionResult GetAllAppointments()
@@ -56,8 +63,8 @@ namespace GuidanceOfficeAPI.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            // Ensure CreatedAt is set to current time
-            appointment.CreatedAt = DateTime.Now;
+            // Set CreatedAt to Philippines time
+            appointment.CreatedAt = GetPhilippinesTime();
             appointment.Status = "pending"; // Ensure status is pending
 
             _context.GuidanceAppointments.Add(appointment);
@@ -76,7 +83,7 @@ namespace GuidanceOfficeAPI.Controllers
                 return NotFound(new { message = "Appointment not found" });
 
             appointment.Status = request.Status;
-            appointment.UpdatedAt = DateTime.Now; // Track when status was updated
+            appointment.UpdatedAt = GetPhilippinesTime(); // Track when status was updated in Philippines time
 
             await _context.SaveChangesAsync();
 
