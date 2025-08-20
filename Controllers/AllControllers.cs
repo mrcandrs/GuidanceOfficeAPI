@@ -32,12 +32,6 @@ namespace GuidanceOfficeAPI.Controllers
         public CareerPlanningFormController(AppDbContext context) : base(context) { }
     }
 
-    [ApiController]
-    [Route("api/[controller]")]
-    public class InitialAssessmentFormController : CrudController<InitialAssessmentForm>
-    {
-        public InitialAssessmentFormController(AppDbContext context) : base(context) { }
-    }
 
     /*[ApiController]
     [Route("api/[controller]")]
@@ -100,19 +94,5 @@ namespace GuidanceOfficeAPI.Controllers
     public class GuidanceNoteController : CrudController<GuidanceNote>
     {
         public GuidanceNoteController(AppDbContext context) : base(context) { }
-    }
-
-    [ApiController]
-    [Route("api/[controller]")]
-    public class MoodSupportController : CrudController<MoodSupport>
-    {
-        public MoodSupportController(AppDbContext context) : base(context) { }
-    }
-
-    [ApiController]
-    [Route("api/[controller]")]
-    public class MotivationalQuoteController : CrudController<MotivationalQuote>
-    {
-        public MotivationalQuoteController(AppDbContext context) : base(context) { }
     }
 }
