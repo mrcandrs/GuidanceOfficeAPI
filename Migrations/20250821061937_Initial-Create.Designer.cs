@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GuidanceOfficeAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250820053127_Initial-Create")]
+    [Migration("20250821061937_Initial-Create")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -289,13 +289,44 @@ namespace GuidanceOfficeAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<string>("Comments")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<int>("CounselorId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("EndorsementDetails")
+                    b.Property<string>("EndorsedBy")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("EndorsedTo")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("GradeYearLevel")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Interventions")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Recommendations")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Referrals")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Section")
                         .IsRequired()
                         .HasColumnType("longtext");
 

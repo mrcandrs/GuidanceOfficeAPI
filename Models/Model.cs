@@ -417,12 +417,19 @@ namespace GuidanceOfficeAPI.Models
         public int CustodyId { get; set; }
         public int StudentId { get; set; }
         public int CounselorId { get; set; }
-        public string EndorsementDetails { get; set; }
         public DateTime Date { get; set; }
+        public string GradeYearLevel { get; set; }
+        public string Section { get; set; }
+        public string Comments { get; set; }
+        public string Interventions { get; set; }
+        public string Recommendations { get; set; }
+        public string Referrals { get; set; }
+        public string EndorsedBy { get; set; }
+        public string EndorsedTo { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
 
         [ForeignKey("StudentId")]
         public Student Student { get; set; }
-
         [ForeignKey("CounselorId")]
         public Counselor Counselor { get; set; }
     }
