@@ -363,7 +363,7 @@ namespace GuidanceOfficeAPI.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Section = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Comments = table.Column<string>(type: "longtext", nullable: false)
+                    Concerns = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Interventions = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),

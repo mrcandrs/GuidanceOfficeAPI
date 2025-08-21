@@ -18,7 +18,7 @@ namespace GuidanceOfficeAPI.Dtos
         public string? Section { get; set; }
 
         [StringLength(2000, ErrorMessage = "Comments cannot exceed 2000 characters")]
-        public string? Comments { get; set; }
+        public string? Concerns { get; set; }
 
         [StringLength(2000, ErrorMessage = "Interventions cannot exceed 2000 characters")]
         public string? Interventions { get; set; }

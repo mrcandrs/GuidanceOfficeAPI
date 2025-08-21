@@ -11,7 +11,7 @@ namespace GuidanceOfficeAPI.Dtos
             public DateTime Date { get; set; }
             public string? GradeYearLevel { get; set; }
             public string? Section { get; set; }
-            public string? Comments { get; set; }
+            public string? Concerns { get; set; }
             public string? Interventions { get; set; }
             public string? Recommendations { get; set; }
             public string? Referrals { get; set; }

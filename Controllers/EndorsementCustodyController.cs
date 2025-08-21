@@ -38,7 +38,7 @@ namespace GuidanceOfficeAPI.Controllers
                         Date = f.Date,
                         GradeYearLevel = f.GradeYearLevel,
                         Section = f.Section,
-                        Comments = f.Comments,
+                        Concerns = f.Concerns,
                         Interventions = f.Interventions,
                         Recommendations = f.Recommendations,
                         Referrals = f.Referrals,
@@ -86,7 +86,7 @@ namespace GuidanceOfficeAPI.Controllers
                         Date = f.Date,
                         GradeYearLevel = f.GradeYearLevel,
                         Section = f.Section,
-                        Comments = f.Comments,
+                        Concerns = f.Concerns,
                         Interventions = f.Interventions,
                         Recommendations = f.Recommendations,
                         Referrals = f.Referrals,
@@ -148,7 +148,7 @@ namespace GuidanceOfficeAPI.Controllers
                     Date = createDto.Date,
                     GradeYearLevel = createDto.GradeYearLevel,
                     Section = createDto.Section,
-                    Comments = createDto.Comments,
+                    Concerns = createDto.Concerns,
                     Interventions = createDto.Interventions,
                     Recommendations = createDto.Recommendations,
                     Referrals = createDto.Referrals,
@@ -173,7 +173,7 @@ namespace GuidanceOfficeAPI.Controllers
                         Date = f.Date,
                         GradeYearLevel = f.GradeYearLevel,
                         Section = f.Section,
-                        Comments = f.Comments,
+                        Concerns = f.Concerns,
                         Interventions = f.Interventions,
                         Recommendations = f.Recommendations,
                         Referrals = f.Referrals,
@@ -244,7 +244,7 @@ namespace GuidanceOfficeAPI.Controllers
                 form.Date = updateDto.Date;
                 form.GradeYearLevel = updateDto.GradeYearLevel;
                 form.Section = updateDto.Section;
-                form.Comments = updateDto.Comments;
+                form.Concerns = updateDto.Concerns;
                 form.Interventions = updateDto.Interventions;
                 form.Recommendations = updateDto.Recommendations;
                 form.Referrals = updateDto.Referrals;
@@ -316,7 +316,7 @@ namespace GuidanceOfficeAPI.Controllers
                         Date = f.Date,
                         GradeYearLevel = f.GradeYearLevel,
                         Section = f.Section,
-                        Comments = f.Comments,
+                        Concerns = f.Concerns,
                         Interventions = f.Interventions,
                         Recommendations = f.Recommendations,
                         Referrals = f.Referrals,

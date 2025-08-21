@@ -287,7 +287,7 @@ namespace GuidanceOfficeAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("Comments")
+                    b.Property<string>("Concerns")
                         .IsRequired()
                         .HasColumnType("longtext");
 
