@@ -10,7 +10,6 @@ namespace GuidanceOfficeAPI.Controllers
 {
     [ApiController]
     [Route("api/endorsement-custody")]
-    [Authorize]
     public class EndorsementCustodyController : ControllerBase
     {
         private readonly AppDbContext _context;
