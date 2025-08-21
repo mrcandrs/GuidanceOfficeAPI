@@ -9,7 +9,7 @@ using GuidanceOfficeAPI.Dtos;
 namespace GuidanceOfficeAPI.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/endorsement-custody")]
     [Authorize]
     public class EndorsementCustodyController : ControllerBase
     {
