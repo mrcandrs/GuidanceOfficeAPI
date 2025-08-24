@@ -344,5 +344,65 @@ namespace GuidanceOfficeAPI.Controllers
                 return StatusCode(500, new { message = "Error fetching student endorsement custody forms", error = ex.Message });
             }
         }
+
+        // GET: api/endorsement-custody/student-details/{studentId}
+        [HttpGet("student-details/{studentId}")]
+        public async Task<ActionResult<object>> GetStudentDetailsFromCareerPlan(int studentId)
+        {
+            try
+            {
+                // First, try to get details from the most recent Career Planning Form
+                var careerPlanDetails = await _context.CareerPlanningForms
+                    .Where(c => c.StudentId == studentId)
+                    .OrderByDescending(c => c.SubmittedAt)
+                    .Select(c => new {
+                        GradeYear = c.GradeYear,
+                        Section = c.Section,
+                        Program = c.Program,
+                        FullName = c.FullName
+                    })
+                    .FirstOrDefaultAsync();
+
+                if (careerPlanDetails != null)
+                {
+                    return Ok(new
+                    {
+                        gradeYearLevel = careerPlanDetails.GradeYear,
+                        section = careerPlanDetails.Section,
+                        program = careerPlanDetails.Program,
+                        fullName = careerPlanDetails.FullName,
+                        source = "CareerPlanningForm"
+                    });
+                }
+
+                // Fallback to Student table if no Career Planning Form exists
+                var studentDetails = await _context.Students
+                    .Where(s => s.StudentId == studentId)
+                    .Select(s => new {
+                        GradeYear = s.GradeYear,
+                        Program = s.Program,
+                        FullName = s.FullName
+                    })
+                    .FirstOrDefaultAsync();
+
+                if (studentDetails != null)
+                {
+                    return Ok(new
+                    {
+                        gradeYearLevel = studentDetails.GradeYear,
+                        section = "", // Student table doesn't have section
+                        program = studentDetails.Program,
+                        fullName = studentDetails.FullName,
+                        source = "StudentTable"
+                    });
+                }
+
+                return NotFound(new { message = "Student details not found" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error fetching student details", error = ex.Message });
+            }
+        }
     }
 }
