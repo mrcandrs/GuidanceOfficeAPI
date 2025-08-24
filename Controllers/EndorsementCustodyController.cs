@@ -43,7 +43,9 @@ namespace GuidanceOfficeAPI.Controllers
                         Referrals = f.Referrals,
                         EndorsedBy = f.EndorsedBy,
                         EndorsedTo = f.EndorsedTo,
-                        CreatedAt = f.CreatedAt,
+                        CreatedAt = TimeZoneInfo.ConvertTimeFromUtc(
+                            f.CreatedAt, TimeZoneInfo.FindSystemTimeZoneById("Asia/Manila")
+                        ),
                         Student = f.Student != null ? new StudentDto
                         {
                             StudentId = f.Student.StudentId,
@@ -91,7 +93,9 @@ namespace GuidanceOfficeAPI.Controllers
                         Referrals = f.Referrals,
                         EndorsedBy = f.EndorsedBy,
                         EndorsedTo = f.EndorsedTo,
-                        CreatedAt = f.CreatedAt,
+                        CreatedAt = TimeZoneInfo.ConvertTimeFromUtc(
+                            f.CreatedAt, TimeZoneInfo.FindSystemTimeZoneById("Asia/Manila")
+                        ),
                         Student = f.Student != null ? new StudentDto
                         {
                             StudentId = f.Student.StudentId,
@@ -140,8 +144,6 @@ namespace GuidanceOfficeAPI.Controllers
                     return BadRequest(new { message = "Student not found" });
                 }
 
-                var philTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Asia/Manila");
-
                 var form = new EndorsementCustodyForm
                 {
                     StudentId = createDto.StudentId,
@@ -155,7 +157,7 @@ namespace GuidanceOfficeAPI.Controllers
                     Referrals = createDto.Referrals,
                     EndorsedBy = createDto.EndorsedBy,
                     EndorsedTo = createDto.EndorsedTo,
-                    CreatedAt = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, philTimeZone)
+                    CreatedAt = DateTime.UtcNow
                 };
 
                 _context.EndorsementCustodyForms.Add(form);
@@ -323,7 +325,9 @@ namespace GuidanceOfficeAPI.Controllers
                         Referrals = f.Referrals,
                         EndorsedBy = f.EndorsedBy,
                         EndorsedTo = f.EndorsedTo,
-                        CreatedAt = f.CreatedAt,
+                        CreatedAt = TimeZoneInfo.ConvertTimeFromUtc(
+                            f.CreatedAt, TimeZoneInfo.FindSystemTimeZoneById("Asia/Manila")
+                        ),
                         Student = f.Student != null ? new StudentDto
                         {
                             StudentId = f.Student.StudentId,
