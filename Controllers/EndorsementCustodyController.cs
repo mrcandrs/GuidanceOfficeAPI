@@ -290,7 +290,7 @@ namespace GuidanceOfficeAPI.Controllers
             try
             {
                 // Get counselor ID from JWT token
-                var counselorIdClaim = User.FindFirst("CounselorId")?.Value;
+                var counselorIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 if (string.IsNullOrEmpty(counselorIdClaim) || !int.TryParse(counselorIdClaim, out int counselorId))
                 {
                     return Unauthorized(new { message = "Invalid counselor authentication" });
