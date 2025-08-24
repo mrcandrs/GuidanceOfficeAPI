@@ -18,6 +18,7 @@ namespace GuidanceOfficeAPI.Dtos
             public string? EndorsedBy { get; set; }
             public string? EndorsedTo { get; set; }
             public DateTime CreatedAt { get; set; }
+            public DateTime? UpdatedAt { get; set; }
             public StudentDto? Student { get; set; }
             public CounselorDto? Counselor { get; set; }
         }

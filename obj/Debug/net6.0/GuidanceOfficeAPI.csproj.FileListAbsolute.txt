@@ -60,7 +60,6 @@ C:\Users\Windows 10\source\repos\GuidanceOfficeAPI\obj\Debug\net6.0\staticwebass
 C:\Users\Windows 10\source\repos\GuidanceOfficeAPI\obj\Debug\net6.0\staticwebassets\msbuild.buildMultiTargeting.GuidanceOfficeAPI.props
 C:\Users\Windows 10\source\repos\GuidanceOfficeAPI\obj\Debug\net6.0\staticwebassets\msbuild.buildTransitive.GuidanceOfficeAPI.props
 C:\Users\Windows 10\source\repos\GuidanceOfficeAPI\obj\Debug\net6.0\staticwebassets.pack.json
-C:\Users\Windows 10\source\repos\GuidanceOfficeAPI\obj\Debug\net6.0\staticwebassets.upToDateCheck.txt
 C:\Users\Windows 10\source\repos\GuidanceOfficeAPI\obj\Debug\net6.0\Guidance.694BAA1A.Up2Date
 C:\Users\Windows 10\source\repos\GuidanceOfficeAPI\obj\Debug\net6.0\GuidanceOfficeAPI.dll
 C:\Users\Windows 10\source\repos\GuidanceOfficeAPI\obj\Debug\net6.0\refint\GuidanceOfficeAPI.dll

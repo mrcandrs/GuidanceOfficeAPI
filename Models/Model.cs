@@ -426,7 +426,8 @@ namespace GuidanceOfficeAPI.Models
         public string Referrals { get; set; }
         public string EndorsedBy { get; set; }
         public string EndorsedTo { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime? UpdatedAt { get; set; }
 
         [ForeignKey("StudentId")]
         public Student Student { get; set; }

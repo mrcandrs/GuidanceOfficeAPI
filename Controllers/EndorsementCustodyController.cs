@@ -66,6 +66,7 @@ namespace GuidanceOfficeAPI.Controllers
                     EndorsedBy = f.EndorsedBy,
                     EndorsedTo = f.EndorsedTo,
                     CreatedAt = ConvertToManilaTime(f.CreatedAt),
+                    UpdatedAt = f.UpdatedAt.HasValue ? ConvertToManilaTime(f.UpdatedAt.Value) : null, // Add this line
                     Student = f.Student != null ? new StudentDto
                     {
                         StudentId = f.Student.StudentId,
@@ -120,6 +121,7 @@ namespace GuidanceOfficeAPI.Controllers
                     EndorsedBy = formFromDb.EndorsedBy,
                     EndorsedTo = formFromDb.EndorsedTo,
                     CreatedAt = ConvertToManilaTime(formFromDb.CreatedAt),
+                    UpdatedAt = formFromDb.UpdatedAt.HasValue ? ConvertToManilaTime(formFromDb.UpdatedAt.Value) : null, // Add this line
                     Student = formFromDb.Student != null ? new StudentDto
                     {
                         StudentId = formFromDb.Student.StudentId,
@@ -272,10 +274,17 @@ namespace GuidanceOfficeAPI.Controllers
                 form.Referrals = updateDto.Referrals;
                 form.EndorsedBy = updateDto.EndorsedBy;
                 form.EndorsedTo = updateDto.EndorsedTo;
+                form.UpdatedAt = DateTime.UtcNow; // Set the UpdatedAt timestamp
 
                 await _context.SaveChangesAsync();
 
-                return NoContent();
+                // Return success response with message
+                return Ok(new
+                {
+                    message = "Endorsement custody form updated successfully",
+                    updatedAt = ConvertToManilaTime(form.UpdatedAt.Value),
+                    custodyId = form.CustodyId
+                });
             }
             catch (Exception ex)
             {
@@ -347,6 +356,7 @@ namespace GuidanceOfficeAPI.Controllers
                     EndorsedBy = f.EndorsedBy,
                     EndorsedTo = f.EndorsedTo,
                     CreatedAt = ConvertToManilaTime(f.CreatedAt),
+                    UpdatedAt = f.UpdatedAt.HasValue ? ConvertToManilaTime(f.UpdatedAt.Value) : null, // Add this line
                     Student = f.Student != null ? new StudentDto
                     {
                         StudentId = f.Student.StudentId,
