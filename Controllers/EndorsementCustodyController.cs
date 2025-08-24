@@ -140,6 +140,8 @@ namespace GuidanceOfficeAPI.Controllers
                     return BadRequest(new { message = "Student not found" });
                 }
 
+                var philTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Asia/Manila");
+
                 var form = new EndorsementCustodyForm
                 {
                     StudentId = createDto.StudentId,
@@ -153,7 +155,7 @@ namespace GuidanceOfficeAPI.Controllers
                     Referrals = createDto.Referrals,
                     EndorsedBy = createDto.EndorsedBy,
                     EndorsedTo = createDto.EndorsedTo,
-                    CreatedAt = DateTime.Now
+                    CreatedAt = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, philTimeZone)
                 };
 
                 _context.EndorsementCustodyForms.Add(form);
