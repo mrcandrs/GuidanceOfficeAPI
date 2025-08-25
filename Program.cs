@@ -9,10 +9,9 @@ var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 // Add services to the container.
 builder.Logging.ClearProviders();
-builder.Logging.AddConsole(); // This enables logs to appear in terminal / output
+builder.Logging.AddConsole();
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -26,18 +25,16 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // cors
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: MyAllowSpecificOrigins, 
+    options.AddPolicy(name: MyAllowSpecificOrigins,
     policy =>
     {
-        policy.WithOrigins(
-                    "https://guidance-counselor-web-app.vercel.app"
-               )
+        policy.WithOrigins("https://guidance-counselor-web-app.vercel.app")
               .AllowAnyHeader()
               .AllowAnyMethod()
-              .AllowCredentials();
+              .AllowCredentials()
+              .SetIsOriginAllowedToAllowWildcardSubdomains();
     });
 });
-
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -54,15 +51,13 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-
 var app = builder.Build();
-
 
 //Automatically apply pending migrations on startup
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    db.Database.Migrate(); // <- this is what applies the migrations
+    db.Database.Migrate();
 }
 
 if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
@@ -73,6 +68,19 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 
 app.UseHttpsRedirection();
 app.UseCors(MyAllowSpecificOrigins);
+
+// Add global OPTIONS handler
+app.MapMethods("/api/{*path}", new[] { "OPTIONS" }, async context =>
+{
+    context.Response.Headers.Add("Access-Control-Allow-Origin", "https://guidance-counselor-web-app.vercel.app");
+    context.Response.Headers.Add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    context.Response.Headers.Add("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    context.Response.Headers.Add("Access-Control-Allow-Credentials", "true");
+
+    context.Response.StatusCode = 200;
+    await context.Response.CompleteAsync();
+});
+
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
