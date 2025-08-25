@@ -335,29 +335,27 @@ namespace GuidanceOfficeAPI.Controllers
         }
 
         // DELETE: api/student/{id}
+        // Fixed DELETE endpoint
         [HttpDelete("{id}")]
-        [Authorize] // Add this line
+        [Authorize] // This ensures JWT authentication
         public async Task<IActionResult> DeleteStudent(int id)
         {
             try
             {
-                // Get counselor ID from JWT token
-                var counselorIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                if (string.IsNullOrEmpty(counselorIdClaim) || !int.TryParse(counselorIdClaim, out int counselorId))
-                {
-                    return Unauthorized(new { message = "Invalid counselor authentication" });
-                }
+                _logger.LogInformation("Attempting to delete student with ID: {StudentId}", id);
 
                 var student = await _context.Students.FindAsync(id);
                 if (student == null)
                 {
+                    _logger.LogWarning("Student with ID {StudentId} not found", id);
                     return NotFound(new { message = "Student not found" });
                 }
 
                 _context.Students.Remove(student);
                 await _context.SaveChangesAsync();
 
-                return NoContent();
+                _logger.LogInformation("Successfully deleted student with ID: {StudentId}", id);
+                return NoContent(); // 204 status code for successful deletion
             }
             catch (Exception ex)
             {
