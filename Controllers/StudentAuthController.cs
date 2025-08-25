@@ -335,51 +335,36 @@ namespace GuidanceOfficeAPI.Controllers
         }
 
         // DELETE: api/student/{id}
-        // Fixed DELETE endpoint
         [HttpDelete("{id}")]
-        [Authorize] // This ensures JWT authentication
+        [Authorize]
         public async Task<IActionResult> DeleteStudent(int id)
         {
             try
             {
-                _logger.LogInformation("Attempting to delete student with ID: {StudentId}", id);
+                // Log the attempt
+                Console.WriteLine($"Attempting to delete student ID: {id}");
 
                 var student = await _context.Students.FindAsync(id);
                 if (student == null)
                 {
-                    _logger.LogWarning("Student with ID {StudentId} not found", id);
                     return NotFound(new { message = "Student not found" });
                 }
 
                 _context.Students.Remove(student);
                 await _context.SaveChangesAsync();
 
-                _logger.LogInformation("Successfully deleted student with ID: {StudentId}", id);
-                return NoContent(); // 204 status code for successful deletion
+                return Ok(new { message = "Student deleted successfully", id = id });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error deleting student with ID: {StudentId}", id);
-                return StatusCode(500, new { message = "Error deleting student", error = ex.Message });
-            }
-        }
+                Console.WriteLine($"Delete error: {ex.Message}");
+                Console.WriteLine($"Stack trace: {ex.StackTrace}");
 
-        // Add this simple test endpoint to your StudentAuthController
-        [HttpDelete("test-simple/{id}")]
-        public IActionResult TestSimpleDelete(int id)
-        {
-            try
-            {
-                return Ok(new
+                return StatusCode(500, new
                 {
-                    message = $"Test DELETE for ID {id} would work",
-                    timestamp = DateTime.UtcNow,
-                    success = true
+                    message = "Error deleting student",
+                    error = ex.Message
                 });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = ex.Message, error = ex.ToString() });
             }
         }
 
