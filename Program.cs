@@ -28,8 +28,7 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins("https://guidance-counselor-web-app.vercel.app")
               .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials();
+              .AllowAnyMethod();
     });
 });
 

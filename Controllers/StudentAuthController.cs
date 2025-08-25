@@ -23,19 +23,6 @@ namespace GuidanceOfficeAPI.Controllers
             _logger = logger;
         }
 
-        // Add this OPTIONS endpoint
-        [HttpOptions("{id}")]
-        public IActionResult Options(int id)
-        {
-            Response.Headers.Add("Access-Control-Allow-Origin", "https://guidance-counselor-web-app.vercel.app");
-            Response.Headers.Add("Access-Control-Allow-Methods", "DELETE, OPTIONS");
-            Response.Headers.Add("Access-Control-Allow-Headers", "Content-Type, Authorization, Accept, Origin, X-Requested-With");
-            Response.Headers.Add("Access-Control-Allow-Credentials", "true");
-            Response.Headers.Add("Access-Control-Max-Age", "86400");
-
-            return Ok();
-        }
-
         private static DateTime ConvertToManilaTime(DateTime utcDateTime)
         {
             var manilaTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Asia/Manila");
@@ -349,6 +336,7 @@ namespace GuidanceOfficeAPI.Controllers
 
         // DELETE: api/student/{id}
         [HttpDelete("{id}")]
+        [Authorize] // Add this line
         public async Task<IActionResult> DeleteStudent(int id)
         {
             try
@@ -360,19 +348,20 @@ namespace GuidanceOfficeAPI.Controllers
                     return Unauthorized(new { message = "Invalid counselor authentication" });
                 }
 
-                var form = await _context.Students.FindAsync(id);
-                if (form == null)
+                var student = await _context.Students.FindAsync(id);
+                if (student == null)
                 {
                     return NotFound(new { message = "Student not found" });
                 }
 
-                _context.Students.Remove(form);
+                _context.Students.Remove(student);
                 await _context.SaveChangesAsync();
 
                 return NoContent();
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error deleting student with ID: {StudentId}", id);
                 return StatusCode(500, new { message = "Error deleting student", error = ex.Message });
             }
         }
