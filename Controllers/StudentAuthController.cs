@@ -335,7 +335,7 @@ namespace GuidanceOfficeAPI.Controllers
         }
 
         // DELETE: api/student/{id}
-        /*[HttpDelete("{id}")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteStudent(int id)
         {
             try
@@ -362,7 +362,7 @@ namespace GuidanceOfficeAPI.Controllers
             {
                 return StatusCode(500, new { message = "Error deleting student", error = ex.Message });
             }
-        }*/
+        }
 
     }
 
