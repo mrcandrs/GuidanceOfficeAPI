@@ -338,7 +338,6 @@ namespace GuidanceOfficeAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteStudent(int id)
         {
-            // Temporary: Manual token validation instead of [Authorize]
             var authHeader = Request.Headers["Authorization"].FirstOrDefault();
             if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
             {
@@ -350,14 +349,35 @@ namespace GuidanceOfficeAPI.Controllers
                 var student = await _context.Students.FindAsync(id);
                 if (student == null) return NotFound(new { message = "Student not found" });
 
+                // Delete related records first
+                var moodTrackers = _context.MoodTrackers.Where(m => m.StudentId == id);
+                _context.MoodTrackers.RemoveRange(moodTrackers);
+
+                var consentForms = _context.ConsentForms.Where(c => c.StudentId == id);
+                _context.ConsentForms.RemoveRange(consentForms);
+
+                var inventoryForms = _context.InventoryForms.Where(i => i.StudentId == id);
+                _context.InventoryForms.RemoveRange(inventoryForms);
+
+                var careerForms = _context.CareerPlanningForms.Where(c => c.StudentId == id);
+                _context.CareerPlanningForms.RemoveRange(careerForms);
+
+                // Add any other related tables as needed
+
+                // Finally delete the student
                 _context.Students.Remove(student);
                 await _context.SaveChangesAsync();
 
-                return Ok(new { message = "Student deleted successfully" });
+                return Ok(new { message = "Student and related records deleted successfully" });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { error = ex.Message });
+                _logger.LogError(ex, "Error deleting student {StudentId}: {Error}", id, ex.ToString());
+                return StatusCode(500, new
+                {
+                    error = ex.Message,
+                    details = ex.InnerException?.Message
+                });
             }
         }
 
