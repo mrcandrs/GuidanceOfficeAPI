@@ -5,6 +5,7 @@ using GuidanceOfficeAPI.Data;
 using GuidanceOfficeAPI.Dtos;
 using GuidanceOfficeAPI.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace GuidanceOfficeAPI.Controllers
 {
@@ -330,6 +331,36 @@ namespace GuidanceOfficeAPI.Controllers
                 // Log the error
                 Console.WriteLine($"Error fetching students: {ex.Message}");
                 return StatusCode(500, "Internal server error");
+            }
+        }
+
+        // DELETE: api/student/{id}
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteStudent(int id)
+        {
+            try
+            {
+                // Get counselor ID from JWT token
+                var counselorIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(counselorIdClaim) || !int.TryParse(counselorIdClaim, out int counselorId))
+                {
+                    return Unauthorized(new { message = "Invalid counselor authentication" });
+                }
+
+                var form = await _context.Students.FindAsync(id);
+                if (form == null)
+                {
+                    return NotFound(new { message = "Student not found" });
+                }
+
+                _context.Students.Remove(form);
+                await _context.SaveChangesAsync();
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error deleting student", error = ex.Message });
             }
         }
 
