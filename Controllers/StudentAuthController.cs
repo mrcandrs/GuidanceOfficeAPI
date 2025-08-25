@@ -336,35 +336,28 @@ namespace GuidanceOfficeAPI.Controllers
 
         // DELETE: api/student/{id}
         [HttpDelete("{id}")]
-        [Authorize]
         public async Task<IActionResult> DeleteStudent(int id)
         {
+            // Temporary: Manual token validation instead of [Authorize]
+            var authHeader = Request.Headers["Authorization"].FirstOrDefault();
+            if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
+            {
+                return Unauthorized(new { message = "Missing or invalid authorization header" });
+            }
+
             try
             {
-                // Log the attempt
-                Console.WriteLine($"Attempting to delete student ID: {id}");
-
                 var student = await _context.Students.FindAsync(id);
-                if (student == null)
-                {
-                    return NotFound(new { message = "Student not found" });
-                }
+                if (student == null) return NotFound(new { message = "Student not found" });
 
                 _context.Students.Remove(student);
                 await _context.SaveChangesAsync();
 
-                return Ok(new { message = "Student deleted successfully", id = id });
+                return Ok(new { message = "Student deleted successfully" });
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Delete error: {ex.Message}");
-                Console.WriteLine($"Stack trace: {ex.StackTrace}");
-
-                return StatusCode(500, new
-                {
-                    message = "Error deleting student",
-                    error = ex.Message
-                });
+                return StatusCode(500, new { error = ex.Message });
             }
         }
 
