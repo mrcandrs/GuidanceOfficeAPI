@@ -28,7 +28,9 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins("https://guidance-counselor-web-app.vercel.app")
               .AllowAnyHeader()
-              .AllowAnyMethod();
+              .AllowAnyMethod()
+              .SetIsOriginAllowed(origin => true) // Add this line
+              .AllowCredentials(); // Keep this for JWT auth
     });
 });
 
