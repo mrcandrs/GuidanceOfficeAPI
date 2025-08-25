@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
-var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 // Add services to the container.
 builder.Logging.ClearProviders();
@@ -22,17 +21,15 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     )
 );
 
-// cors
+// CORS configuration
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: MyAllowSpecificOrigins,
-    policy =>
+    options.AddDefaultPolicy(policy =>
     {
         policy.WithOrigins("https://guidance-counselor-web-app.vercel.app")
               .AllowAnyHeader()
               .AllowAnyMethod()
-              .AllowCredentials()
-              .SetIsOriginAllowedToAllowWildcardSubdomains();
+              .AllowCredentials();
     });
 });
 
@@ -67,22 +64,26 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 }
 
 app.UseHttpsRedirection();
-app.UseCors(MyAllowSpecificOrigins);
 
-// Add global OPTIONS handler
+// Use CORS before authentication and authorization
+app.UseCors();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+// Add explicit OPTIONS handler for all API routes
 app.MapMethods("/api/{*path}", new[] { "OPTIONS" }, async context =>
 {
     context.Response.Headers.Add("Access-Control-Allow-Origin", "https://guidance-counselor-web-app.vercel.app");
     context.Response.Headers.Add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-    context.Response.Headers.Add("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    context.Response.Headers.Add("Access-Control-Allow-Headers", "Content-Type, Authorization, Accept, Origin, X-Requested-With");
     context.Response.Headers.Add("Access-Control-Allow-Credentials", "true");
+    context.Response.Headers.Add("Access-Control-Max-Age", "86400"); // 24 hours
 
     context.Response.StatusCode = 200;
     await context.Response.CompleteAsync();
 });
 
-app.UseAuthentication();
-app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
