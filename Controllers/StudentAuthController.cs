@@ -364,6 +364,25 @@ namespace GuidanceOfficeAPI.Controllers
             }
         }
 
+        // Add this simple test endpoint to your StudentAuthController
+        [HttpDelete("test-simple/{id}")]
+        public IActionResult TestSimpleDelete(int id)
+        {
+            try
+            {
+                return Ok(new
+                {
+                    message = $"Test DELETE for ID {id} would work",
+                    timestamp = DateTime.UtcNow,
+                    success = true
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message, error = ex.ToString() });
+            }
+        }
+
     }
 
     public class LoginRequest
