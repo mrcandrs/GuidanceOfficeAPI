@@ -23,6 +23,18 @@ namespace GuidanceOfficeAPI.Controllers
             _logger = logger;
         }
 
+        // Add this OPTIONS endpoint
+        [HttpOptions("{id}")]
+        public IActionResult Options(int id)
+        {
+            Response.Headers.Add("Access-Control-Allow-Origin", "https://guidance-counselor-web-app.vercel.app");
+            Response.Headers.Add("Access-Control-Allow-Methods", "DELETE, OPTIONS");
+            Response.Headers.Add("Access-Control-Allow-Headers", "Content-Type, Authorization, Accept, Origin, X-Requested-With");
+            Response.Headers.Add("Access-Control-Allow-Credentials", "true");
+            Response.Headers.Add("Access-Control-Max-Age", "86400");
+
+            return Ok();
+        }
 
         private static DateTime ConvertToManilaTime(DateTime utcDateTime)
         {
@@ -337,7 +349,6 @@ namespace GuidanceOfficeAPI.Controllers
 
         // DELETE: api/student/{id}
         [HttpDelete("{id}")]
-        [Authorize]
         public async Task<IActionResult> DeleteStudent(int id)
         {
             try
