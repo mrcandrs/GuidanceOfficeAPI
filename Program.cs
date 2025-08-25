@@ -22,15 +22,14 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 );
 
 // CORS configuration
+// Replace your CORS configuration with this temporarily
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
-        policy.WithOrigins("https://guidance-counselor-web-app.vercel.app")
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .SetIsOriginAllowed(origin => true) // Add this line
-              .AllowCredentials(); // Keep this for JWT auth
+        policy.AllowAnyOrigin()   // Allows ALL origins
+              .AllowAnyHeader()   // Allows ALL headers
+              .AllowAnyMethod();  // Allows ALL methods (GET, POST, DELETE, etc.)
     });
 });
 
