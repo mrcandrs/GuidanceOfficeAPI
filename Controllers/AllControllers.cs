@@ -4,12 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GuidanceOfficeAPI.Controllers
 {
-    [ApiController]
+    /*[ApiController]
     [Route("api/[controller]")]
     public class StudentController : CrudController<Student>
     {
         public StudentController(AppDbContext context) : base(context) { }
-    }
+    }*/
 
     [ApiController]
     [Route("api/[controller]")]
