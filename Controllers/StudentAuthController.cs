@@ -6,6 +6,7 @@ using GuidanceOfficeAPI.Dtos;
 using GuidanceOfficeAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GuidanceOfficeAPI.Controllers
 {
@@ -336,6 +337,7 @@ namespace GuidanceOfficeAPI.Controllers
 
         // DELETE: api/student/{id}
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteStudent(int id)
         {
             try

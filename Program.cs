@@ -33,7 +33,8 @@ builder.Services.AddCors(options =>
                     "https://guidance-counselor-web-app.vercel.app"
                )
               .AllowAnyHeader()
-              .AllowAnyMethod();
+              .AllowAnyMethod()
+              .AllowAnyHeader();
     });
 });
 
