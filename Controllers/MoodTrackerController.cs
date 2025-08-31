@@ -44,7 +44,7 @@ namespace GuidanceOfficeAPI.Controllers
                 {
                     StudentId = dto.StudentId,
                     MoodLevel = dto.MoodLevel,
-                    EntryDate = GetPhilippinesNow() // Use Philippines time
+                    EntryDate = DateTime.UtcNow  // Store UTC, not Philippines time
                 };
 
                 _context.MoodTrackers.Add(mood);
