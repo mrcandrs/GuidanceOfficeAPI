@@ -334,6 +334,37 @@ namespace GuidanceOfficeAPI.Controllers
             }
         }
 
+        // GET: api/student
+        [HttpGet]
+        public async Task<IActionResult> GetAllStudents()
+        {
+            try
+            {
+                var students = await _context.Students
+                    .Select(s => new
+                    {
+                        studentId = s.StudentId,
+                        studentNumber = s.StudentNumber,
+                        fullName = s.FullName,
+                        program = s.Program,
+                        gradeYear = s.GradeYear,
+                        email = s.Email,
+                        username = s.Username,
+                        dateRegistered = s.DateRegistered,
+                        lastLogin = s.LastLogin
+                    })
+                    .OrderBy(s => s.fullName)
+                    .ToListAsync();
+
+                return Ok(students);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error fetching students: {Message}", ex.Message);
+                return StatusCode(500, new { message = "Error retrieving students", error = ex.Message });
+            }
+        }
+
         // DELETE: api/student/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteStudent(int id)
