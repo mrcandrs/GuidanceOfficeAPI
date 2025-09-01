@@ -10,7 +10,7 @@ namespace GuidanceOfficeAPI.Dtos
         public int StudentId { get; set; }
         public int CounselorId { get; set; }
         public DateTime Date { get; set; }
-        public TimeSpan? Time { get; set; } // Added time field
+        public string? Time { get; set; }
         public string? GradeYearLevel { get; set; }
         public string? Section { get; set; }
         public string? Concerns { get; set; }
