@@ -169,7 +169,6 @@ namespace GuidanceOfficeAPI.Controllers
                     StudentId = createDto.StudentId,
                     CounselorId = counselorId,
                     Date = createDto.Date,
-                    Time = createDto.Time,
                     GradeYearLevel = createDto.GradeYearLevel,
                     Section = createDto.Section,
                     Concerns = createDto.Concerns,
@@ -180,6 +179,19 @@ namespace GuidanceOfficeAPI.Controllers
                     EndorsedTo = createDto.EndorsedTo,
                     CreatedAt = DateTime.UtcNow
                 };
+
+                // Parse the string time into TimeSpan (if valid)
+                if (!string.IsNullOrEmpty(createDto.Time))
+                {
+                    if (TimeSpan.TryParse(createDto.Time, out var parsedTime))
+                    {
+                        form.Time = parsedTime;
+                    }
+                    else
+                    {
+                        return BadRequest("Invalid time format. Use HH:mm or HH:mm:ss.");
+                    }
+                }
 
                 _context.EndorsementCustodyForms.Add(form);
                 await _context.SaveChangesAsync();
@@ -268,7 +280,6 @@ namespace GuidanceOfficeAPI.Controllers
                 // Update form properties
                 form.StudentId = updateDto.StudentId;
                 form.Date = updateDto.Date;
-                form.Time = updateDto.Time;
                 form.GradeYearLevel = updateDto.GradeYearLevel;
                 form.Section = updateDto.Section;
                 form.Concerns = updateDto.Concerns;
@@ -278,6 +289,19 @@ namespace GuidanceOfficeAPI.Controllers
                 form.EndorsedBy = updateDto.EndorsedBy;
                 form.EndorsedTo = updateDto.EndorsedTo;
                 form.UpdatedAt = DateTime.UtcNow; // Set the UpdatedAt timestamp
+
+                // Parse the string time into TimeSpan (if valid)
+                if (!string.IsNullOrEmpty(updateDto.Time))
+                {
+                    if (TimeSpan.TryParse(updateDto.Time, out var parsedTime))
+                    {
+                        form.Time = parsedTime;
+                    }
+                    else
+                    {
+                        return BadRequest("Invalid time format. Use HH:mm or HH:mm:ss.");
+                    }
+                }
 
                 await _context.SaveChangesAsync();
 
