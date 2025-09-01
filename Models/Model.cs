@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography.X509Certificates;
 
 namespace GuidanceOfficeAPI.Models
 {
@@ -443,11 +444,22 @@ namespace GuidanceOfficeAPI.Models
     {
         [Key]
         public int ConsultationId { get; set; }
-        public int StudentId { get; set; }
         public int CounselorId { get; set; }
+        public int StudentId { get; set; }
         public DateTime Date { get; set; }
-        public string Topic { get; set; }
-        public string ActionTaken { get; set; }
+
+        [Column(TypeName = "time")]
+        public TimeSpan? Time { get; set; }
+        public string GradeYearLevel { get; set; }
+        public string Section { get; set; }
+        public string Concerns { get; set; }
+        public string Remarks {  get; set; }
+        public string CounselorName { get; set; }
+        public string ParentGuardian { get; set; }
+        public string SchoolPersonnel { get; set; }
+        public string ParentContactNumber { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime? UpdatedAt { get; set; }
 
         [ForeignKey("StudentId")]
         public Student Student { get; set; }
