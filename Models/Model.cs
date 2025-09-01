@@ -418,6 +418,10 @@ namespace GuidanceOfficeAPI.Models
         public int StudentId { get; set; }
         public int CounselorId { get; set; }
         public DateTime Date { get; set; }
+
+        [Column(TypeName = "time")]
+        public TimeSpan? Time { get; set; }
+
         public string GradeYearLevel { get; set; }
         public string Section { get; set; }
         public string Concerns { get; set; }

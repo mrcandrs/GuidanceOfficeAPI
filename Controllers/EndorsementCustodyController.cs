@@ -169,6 +169,7 @@ namespace GuidanceOfficeAPI.Controllers
                     StudentId = createDto.StudentId,
                     CounselorId = counselorId,
                     Date = createDto.Date,
+                    Time = createDto.Time,
                     GradeYearLevel = createDto.GradeYearLevel,
                     Section = createDto.Section,
                     Concerns = createDto.Concerns,
@@ -196,6 +197,7 @@ namespace GuidanceOfficeAPI.Controllers
                     StudentId = createdFormFromDb.StudentId,
                     CounselorId = createdFormFromDb.CounselorId,
                     Date = createdFormFromDb.Date,
+                    Time = createdFormFromDb.Time,
                     GradeYearLevel = createdFormFromDb.GradeYearLevel,
                     Section = createdFormFromDb.Section,
                     Concerns = createdFormFromDb.Concerns,
@@ -266,6 +268,7 @@ namespace GuidanceOfficeAPI.Controllers
                 // Update form properties
                 form.StudentId = updateDto.StudentId;
                 form.Date = updateDto.Date;
+                form.Time = updateDto.Time;
                 form.GradeYearLevel = updateDto.GradeYearLevel;
                 form.Section = updateDto.Section;
                 form.Concerns = updateDto.Concerns;
@@ -347,6 +350,7 @@ namespace GuidanceOfficeAPI.Controllers
                     StudentId = f.StudentId,
                     CounselorId = f.CounselorId,
                     Date = f.Date,
+                    Time = f.Time,
                     GradeYearLevel = f.GradeYearLevel,
                     Section = f.Section,
                     Concerns = f.Concerns,

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿// CreateEndorsementCustodyFormDto.cs
+using System.ComponentModel.DataAnnotations;
 
 namespace GuidanceOfficeAPI.Dtos
 {
@@ -10,6 +11,9 @@ namespace GuidanceOfficeAPI.Dtos
 
         [Required(ErrorMessage = "Date is required")]
         public DateTime Date { get; set; }
+
+        // Optional: Separate time field (alternative approach)
+        public TimeSpan? Time { get; set; }
 
         [StringLength(50, ErrorMessage = "Grade/Year Level cannot exceed 50 characters")]
         public string? GradeYearLevel { get; set; }
