@@ -391,6 +391,25 @@ namespace GuidanceOfficeAPI.Controllers
             return Ok(student);
         }
 
+        // GET: api/student/{id}/mood-history
+        [HttpGet("{id}/mood-history")]
+        public async Task<IActionResult> GetMoodHistory(int id)
+        {
+            var moods = await _context.MoodTrackers
+                .Where(m => m.StudentId == id)
+                .OrderByDescending(m => m.EntryDate)
+                .Select(m => new
+                {
+                    moodLevel = m.MoodLevel,
+                    entryDate = m.EntryDate
+                })
+                .ToListAsync();
+
+            if (!moods.Any())
+                return NotFound(new { message = "No mood history found for this student." });
+
+            return Ok(moods);
+        }
 
         // DELETE: api/student/{id}
         [HttpDelete("{id}")]
