@@ -365,6 +365,33 @@ namespace GuidanceOfficeAPI.Controllers
             }
         }
 
+        // GET: api/student/{id}
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetStudentById(int id)
+        {
+            var student = await _context.Students
+                .Where(s => s.StudentId == id)
+                .Select(s => new
+                {
+                    studentId = s.StudentId,
+                    studentNumber = s.StudentNumber,
+                    fullName = s.FullName,
+                    program = s.Program,
+                    gradeYear = s.GradeYear,
+                    email = s.Email,
+                    username = s.Username,
+                    dateRegistered = s.DateRegistered,
+                    lastLogin = s.LastLogin
+                })
+                .FirstOrDefaultAsync();
+
+            if (student == null)
+                return NotFound(new { message = "Student not found" });
+
+            return Ok(student);
+        }
+
+
         // DELETE: api/student/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteStudent(int id)
