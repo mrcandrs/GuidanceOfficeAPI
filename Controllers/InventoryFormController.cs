@@ -36,6 +36,7 @@ namespace GuidanceOfficeAPI.Controllers
                 var response = new
                 {
                     studentId = inventoryForm.StudentId,
+                    submissionDate = inventoryForm.SubmissionDate,
                     fullName = inventoryForm.FullName,
                     studentNumber = inventoryForm.StudentNumber,
                     program = inventoryForm.Program,
