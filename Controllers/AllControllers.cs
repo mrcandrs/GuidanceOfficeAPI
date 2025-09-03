@@ -23,7 +23,7 @@ namespace GuidanceOfficeAPI.Controllers
     public class InventoryFormController : CrudController<InventoryForm>
     {
         public InventoryFormController(AppDbContext context) : base(context) { }
-    }*/
+    }*/ 
 
     [ApiController]
     [Route("api/[controller]")]
