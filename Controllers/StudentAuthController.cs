@@ -334,6 +334,49 @@ namespace GuidanceOfficeAPI.Controllers
             }
         }
 
+        // GET: api/student/{id}/consent-form
+        [HttpGet("{id}/consent-form")]
+        public async Task<IActionResult> GetConsentForm(int id)
+        {
+            var consentForm = await _context.ConsentForms
+                .Include(c => c.Student)
+                .Include(c => c.Counselor)
+                .FirstOrDefaultAsync(c => c.StudentId == id);
+
+            if (consentForm == null)
+                return NotFound(new { message = "No consent form found for this student" });
+
+            return Ok(consentForm);
+        }
+
+        // GET: api/student/{id}/inventory-form  
+        [HttpGet("{id}/inventory-form")]
+        public async Task<IActionResult> GetInventoryForm(int id)
+        {
+            var inventoryForm = await _context.InventoryForms
+                .Include(i => i.Siblings)
+                .Include(i => i.WorkExperience)
+                .FirstOrDefaultAsync(i => i.StudentId == id);
+
+            if (inventoryForm == null)
+                return NotFound(new { message = "No inventory form found for this student" });
+
+            return Ok(inventoryForm);
+        }
+
+        // GET: api/student/{id}/career-form
+        [HttpGet("{id}/career-form")]
+        public async Task<IActionResult> GetCareerForm(int id)
+        {
+            var careerForm = await _context.CareerPlanningForms
+                .FirstOrDefaultAsync(c => c.StudentId == id);
+
+            if (careerForm == null)
+                return NotFound(new { message = "No career form found for this student" });
+
+            return Ok(careerForm);
+        }
+
         // GET: api/student
         [HttpGet]
         public async Task<IActionResult> GetAllStudents()
