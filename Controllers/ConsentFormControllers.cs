@@ -100,7 +100,7 @@ namespace GuidanceOfficeAPI.Controllers
 
                     // Create font for filling fields
                     var font = PdfFontFactory.CreateFont(StandardFonts.HELVETICA, PdfEncodings.WINANSI);
-                    acroForm.SetGenerateAppearance(true);
+                    acroForm.SetGenerateAppearance(true); 
 
                     // Helper function to safely set field values
                     void TrySet(string fieldName, string value, float size = 11f)
