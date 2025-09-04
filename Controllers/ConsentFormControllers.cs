@@ -72,7 +72,7 @@ namespace GuidanceOfficeAPI.Controllers
                 string studentId = form.StudentId?.ToString() ?? "N/A";
                 string consentId = form.ConsentId.ToString();
 
-                // Handle SignedDate (non-nullable)
+                // Handle SignedDate (non-nullable DateTime)
                 string signedDate = form.SignedDate == DateTime.MinValue
                     ? "N/A"
                     : TimeZoneInfo.ConvertTimeFromUtc(
@@ -95,11 +95,11 @@ namespace GuidanceOfficeAPI.Controllers
                         return BadRequest("The PDF template does not contain fillable form fields.");
                     }
 
-                    // Get all form fields - using the correct method for iText7
-                    var fields = acroForm.GetAllFormFields();
+                    // For iText 7.2.5 - this method works
+                    var fields = acroForm.GetFormFields();
 
-                    // Create font for filling fields (simplified for iText 9.x)
-                    var font = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
+                    // Create font for filling fields
+                    var font = PdfFontFactory.CreateFont(StandardFonts.HELVETICA, PdfEncodings.WINANSI);
                     acroForm.SetGenerateAppearance(true);
 
                     // Helper function to safely set field values
@@ -109,9 +109,7 @@ namespace GuidanceOfficeAPI.Controllers
                         {
                             try
                             {
-                                field.SetValue(value);
-                                field.SetFont(font);
-                                field.SetFontSize(size);
+                                field.SetValue(value, font, size);
                             }
                             catch (Exception ex)
                             {

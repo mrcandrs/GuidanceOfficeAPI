@@ -81,7 +81,7 @@
             },
             "itext7": {
               "target": "Package",
-              "version": "[9.3.0, )"
+              "version": "[7.2.5, )"
             }
           },
           "imports": [
