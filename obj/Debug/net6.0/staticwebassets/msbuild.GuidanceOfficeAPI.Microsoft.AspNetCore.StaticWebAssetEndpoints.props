@@ -1,0 +1,16 @@
+﻿<Project>
+  <ItemGroup>
+    <StaticWebAssetEndpoint Include="_content/GuidanceOfficeAPI/pdf-templates/ConsentFormTemplate.pdf">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\pdf-templates\ConsentFormTemplate.pdf'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-DrSomd6Oc3j02TtMiwSIzaPUpJQ5vgnW7QxjB3snHWI="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"131476"},{"Name":"Content-Type","Value":"application/pdf"},{"Name":"ETag","Value":"\u0022DrSomd6Oc3j02TtMiwSIzaPUpJQ5vgnW7QxjB3snHWI=\u0022"},{"Name":"Last-Modified","Value":"Thu, 04 Sep 2025 03:31:37 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/GuidanceOfficeAPI/pdf-templates/ConsentFormTemplate.qi151t4d4r.pdf">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\pdf-templates\ConsentFormTemplate.pdf'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"qi151t4d4r"},{"Name":"integrity","Value":"sha256-DrSomd6Oc3j02TtMiwSIzaPUpJQ5vgnW7QxjB3snHWI="},{"Name":"label","Value":"_content/GuidanceOfficeAPI/pdf-templates/ConsentFormTemplate.pdf"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"131476"},{"Name":"Content-Type","Value":"application/pdf"},{"Name":"ETag","Value":"\u0022DrSomd6Oc3j02TtMiwSIzaPUpJQ5vgnW7QxjB3snHWI=\u0022"},{"Name":"Last-Modified","Value":"Thu, 04 Sep 2025 03:31:37 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+  </ItemGroup>
+</Project>

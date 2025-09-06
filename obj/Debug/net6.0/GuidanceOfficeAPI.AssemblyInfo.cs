@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GuidanceOfficeAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+da1201c42e014755c63ce9e1b1134bc512933ef6")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+246656b1f17d287f7bbdf0b3cf8e45c787570fb8")]
 [assembly: System.Reflection.AssemblyProductAttribute("GuidanceOfficeAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GuidanceOfficeAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

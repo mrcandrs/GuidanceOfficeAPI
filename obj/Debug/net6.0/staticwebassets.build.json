@@ -1,0 +1,125 @@
+{
+  "Version": 1,
+  "Hash": "UbZwdLB9JEtoE9bEws4RaZPYeXJDIEpVZaANRUpUQoo=",
+  "Source": "GuidanceOfficeAPI",
+  "BasePath": "_content/GuidanceOfficeAPI",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "GuidanceOfficeAPI\\wwwroot",
+      "Source": "GuidanceOfficeAPI",
+      "ContentRoot": "C:\\Users\\Windows 10\\source\\repos\\GuidanceOfficeAPI\\wwwroot\\",
+      "BasePath": "_content/GuidanceOfficeAPI",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "C:\\Users\\Windows 10\\source\\repos\\GuidanceOfficeAPI\\wwwroot\\pdf-templates\\ConsentFormTemplate.pdf",
+      "SourceId": "GuidanceOfficeAPI",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Windows 10\\source\\repos\\GuidanceOfficeAPI\\wwwroot\\",
+      "BasePath": "_content/GuidanceOfficeAPI",
+      "RelativePath": "pdf-templates/ConsentFormTemplate#[.{fingerprint}]?.pdf",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "qi151t4d4r",
+      "Integrity": "DrSomd6Oc3j02TtMiwSIzaPUpJQ5vgnW7QxjB3snHWI=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\pdf-templates\\ConsentFormTemplate.pdf"
+    }
+  ],
+  "Endpoints": [
+    {
+      "Route": "pdf-templates/ConsentFormTemplate.pdf",
+      "AssetFile": "C:\\Users\\Windows 10\\source\\repos\\GuidanceOfficeAPI\\wwwroot\\pdf-templates\\ConsentFormTemplate.pdf",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "131476"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/pdf"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"DrSomd6Oc3j02TtMiwSIzaPUpJQ5vgnW7QxjB3snHWI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 04 Sep 2025 03:31:37 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-DrSomd6Oc3j02TtMiwSIzaPUpJQ5vgnW7QxjB3snHWI="
+        }
+      ]
+    },
+    {
+      "Route": "pdf-templates/ConsentFormTemplate.qi151t4d4r.pdf",
+      "AssetFile": "C:\\Users\\Windows 10\\source\\repos\\GuidanceOfficeAPI\\wwwroot\\pdf-templates\\ConsentFormTemplate.pdf",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "131476"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/pdf"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"DrSomd6Oc3j02TtMiwSIzaPUpJQ5vgnW7QxjB3snHWI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 04 Sep 2025 03:31:37 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "qi151t4d4r"
+        },
+        {
+          "Name": "label",
+          "Value": "pdf-templates/ConsentFormTemplate.pdf"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-DrSomd6Oc3j02TtMiwSIzaPUpJQ5vgnW7QxjB3snHWI="
+        }
+      ]
+    }
+  ]
+}

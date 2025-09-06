@@ -486,11 +486,57 @@ namespace GuidanceOfficeAPI.Models
         [Key]
         public int NoteId { get; set; }
 
+        // Foreign Keys
         public int StudentId { get; set; }
         public int CounselorId { get; set; }
-        public string NoteText { get; set; }
-        public DateTime CreatedAt { get; set; }
 
+        // Interview Info
+        public DateTime InterviewDate { get; set; }
+        public TimeSpan? TimeStarted { get; set; }
+        public TimeSpan? TimeEnded { get; set; }
+
+        // School Year Info
+        public string SchoolYear { get; set; }
+        public string TertiarySemester { get; set; }   // "1st", "2nd", "Summer"
+        public string SeniorHighQuarter { get; set; }  // "1st", "2nd", "3rd", "4th", "Summer"
+
+        // Student Info
+        public string GradeYearLevelSection { get; set; }
+        public string Program { get; set; }
+
+        // Nature of Counseling (Multiple Choice)
+        public bool IsAcademic { get; set; }
+        public bool IsBehavioral { get; set; }
+        public bool IsPersonal { get; set; }
+        public bool IsSocial { get; set; }
+        public bool IsCareer { get; set; }
+
+        // Counseling Situation/s (Multiple Choice)
+        public bool IsIndividual { get; set; }
+        public bool IsGroup { get; set; }
+        public bool IsClass { get; set; }
+        public bool IsCounselorInitiated { get; set; }
+        public bool IsWalkIn { get; set; }
+        public bool IsFollowUp { get; set; }
+        public string ReferredBy { get; set; }
+
+        // Counseling Notes Sections
+        public string PresentingProblem { get; set; }
+        public string Assessment { get; set; }
+        public string Interventions { get; set; }
+        public string PlanOfAction { get; set; }
+
+        // Recommendations
+        public bool IsFollowThroughSession { get; set; }
+        public DateTime? FollowThroughDate { get; set; }
+        public bool IsReferral { get; set; }
+        public string ReferralAgencyName { get; set; }
+
+        // Metadata
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime? UpdatedAt { get; set; }
+
+        // Relationships
         [ForeignKey("StudentId")]
         public Student Student { get; set; }
 
