@@ -299,6 +299,7 @@ namespace GuidanceOfficeAPI.Controllers
             return Ok();
         }
 
+        // GET: api/student/${studentId}/photo
         [HttpGet("{id}/photo")]
         [AllowAnonymous] // or secure it if needed, then pass token via cookie/header-capable fetch
         public async Task<IActionResult> GetPhoto(int id)
