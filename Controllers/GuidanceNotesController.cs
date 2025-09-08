@@ -87,6 +87,8 @@ namespace GuidanceOfficeAPI.Controllers
                     FollowThroughDate = n.FollowThroughDate,
                     IsReferral = n.IsReferral,
                     ReferralAgencyName = n.ReferralAgencyName,
+                    // Counselor name (new field)
+                    CounselorName = n.CounselorName,
                     // Metadata
                     CreatedAt = ConvertToManilaTime(n.CreatedAt),
                     UpdatedAt = n.UpdatedAt.HasValue ? ConvertToManilaTime(n.UpdatedAt.Value) : null,
@@ -166,6 +168,8 @@ namespace GuidanceOfficeAPI.Controllers
                     FollowThroughDate = noteFromDb.FollowThroughDate,
                     IsReferral = noteFromDb.IsReferral,
                     ReferralAgencyName = noteFromDb.ReferralAgencyName,
+                    // Counselor name (new field)
+                    CounselorName = noteFromDb.CounselorName,
                     // Metadata
                     CreatedAt = ConvertToManilaTime(noteFromDb.CreatedAt),
                     UpdatedAt = noteFromDb.UpdatedAt.HasValue ? ConvertToManilaTime(noteFromDb.UpdatedAt.Value) : null,
@@ -211,6 +215,13 @@ namespace GuidanceOfficeAPI.Controllers
                     return BadRequest(new { message = "Student not found" });
                 }
 
+                // Get counselor details for name
+                var counselor = await _context.Counselors.FindAsync(counselorId);
+                if (counselor == null)
+                {
+                    return BadRequest(new { message = "Counselor not found" });
+                }
+
                 var note = new GuidanceNote
                 {
                     StudentId = createDto.StudentId,
@@ -245,6 +256,8 @@ namespace GuidanceOfficeAPI.Controllers
                     FollowThroughDate = createDto.FollowThroughDate,
                     IsReferral = createDto.IsReferral,
                     ReferralAgencyName = createDto.ReferralAgencyName,
+                    // Counselor name (auto-populated from counselor record or from DTO)
+                    CounselorName = !string.IsNullOrEmpty(createDto.CounselorName) ? createDto.CounselorName : counselor.Name,
                     CreatedAt = DateTime.UtcNow
                 };
 
@@ -320,6 +333,8 @@ namespace GuidanceOfficeAPI.Controllers
                     FollowThroughDate = createdNoteFromDb.FollowThroughDate,
                     IsReferral = createdNoteFromDb.IsReferral,
                     ReferralAgencyName = createdNoteFromDb.ReferralAgencyName,
+                    // Counselor name
+                    CounselorName = createdNoteFromDb.CounselorName,
                     CreatedAt = ConvertToManilaTime(createdNoteFromDb.CreatedAt),
                     Student = createdNoteFromDb.Student != null ? new StudentDto
                     {
@@ -411,6 +426,11 @@ namespace GuidanceOfficeAPI.Controllers
                 note.FollowThroughDate = updateDto.FollowThroughDate;
                 note.IsReferral = updateDto.IsReferral;
                 note.ReferralAgencyName = updateDto.ReferralAgencyName;
+                // Update counselor name if provided
+                if (!string.IsNullOrEmpty(updateDto.CounselorName))
+                {
+                    note.CounselorName = updateDto.CounselorName;
+                }
                 note.UpdatedAt = DateTime.UtcNow;
 
                 // Parse time fields
