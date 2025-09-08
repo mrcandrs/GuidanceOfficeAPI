@@ -299,6 +299,22 @@ namespace GuidanceOfficeAPI.Controllers
             return Ok();
         }
 
+        [HttpGet("{id}/photo")]
+        [AllowAnonymous] // or secure it if needed, then pass token via cookie/header-capable fetch
+        public async Task<IActionResult> GetPhoto(int id)
+        {
+            var student = await _context.Students
+                .Where(s => s.StudentId == id)
+                .Select(s => new { s.ProfileImage })
+                .FirstOrDefaultAsync();
+
+            if (student == null || student.ProfileImage == null || student.ProfileImage.Length == 0)
+                return NotFound();
+
+            // If you store different formats, return the correct MIME (e.g., image/png).
+            return File(student.ProfileImage, "image/jpeg");
+        }
+
         // GET: api/student/students-with-mood
         [HttpGet("students-with-mood")]
         public async Task<IActionResult> GetStudentsWithLastMood()
