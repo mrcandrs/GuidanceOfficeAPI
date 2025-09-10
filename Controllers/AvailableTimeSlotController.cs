@@ -201,6 +201,85 @@ namespace GuidanceOfficeAPI.Controllers
 
             return Ok(slots);
         }
+
+        // Add this method to AvailableTimeSlotController
+        [HttpGet("available-for-students")]
+        public async Task<IActionResult> GetAvailableSlotsForStudents()
+        {
+            var today = GetPhilippinesTime().Date;
+            var availableSlots = new List<object>();
+
+            // Get all active time slots
+            var slots = await _context.AvailableTimeSlots
+                .Where(s => s.Date >= today && s.IsActive)
+                .OrderBy(s => s.Date)
+                .ThenBy(s => s.Time)
+                .ToListAsync();
+
+            foreach (var slot in slots)
+            {
+                // Count only approved appointments for this slot
+                var approvedCount = await _context.GuidanceAppointments
+                    .CountAsync(a => a.Date == slot.Date.ToString("yyyy-MM-dd") &&
+                                    a.Time == slot.Time &&
+                                    a.Status.ToLower() == "approved");
+
+                // Only include slots that have available capacity
+                if (approvedCount < slot.MaxAppointments)
+                {
+                    availableSlots.Add(new
+                    {
+                        date = slot.Date.ToString("yyyy-MM-dd"),
+                        time = slot.Time,
+                        availableSpots = slot.MaxAppointments - approvedCount,
+                        maxAppointments = slot.MaxAppointments
+                    });
+                }
+            }
+
+            return Ok(availableSlots);
+        }
+
+        // Also add this method to get available slots for a specific date
+        [HttpGet("available-for-students/date/{date}")]
+        public async Task<IActionResult> GetAvailableSlotsForStudentsByDate(string date)
+        {
+            if (!DateTime.TryParse(date, out DateTime targetDate))
+            {
+                return BadRequest(new { message = "Invalid date format" });
+            }
+
+            var availableSlots = new List<object>();
+
+            // Get active time slots for the specific date
+            var slots = await _context.AvailableTimeSlots
+                .Where(s => s.Date.Date == targetDate.Date && s.IsActive)
+                .OrderBy(s => s.Time)
+                .ToListAsync();
+
+            foreach (var slot in slots)
+            {
+                // Count only approved appointments for this slot
+                var approvedCount = await _context.GuidanceAppointments
+                    .CountAsync(a => a.Date == date &&
+                                    a.Time == slot.Time &&
+                                    a.Status.ToLower() == "approved");
+
+                // Only include slots that have available capacity
+                if (approvedCount < slot.MaxAppointments)
+                {
+                    availableSlots.Add(new
+                    {
+                        date = slot.Date.ToString("yyyy-MM-dd"),
+                        time = slot.Time,
+                        availableSpots = slot.MaxAppointments - approvedCount,
+                        maxAppointments = slot.MaxAppointments
+                    });
+                }
+            }
+
+            return Ok(availableSlots);
+        }
     }
 
     // Request models
