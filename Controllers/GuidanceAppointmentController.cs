@@ -110,10 +110,19 @@ namespace GuidanceOfficeAPI.Controllers
             if (appointment.Status.ToLower() != "pending")
                 return BadRequest(new { message = "Only pending appointments can be approved" });
 
+            // Check if the slot is still available (not overbooked)
+            if (!await IsTimeSlotAvailable(appointment.Date, appointment.Time))
+            {
+                return BadRequest(new { message = "This time slot is no longer available or fully booked" });
+            }
+
             appointment.Status = "approved";
             appointment.UpdatedAt = GetPhilippinesTime();
 
             await _context.SaveChangesAsync();
+
+            // Update the appointment count for this time slot
+            await UpdateAppointmentCount(appointment.Date, appointment.Time);
 
             return Ok(new
             {
@@ -145,6 +154,9 @@ namespace GuidanceOfficeAPI.Controllers
 
             await _context.SaveChangesAsync();
 
+            // Update the appointment count for this time slot (since we're rejecting, count decreases)
+            await UpdateAppointmentCount(appointment.Date, appointment.Time);
+
             return Ok(new
             {
                 message = "Appointment rejected successfully",
@@ -170,7 +182,7 @@ namespace GuidanceOfficeAPI.Controllers
             return Ok(appointments);
         }
 
-        // Add this method to GuidanceAppointmentController
+        // Update the IsTimeSlotAvailable method to be more accurate
         private async Task<bool> IsTimeSlotAvailable(string date, string time)
         {
             var targetDate = DateTime.Parse(date);
@@ -180,12 +192,63 @@ namespace GuidanceOfficeAPI.Controllers
             if (slot == null)
                 return false;
 
-            // Count current appointments for this slot
+            // Count current appointments for this slot (pending + approved)
             var currentCount = await _context.GuidanceAppointments
                 .CountAsync(a => a.Date == date && a.Time == time &&
                                 (a.Status.ToLower() == "pending" || a.Status.ToLower() == "approved"));
 
             return currentCount < slot.MaxAppointments;
+        }
+
+        // Add this method to update appointment counts when approving/rejecting
+        private async Task UpdateAppointmentCount(string date, string time)
+        {
+            var targetDate = DateTime.Parse(date);
+            var slot = await _context.AvailableTimeSlots
+                .FirstOrDefaultAsync(s => s.Date.Date == targetDate.Date && s.Time == time);
+
+            if (slot != null)
+            {
+                // Count current approved and pending appointments for this slot
+                var currentCount = await _context.GuidanceAppointments
+                    .CountAsync(a => a.Date == date && a.Time == time &&
+                                    (a.Status.ToLower() == "pending" || a.Status.ToLower() == "approved"));
+
+                slot.CurrentAppointmentCount = currentCount;
+                slot.UpdatedAt = GetPhilippinesTime();
+
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        // Add this method to sync appointment counts (useful for maintenance)
+        [HttpPost("sync-appointment-counts")]
+        public async Task<IActionResult> SyncAppointmentCounts()
+        {
+            var slots = await _context.AvailableTimeSlots.ToListAsync();
+            var updatedCount = 0;
+
+            foreach (var slot in slots)
+            {
+                var currentCount = await _context.GuidanceAppointments
+                    .CountAsync(a => a.Date == slot.Date.ToString("yyyy-MM-dd") && a.Time == slot.Time &&
+                                    (a.Status.ToLower() == "pending" || a.Status.ToLower() == "approved"));
+
+                if (slot.CurrentAppointmentCount != currentCount)
+                {
+                    slot.CurrentAppointmentCount = currentCount;
+                    slot.UpdatedAt = GetPhilippinesTime();
+                    updatedCount++;
+                }
+            }
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new
+            {
+                message = $"Synced {updatedCount} time slot appointment counts",
+                updatedSlots = updatedCount
+            });
         }
     }
 
