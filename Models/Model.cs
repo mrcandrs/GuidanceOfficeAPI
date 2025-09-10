@@ -324,8 +324,8 @@ namespace GuidanceOfficeAPI.Models
         public string Notes { get; set; }
         public int CounselorId { get; set; }
 
-        [ForeignKey("AppointmentId")]
-        public GuidanceAppointment Appointment { get; set; }
+        /*[ForeignKey("AppointmentId")]
+        public GuidanceAppointment Appointment { get; set; }*/
 
         [ForeignKey("CounselorId")]
         public Counselor Counselor { get; set; }
