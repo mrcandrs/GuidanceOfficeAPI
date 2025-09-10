@@ -47,6 +47,8 @@
         public DbSet<Counselor> Counselors { get; set; }
         public DbSet<GuidanceNote> GuidanceNotes { get; set; }
         public DbSet<JournalEntry> JournalEntries { get; set; }
+
+        public DbSet<AvailableTimeSlot> AvailableTimeSlots { get; set; }
     }
 
 }

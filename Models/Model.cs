@@ -554,4 +554,28 @@ namespace GuidanceOfficeAPI.Models
 
         public string Mood { get; set; }
     }
+
+    public class AvailableTimeSlot
+    {
+        [Key]
+        public int SlotId { get; set; }
+
+        [Required]
+        public DateTime Date { get; set; }
+
+        [Required]
+        [StringLength(20)]
+        public string Time { get; set; }
+
+        [Required]
+        public int MaxAppointments { get; set; } = 3; // Default max appointments per slot
+
+        public int CurrentAppointmentCount { get; set; } = 0; // Track current appointments
+
+        public bool IsActive { get; set; } = true; // Allow disabling slots
+
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        public DateTime? UpdatedAt { get; set; }
+    }
 }

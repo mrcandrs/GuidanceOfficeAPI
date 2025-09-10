@@ -1,6 +1,7 @@
 ﻿using GuidanceOfficeAPI.Data;
 using GuidanceOfficeAPI.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace GuidanceOfficeAPI.Controllers
 {
@@ -57,15 +58,22 @@ namespace GuidanceOfficeAPI.Controllers
         }
 
         // POST: api/guidanceappointment
+        // Update the PostAppointment method to include slot validation
         [HttpPost]
         public async Task<IActionResult> PostAppointment(GuidanceAppointment appointment)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
+            // Check if time slot is available
+            if (!await IsTimeSlotAvailable(appointment.Date, appointment.Time))
+            {
+                return BadRequest(new { message = "Selected time slot is not available or fully booked" });
+            }
+
             // Set CreatedAt to Philippines time
             appointment.CreatedAt = GetPhilippinesTime();
-            appointment.Status = "pending"; // Ensure status is pending
+            appointment.Status = "pending";
 
             _context.GuidanceAppointments.Add(appointment);
             await _context.SaveChangesAsync();
@@ -160,6 +168,24 @@ namespace GuidanceOfficeAPI.Controllers
                 .ToList();
 
             return Ok(appointments);
+        }
+
+        // Add this method to GuidanceAppointmentController
+        private async Task<bool> IsTimeSlotAvailable(string date, string time)
+        {
+            var targetDate = DateTime.Parse(date);
+            var slot = await _context.AvailableTimeSlots
+                .FirstOrDefaultAsync(s => s.Date.Date == targetDate.Date && s.Time == time && s.IsActive);
+
+            if (slot == null)
+                return false;
+
+            // Count current appointments for this slot
+            var currentCount = await _context.GuidanceAppointments
+                .CountAsync(a => a.Date == date && a.Time == time &&
+                                (a.Status.ToLower() == "pending" || a.Status.ToLower() == "approved"));
+
+            return currentCount < slot.MaxAppointments;
         }
     }
 
