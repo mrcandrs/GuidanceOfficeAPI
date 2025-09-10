@@ -112,9 +112,6 @@ namespace GuidanceOfficeAPI.Controllers
                 if (appointment.Status.ToLower() != "pending")
                     return BadRequest(new { message = "Only pending appointments can be approved" });
 
-                // Debug logging
-                Console.WriteLine($"Approving appointment: Date={appointment.Date}, Time={appointment.Time}");
-
                 // Check if the slot exists and is active
                 var targetDate = DateTime.Parse(appointment.Date);
                 var slot = await _context.AvailableTimeSlots
@@ -124,25 +121,23 @@ namespace GuidanceOfficeAPI.Controllers
                 {
                     return BadRequest(new
                     {
-                        message = $"No active time slot found for {appointment.Date} at {appointment.Time}",
-                        appointmentDate = appointment.Date,
-                        appointmentTime = appointment.Time
+                        message = $"No active time slot found for {appointment.Date} at {appointment.Time}"
                     });
                 }
 
-                // Check current appointment count for this slot
-                var currentCount = await _context.GuidanceAppointments
+                // Count ONLY approved appointments (excluding the current pending one we're about to approve)
+                var approvedCount = await _context.GuidanceAppointments
                     .CountAsync(a => a.Date == appointment.Date && a.Time == appointment.Time &&
-                                    (a.Status.ToLower() == "pending" || a.Status.ToLower() == "approved"));
+                                    a.Status.ToLower() == "approved");
 
-                Console.WriteLine($"Current count: {currentCount}, Max appointments: {slot.MaxAppointments}");
+                Console.WriteLine($"Approved count: {approvedCount}, Max appointments: {slot.MaxAppointments}");
 
-                if (currentCount >= slot.MaxAppointments)
+                if (approvedCount >= slot.MaxAppointments)
                 {
                     return BadRequest(new
                     {
-                        message = $"Time slot is fully booked. Current: {currentCount}, Max: {slot.MaxAppointments}",
-                        currentCount = currentCount,
+                        message = $"Time slot is fully booked. Approved: {approvedCount}, Max: {slot.MaxAppointments}",
+                        approvedCount = approvedCount,
                         maxAppointments = slot.MaxAppointments
                     });
                 }
