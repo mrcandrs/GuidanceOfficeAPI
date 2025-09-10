@@ -102,39 +102,76 @@ namespace GuidanceOfficeAPI.Controllers
         [HttpPut("{id}/approve")]
         public async Task<IActionResult> ApproveAppointment(int id)
         {
-            var appointment = await _context.GuidanceAppointments.FindAsync(id);
-
-            if (appointment == null)
-                return NotFound(new { message = "Appointment not found" });
-
-            if (appointment.Status.ToLower() != "pending")
-                return BadRequest(new { message = "Only pending appointments can be approved" });
-
-            // Check if the slot is still available (not overbooked)
-            if (!await IsTimeSlotAvailable(appointment.Date, appointment.Time))
+            try
             {
-                return BadRequest(new { message = "This time slot is no longer available or fully booked" });
-            }
+                var appointment = await _context.GuidanceAppointments.FindAsync(id);
 
-            appointment.Status = "approved";
-            appointment.UpdatedAt = GetPhilippinesTime();
+                if (appointment == null)
+                    return NotFound(new { message = "Appointment not found" });
 
-            await _context.SaveChangesAsync();
+                if (appointment.Status.ToLower() != "pending")
+                    return BadRequest(new { message = "Only pending appointments can be approved" });
 
-            // Update the appointment count for this time slot
-            await UpdateAppointmentCount(appointment.Date, appointment.Time);
+                // Debug logging
+                Console.WriteLine($"Approving appointment: Date={appointment.Date}, Time={appointment.Time}");
 
-            return Ok(new
-            {
-                message = "Appointment approved successfully",
-                appointment = new
+                // Check if the slot exists and is active
+                var targetDate = DateTime.Parse(appointment.Date);
+                var slot = await _context.AvailableTimeSlots
+                    .FirstOrDefaultAsync(s => s.Date.Date == targetDate.Date && s.Time == appointment.Time && s.IsActive);
+
+                if (slot == null)
                 {
-                    appointmentId = appointment.AppointmentId,
-                    studentName = appointment.StudentName,
-                    status = appointment.Status,
-                    updatedAt = appointment.UpdatedAt
+                    return BadRequest(new
+                    {
+                        message = $"No active time slot found for {appointment.Date} at {appointment.Time}",
+                        appointmentDate = appointment.Date,
+                        appointmentTime = appointment.Time
+                    });
                 }
-            });
+
+                // Check current appointment count for this slot
+                var currentCount = await _context.GuidanceAppointments
+                    .CountAsync(a => a.Date == appointment.Date && a.Time == appointment.Time &&
+                                    (a.Status.ToLower() == "pending" || a.Status.ToLower() == "approved"));
+
+                Console.WriteLine($"Current count: {currentCount}, Max appointments: {slot.MaxAppointments}");
+
+                if (currentCount >= slot.MaxAppointments)
+                {
+                    return BadRequest(new
+                    {
+                        message = $"Time slot is fully booked. Current: {currentCount}, Max: {slot.MaxAppointments}",
+                        currentCount = currentCount,
+                        maxAppointments = slot.MaxAppointments
+                    });
+                }
+
+                appointment.Status = "approved";
+                appointment.UpdatedAt = GetPhilippinesTime();
+
+                await _context.SaveChangesAsync();
+
+                // Update the appointment count for this time slot
+                await UpdateAppointmentCount(appointment.Date, appointment.Time);
+
+                return Ok(new
+                {
+                    message = "Appointment approved successfully",
+                    appointment = new
+                    {
+                        appointmentId = appointment.AppointmentId,
+                        studentName = appointment.StudentName,
+                        status = appointment.Status,
+                        updatedAt = appointment.UpdatedAt
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error approving appointment: {ex.Message}");
+                return BadRequest(new { message = $"Error approving appointment: {ex.Message}" });
+            }
         }
 
         // PUT: api/guidanceappointment/{id}/reject
