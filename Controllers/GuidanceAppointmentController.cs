@@ -58,27 +58,66 @@ namespace GuidanceOfficeAPI.Controllers
         }
 
         // POST: api/guidanceappointment
-        // Update the PostAppointment method to include slot validation
         [HttpPost]
         public async Task<IActionResult> PostAppointment(GuidanceAppointment appointment)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            // Check if time slot is available
-            if (!await IsTimeSlotAvailable(appointment.Date, appointment.Time))
+            try
             {
-                return BadRequest(new { message = "Selected time slot is not available or fully booked" });
+                if (!ModelState.IsValid)
+                {
+                    var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
+                    return BadRequest(new { message = "Validation failed", errors = errors });
+                }
+
+                // Validate required fields
+                if (string.IsNullOrWhiteSpace(appointment.StudentName))
+                    return BadRequest(new { message = "Student name is required" });
+
+                if (string.IsNullOrWhiteSpace(appointment.ProgramSection))
+                    return BadRequest(new { message = "Program section is required" });
+
+                if (string.IsNullOrWhiteSpace(appointment.Reason))
+                    return BadRequest(new { message = "Reason is required" });
+
+                if (string.IsNullOrWhiteSpace(appointment.Date))
+                    return BadRequest(new { message = "Date is required" });
+
+                if (string.IsNullOrWhiteSpace(appointment.Time))
+                    return BadRequest(new { message = "Time is required" });
+
+                // Validate date format
+                if (!DateTime.TryParse(appointment.Date, out DateTime parsedDate))
+                {
+                    return BadRequest(new { message = "Invalid date format. Use YYYY-MM-DD" });
+                }
+
+                // Check if time slot is available
+                if (!await IsTimeSlotAvailable(appointment.Date, appointment.Time))
+                {
+                    return BadRequest(new { message = "Selected time slot is not available or fully booked" });
+                }
+
+                // Set CreatedAt to Philippines time
+                appointment.CreatedAt = GetPhilippinesTime();
+                appointment.Status = "pending";
+
+                _context.GuidanceAppointments.Add(appointment);
+                await _context.SaveChangesAsync();
+
+                return Ok(new { message = "Appointment submitted successfully." });
             }
+            catch (Exception ex)
+            {
+                // Log the exception for debugging
+                Console.WriteLine($"Error creating appointment: {ex.Message}");
+                Console.WriteLine($"Stack trace: {ex.StackTrace}");
 
-            // Set CreatedAt to Philippines time
-            appointment.CreatedAt = GetPhilippinesTime();
-            appointment.Status = "pending";
-
-            _context.GuidanceAppointments.Add(appointment);
-            await _context.SaveChangesAsync();
-
-            return Ok(new { message = "Appointment submitted successfully." });
+                return StatusCode(500, new
+                {
+                    message = "An error occurred while creating the appointment",
+                    error = ex.Message
+                });
+            }
         }
 
         // PUT: api/guidanceappointment/{id}/status
@@ -247,24 +286,43 @@ namespace GuidanceOfficeAPI.Controllers
         // Update the IsTimeSlotAvailable method to be more accurate
         private async Task<bool> IsTimeSlotAvailable(string date, string time)
         {
-            var targetDate = DateTime.Parse(date);
-            var slot = await _context.AvailableTimeSlots
-                .FirstOrDefaultAsync(s => s.Date.Date == targetDate.Date && s.Time == time && s.IsActive);
-
-            if (slot == null)
+            try
             {
-                Console.WriteLine($"No active slot found for {date} at {time}");
+                if (string.IsNullOrWhiteSpace(date) || string.IsNullOrWhiteSpace(time))
+                {
+                    Console.WriteLine("Date or time is null or empty");
+                    return false;
+                }
+
+                if (!DateTime.TryParse(date, out DateTime targetDate))
+                {
+                    Console.WriteLine($"Invalid date format: {date}");
+                    return false;
+                }
+
+                var slot = await _context.AvailableTimeSlots
+                    .FirstOrDefaultAsync(s => s.Date.Date == targetDate.Date && s.Time == time && s.IsActive);
+
+                if (slot == null)
+                {
+                    Console.WriteLine($"No active slot found for {date} at {time}");
+                    return false;
+                }
+
+                // Count ONLY approved appointments (not pending ones)
+                var approvedCount = await _context.GuidanceAppointments
+                    .CountAsync(a => a.Date == date && a.Time == time &&
+                                    a.Status.ToLower() == "approved");
+
+                Console.WriteLine($"Slot {date} {time}: Approved count = {approvedCount}, Max = {slot.MaxAppointments}");
+
+                return approvedCount < slot.MaxAppointments;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error checking time slot availability: {ex.Message}");
                 return false;
             }
-
-            // Count ONLY approved appointments (not pending ones)
-            var approvedCount = await _context.GuidanceAppointments
-                .CountAsync(a => a.Date == date && a.Time == time &&
-                                a.Status.ToLower() == "approved");
-
-            Console.WriteLine($"Slot {date} {time}: Approved count = {approvedCount}, Max = {slot.MaxAppointments}");
-
-            return approvedCount < slot.MaxAppointments;
         }
 
         // Add this method to update appointment counts when approving/rejecting
