@@ -282,6 +282,37 @@ namespace GuidanceOfficeAPI.Controllers
                 updatedSlots = updatedCount
             });
         }
+
+        // GET: api/guidanceappointment/approved-by-slot/{slotId}
+        [HttpGet("approved-by-slot/{slotId:int}")]
+        public async Task<IActionResult> GetApprovedAppointmentsBySlot(int slotId)
+        {
+            var slot = await _context.AvailableTimeSlots.FirstOrDefaultAsync(s => s.SlotId == slotId);
+            if (slot == null)
+                return NotFound(new { message = "Time slot not found" });
+
+            var dateKey = slot.Date.ToString("yyyy-MM-dd");
+
+            var approved = await _context.GuidanceAppointments
+                .Where(a => a.Date == dateKey && a.Time == slot.Time && a.Status.ToLower() == "approved")
+                .OrderBy(a => a.CreatedAt)
+                .Select(a => new
+                {
+                    appointmentId = a.AppointmentId,
+                    studentId = a.StudentId,
+                    studentName = a.StudentName,
+                    programSection = a.ProgramSection,
+                    reason = a.Reason,
+                    date = a.Date,
+                    time = a.Time,
+                    status = a.Status,
+                    createdAt = a.CreatedAt,
+                    updatedAt = a.UpdatedAt
+                })
+                .ToListAsync();
+
+            return Ok(approved);
+        }
     }
 
     // Helper class for status updates
