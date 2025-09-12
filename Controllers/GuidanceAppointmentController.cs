@@ -224,12 +224,12 @@ namespace GuidanceOfficeAPI.Controllers
             if (slot == null)
                 return false;
 
-            // Count current appointments for this slot (pending + approved)
-            var currentCount = await _context.GuidanceAppointments
+            // Count ONLY approved appointments (not pending ones)
+            var approvedCount = await _context.GuidanceAppointments
                 .CountAsync(a => a.Date == date && a.Time == time &&
-                                (a.Status.ToLower() == "pending" || a.Status.ToLower() == "approved"));
+                                a.Status.ToLower() == "approved");
 
-            return currentCount < slot.MaxAppointments;
+            return approvedCount < slot.MaxAppointments;
         }
 
         // Add this method to update appointment counts when approving/rejecting
