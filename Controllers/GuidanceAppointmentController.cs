@@ -246,12 +246,17 @@ namespace GuidanceOfficeAPI.Controllers
                 .FirstOrDefaultAsync(s => s.Date.Date == targetDate.Date && s.Time == time && s.IsActive);
 
             if (slot == null)
+            {
+                Console.WriteLine($"No active slot found for {date} at {time}");
                 return false;
+            }
 
             // Count ONLY approved appointments (not pending ones)
             var approvedCount = await _context.GuidanceAppointments
                 .CountAsync(a => a.Date == date && a.Time == time &&
                                 a.Status.ToLower() == "approved");
+
+            Console.WriteLine($"Slot {date} {time}: Approved count = {approvedCount}, Max = {slot.MaxAppointments}");
 
             return approvedCount < slot.MaxAppointments;
         }
