@@ -38,6 +38,20 @@
             modelBuilder.Entity<CareerPlanningForm>()
                 .HasIndex(f => f.StudentId)
                 .IsUnique();
+
+            // Configure GuidanceAppointment
+            modelBuilder.Entity<GuidanceAppointment>(entity =>
+            {
+                entity.HasKey(e => e.AppointmentId);
+                entity.Property(e => e.StudentName).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.ProgramSection).IsRequired().HasMaxLength(50);
+                entity.Property(e => e.Reason).IsRequired().HasMaxLength(200);
+                entity.Property(e => e.Date).IsRequired().HasMaxLength(10);
+                entity.Property(e => e.Time).IsRequired().HasMaxLength(10);
+                entity.Property(e => e.Status).IsRequired().HasMaxLength(20).HasDefaultValue("pending");
+                entity.Property(e => e.RejectionReason).HasMaxLength(500);
+                entity.Property(e => e.CreatedAt).IsRequired().HasDefaultValueSql("GETDATE()");
+            });
         }
 
 

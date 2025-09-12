@@ -295,18 +295,40 @@ namespace GuidanceOfficeAPI.Models
     {
         [Key]
         public int AppointmentId { get; set; }
+
+        [Required]
         public int StudentId { get; set; }
-        public string StudentName { get; set; }
-        public string ProgramSection { get; set; }
-        public string Reason { get; set; }
-        public string Date { get; set; }
-        public string Time { get; set; }
+
+        [Required]
+        [StringLength(100)]
+        public string StudentName { get; set; } = string.Empty;
+
+        [Required]
+        [StringLength(50)]
+        public string ProgramSection { get; set; } = string.Empty;
+
+        [Required]
+        [StringLength(200)]
+        public string Reason { get; set; } = string.Empty;
+
+        [Required]
+        [StringLength(10)]
+        public string Date { get; set; } = string.Empty;
+
+        [Required]
+        [StringLength(10)]
+        public string Time { get; set; } = string.Empty;
+
+        [Required]
+        [StringLength(20)]
         public string Status { get; set; } = "pending";
 
-        // Make this nullable and remove any [Required] attributes
+        [StringLength(500)]
         public string? RejectionReason { get; set; }
 
+        [Required]
         public DateTime CreatedAt { get; set; } = DateTime.Now;
+
         public DateTime? UpdatedAt { get; set; }
     }
 

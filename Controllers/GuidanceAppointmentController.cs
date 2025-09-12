@@ -101,21 +101,70 @@ namespace GuidanceOfficeAPI.Controllers
                 appointment.CreatedAt = GetPhilippinesTime();
                 appointment.Status = "pending";
 
+                // Log the appointment data before saving
+                Console.WriteLine($"Attempting to save appointment: StudentId={appointment.StudentId}, StudentName={appointment.StudentName}, Date={appointment.Date}, Time={appointment.Time}");
+
                 _context.GuidanceAppointments.Add(appointment);
                 await _context.SaveChangesAsync();
 
+                Console.WriteLine($"Appointment saved successfully with ID: {appointment.AppointmentId}");
                 return Ok(new { message = "Appointment submitted successfully." });
+            }
+            catch (DbUpdateException dbEx)
+            {
+                // Handle database-specific errors
+                Console.WriteLine($"Database error: {dbEx.Message}");
+                Console.WriteLine($"Inner exception: {dbEx.InnerException?.Message}");
+
+                string errorMessage = "Database error occurred";
+
+                if (dbEx.InnerException != null)
+                {
+                    var innerEx = dbEx.InnerException;
+                    Console.WriteLine($"Inner exception type: {innerEx.GetType().Name}");
+                    Console.WriteLine($"Inner exception message: {innerEx.Message}");
+
+                    // Check for specific database errors
+                    if (innerEx.Message.Contains("UNIQUE constraint"))
+                    {
+                        errorMessage = "Duplicate appointment detected";
+                    }
+                    else if (innerEx.Message.Contains("FOREIGN KEY constraint"))
+                    {
+                        errorMessage = "Invalid reference data";
+                    }
+                    else if (innerEx.Message.Contains("NOT NULL constraint"))
+                    {
+                        errorMessage = "Required field is missing";
+                    }
+                    else if (innerEx.Message.Contains("CHECK constraint"))
+                    {
+                        errorMessage = "Data validation failed";
+                    }
+                    else
+                    {
+                        errorMessage = $"Database constraint violation: {innerEx.Message}";
+                    }
+                }
+
+                return StatusCode(500, new
+                {
+                    message = "An error occurred while creating the appointment",
+                    error = errorMessage,
+                    details = dbEx.InnerException?.Message
+                });
             }
             catch (Exception ex)
             {
                 // Log the exception for debugging
-                Console.WriteLine($"Error creating appointment: {ex.Message}");
+                Console.WriteLine($"General error creating appointment: {ex.Message}");
                 Console.WriteLine($"Stack trace: {ex.StackTrace}");
 
                 return StatusCode(500, new
                 {
                     message = "An error occurred while creating the appointment",
-                    error = ex.Message
+                    error = ex.Message,
+                    stackTrace = ex.StackTrace
                 });
             }
         }
