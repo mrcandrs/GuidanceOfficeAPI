@@ -299,20 +299,15 @@ namespace GuidanceOfficeAPI.Models
         public string StudentName { get; set; }
         public string ProgramSection { get; set; }
         public string Reason { get; set; }
-        public string Date { get; set; }  // Scheduled appointment date
-        public string Time { get; set; }  // Scheduled appointment time
+        public string Date { get; set; }
+        public string Time { get; set; }
         public string Status { get; set; } = "pending";
 
-        public string RejectionReason { get; set; }
+        // Make this nullable and remove any [Required] attributes
+        public string? RejectionReason { get; set; }
 
-        // NEW: Track when the appointment was submitted
         public DateTime CreatedAt { get; set; } = DateTime.Now;
-
-        // OPTIONAL: Track when status was last updated
         public DateTime? UpdatedAt { get; set; }
-
-        // Optional: Foreign key relationship (if you have a Student table)
-        // public Student Student { get; set; }
     }
 
 

@@ -203,8 +203,14 @@ namespace GuidanceOfficeAPI.Controllers
             if (appointment.Status.ToLower() != "pending")
                 return BadRequest(new { message = "Only pending appointments can be rejected" });
 
+            // Validate rejection reason
+            if (string.IsNullOrWhiteSpace(request.RejectionReason))
+            {
+                return BadRequest(new { message = "Rejection reason is required" });
+            }
+
             appointment.Status = "rejected";
-            appointment.RejectionReason = request.RejectionReason ?? "No reason provided";
+            appointment.RejectionReason = request.RejectionReason.Trim();
             appointment.UpdatedAt = GetPhilippinesTime();
 
             await _context.SaveChangesAsync();
