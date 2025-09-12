@@ -303,6 +303,8 @@ namespace GuidanceOfficeAPI.Models
         public string Time { get; set; }  // Scheduled appointment time
         public string Status { get; set; } = "pending";
 
+        public string RejectionReason { get; set; }
+
         // NEW: Track when the appointment was submitted
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 

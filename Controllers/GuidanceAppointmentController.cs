@@ -130,8 +130,6 @@ namespace GuidanceOfficeAPI.Controllers
                     .CountAsync(a => a.Date == appointment.Date && a.Time == appointment.Time &&
                                     a.Status.ToLower() == "approved");
 
-                Console.WriteLine($"Approved count: {approvedCount}, Max appointments: {slot.MaxAppointments}");
-
                 if (approvedCount >= slot.MaxAppointments)
                 {
                     return BadRequest(new
@@ -142,8 +140,32 @@ namespace GuidanceOfficeAPI.Controllers
                     });
                 }
 
+                // Approve the current appointment
                 appointment.Status = "approved";
                 appointment.UpdatedAt = GetPhilippinesTime();
+
+                // Auto-reject remaining pending appointments if slot becomes full
+                var newApprovedCount = approvedCount + 1;
+                if (newApprovedCount >= slot.MaxAppointments)
+                {
+                    // Get all remaining pending appointments for this slot
+                    var remainingPendingAppointments = await _context.GuidanceAppointments
+                        .Where(a => a.Date == appointment.Date &&
+                                   a.Time == appointment.Time &&
+                                   a.Status.ToLower() == "pending" &&
+                                   a.AppointmentId != appointment.AppointmentId)
+                        .ToListAsync();
+
+                    // Auto-reject all remaining pending appointments with custom reason
+                    foreach (var pendingAppointment in remainingPendingAppointments)
+                    {
+                        pendingAppointment.Status = "rejected";
+                        pendingAppointment.RejectionReason = $"Slot became full after another appointment was approved for {appointment.Date} at {appointment.Time}";
+                        pendingAppointment.UpdatedAt = GetPhilippinesTime();
+                    }
+
+                    Console.WriteLine($"Auto-rejected {remainingPendingAppointments.Count} pending appointments for slot {appointment.Date} {appointment.Time}");
+                }
 
                 await _context.SaveChangesAsync();
 
@@ -171,7 +193,7 @@ namespace GuidanceOfficeAPI.Controllers
 
         // PUT: api/guidanceappointment/{id}/reject
         [HttpPut("{id}/reject")]
-        public async Task<IActionResult> RejectAppointment(int id)
+        public async Task<IActionResult> RejectAppointment(int id, [FromBody] RejectAppointmentRequest request)
         {
             var appointment = await _context.GuidanceAppointments.FindAsync(id);
 
@@ -182,11 +204,12 @@ namespace GuidanceOfficeAPI.Controllers
                 return BadRequest(new { message = "Only pending appointments can be rejected" });
 
             appointment.Status = "rejected";
+            appointment.RejectionReason = request.RejectionReason ?? "No reason provided";
             appointment.UpdatedAt = GetPhilippinesTime();
 
             await _context.SaveChangesAsync();
 
-            // Update the appointment count for this time slot (since we're rejecting, count decreases)
+            // Update the appointment count for this time slot
             await UpdateAppointmentCount(appointment.Date, appointment.Time);
 
             return Ok(new
@@ -197,6 +220,7 @@ namespace GuidanceOfficeAPI.Controllers
                     appointmentId = appointment.AppointmentId,
                     studentName = appointment.StudentName,
                     status = appointment.Status,
+                    rejectionReason = appointment.RejectionReason,
                     updatedAt = appointment.UpdatedAt
                 }
             });
@@ -319,5 +343,11 @@ namespace GuidanceOfficeAPI.Controllers
     public class StatusUpdateRequest
     {
         public string Status { get; set; }
+    }
+
+    // Add this class to your GuidanceAppointmentController file
+    public class RejectAppointmentRequest
+    {
+        public string RejectionReason { get; set; }
     }
 }
