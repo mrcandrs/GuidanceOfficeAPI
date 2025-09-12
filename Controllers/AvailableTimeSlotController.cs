@@ -259,7 +259,7 @@ namespace GuidanceOfficeAPI.Controllers
 
             foreach (var slot in slots)
             {
-                // Count only approved appointments for this slot
+                // Count ONLY approved appointments for this slot
                 var approvedCount = await _context.GuidanceAppointments
                     .CountAsync(a => a.Date == date &&
                                     a.Time == slot.Time &&
