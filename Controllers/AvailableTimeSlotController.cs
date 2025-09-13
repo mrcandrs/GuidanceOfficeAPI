@@ -280,6 +280,63 @@ namespace GuidanceOfficeAPI.Controllers
 
             return Ok(availableSlots);
         }
+
+        // Add this method to AvailableTimeSlotController
+        [HttpDelete("{id}/safe-delete")]
+        public async Task<IActionResult> SafeDeleteTimeSlot(int id)
+        {
+            var slot = await _context.AvailableTimeSlots.FindAsync(id);
+            if (slot == null)
+                return NotFound(new { message = "Time slot not found" });
+
+            // Check if there are any appointments for this slot
+            var appointmentCount = await _context.GuidanceAppointments
+                .CountAsync(a => a.Date == slot.Date.ToString("yyyy-MM-dd") &&
+                                a.Time == slot.Time);
+
+            if (appointmentCount > 0)
+            {
+                return BadRequest(new
+                {
+                    message = $"Cannot delete time slot. There are {appointmentCount} existing appointments for this slot.",
+                    appointmentCount = appointmentCount,
+                    hasAppointments = true
+                });
+            }
+
+            _context.AvailableTimeSlots.Remove(slot);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Time slot deleted successfully" });
+        }
+
+        // Add this method to get slot details with appointment info
+        [HttpGet("{id}/details")]
+        public async Task<IActionResult> GetTimeSlotDetails(int id)
+        {
+            var slot = await _context.AvailableTimeSlots.FindAsync(id);
+            if (slot == null)
+                return NotFound(new { message = "Time slot not found" });
+
+            var appointments = await _context.GuidanceAppointments
+                .Where(a => a.Date == slot.Date.ToString("yyyy-MM-dd") && a.Time == slot.Time)
+                .Select(a => new
+                {
+                    appointmentId = a.AppointmentId,
+                    studentName = a.StudentName,
+                    status = a.Status,
+                    createdAt = a.CreatedAt
+                })
+                .ToListAsync();
+
+            return Ok(new
+            {
+                slot = slot,
+                appointments = appointments,
+                appointmentCount = appointments.Count,
+                canDelete = appointments.Count == 0
+            });
+        }
     }
 
     // Request models
