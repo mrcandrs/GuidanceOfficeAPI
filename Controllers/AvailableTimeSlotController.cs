@@ -61,6 +61,31 @@ namespace GuidanceOfficeAPI.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
+            // Validate that the date is not in the past
+            var today = GetPhilippinesTime().Date;
+            if (request.Date.Date < today)
+            {
+                return BadRequest(new { message = "Cannot create time slots for past dates" });
+            }
+
+            // If it's today, validate that the time hasn't passed
+            if (request.Date.Date == today)
+            {
+                var currentTime = GetPhilippinesTime();
+                var currentTimeString = currentTime.ToString("h:mm tt");
+
+                // Parse the requested time to compare
+                if (DateTime.TryParseExact(request.Time, "h:mm tt", null, System.Globalization.DateTimeStyles.None, out DateTime requestedTime))
+                {
+                    var requestedDateTime = today.Add(requestedTime.TimeOfDay);
+
+                    if (requestedDateTime <= currentTime)
+                    {
+                        return BadRequest(new { message = $"Cannot create time slots for past times. Current time is {currentTimeString}" });
+                    }
+                }
+            }
+
             // Check if slot already exists
             var existingSlot = await _context.AvailableTimeSlots
                 .FirstOrDefaultAsync(s => s.Date.Date == request.Date.Date && s.Time == request.Time);
@@ -139,11 +164,36 @@ namespace GuidanceOfficeAPI.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
+            var today = GetPhilippinesTime().Date;
+            var currentTime = GetPhilippinesTime();
+
+            // Validate that the date is not in the past
+            if (request.Date.Date < today)
+            {
+                return BadRequest(new { message = "Cannot create time slots for past dates" });
+            }
+
             var slots = new List<AvailableTimeSlot>();
             var createdSlots = new List<AvailableTimeSlot>();
+            var skippedSlots = new List<string>();
 
             foreach (var time in request.Times)
             {
+                // If it's today, check if the time has passed
+                if (request.Date.Date == today)
+                {
+                    if (DateTime.TryParseExact(time, "h:mm tt", null, System.Globalization.DateTimeStyles.None, out DateTime requestedTime))
+                    {
+                        var requestedDateTime = today.Add(requestedTime.TimeOfDay);
+
+                        if (requestedDateTime <= currentTime)
+                        {
+                            skippedSlots.Add($"{time} (time has passed)");
+                            continue;
+                        }
+                    }
+                }
+
                 // Check if slot already exists
                 var existingSlot = await _context.AvailableTimeSlots
                     .FirstOrDefaultAsync(s => s.Date.Date == request.Date.Date && s.Time == time);
@@ -159,6 +209,10 @@ namespace GuidanceOfficeAPI.Controllers
                     };
                     slots.Add(slot);
                 }
+                else
+                {
+                    skippedSlots.Add($"{time} (already exists)");
+                }
             }
 
             if (slots.Any())
@@ -172,7 +226,8 @@ namespace GuidanceOfficeAPI.Controllers
             {
                 message = $"{createdSlots.Count} time slots created successfully",
                 createdSlots,
-                skipped = request.Times.Count - createdSlots.Count
+                skipped = skippedSlots,
+                skippedCount = skippedSlots.Count
             });
         }
 
