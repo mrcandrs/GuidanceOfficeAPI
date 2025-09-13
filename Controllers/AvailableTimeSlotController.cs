@@ -337,6 +337,32 @@ namespace GuidanceOfficeAPI.Controllers
                 canDelete = appointments.Count == 0
             });
         }
+
+        // Add this method to AvailableTimeSlotController
+        [HttpGet("admin/all-slots")]
+        public async Task<IActionResult> GetAllTimeSlotsForAdmin()
+        {
+            var today = GetPhilippinesTime().Date;
+            var slots = await _context.AvailableTimeSlots
+                .Where(s => s.Date >= today) // Only show future slots
+                .OrderBy(s => s.Date)
+                .ThenBy(s => s.Time)
+                .ToListAsync();
+
+            // Update counts for each slot
+            foreach (var slot in slots)
+            {
+                var currentCount = await _context.GuidanceAppointments
+                    .CountAsync(a => a.Date == slot.Date.ToString("yyyy-MM-dd") && a.Time == slot.Time &&
+                                    (a.Status.ToLower() == "pending" || a.Status.ToLower() == "approved"));
+
+                slot.CurrentAppointmentCount = currentCount;
+            }
+
+            await _context.SaveChangesAsync();
+
+            return Ok(slots);
+        }
     }
 
     // Request models
