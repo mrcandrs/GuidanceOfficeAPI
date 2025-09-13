@@ -455,6 +455,114 @@ namespace GuidanceOfficeAPI.Controllers
 
             return Ok(approved);
         }
+
+        // GET: api/guidanceappointment/rejected-appointments
+        [HttpGet("rejected-appointments")]
+        public async Task<IActionResult> GetRejectedAppointments()
+        {
+            try
+            {
+                var rejectedAppointments = await _context.GuidanceAppointments
+                    .Where(a => a.Status.ToLower() == "rejected")
+                    .OrderByDescending(a => a.UpdatedAt ?? a.CreatedAt)
+                    .ToListAsync();
+
+                return Ok(rejectedAppointments);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error fetching rejected appointments: {ex.Message}");
+                return StatusCode(500, new { message = "Error fetching rejected appointments", error = ex.Message });
+            }
+        }
+
+        // GET: api/guidanceappointment/recent-activity
+        [HttpGet("recent-activity")]
+        public async Task<IActionResult> GetRecentActivity()
+        {
+            try
+            {
+                // Get all appointments ordered by most recent activity (updated or created)
+                var recentActivity = await _context.GuidanceAppointments
+                    .OrderByDescending(a => a.UpdatedAt ?? a.CreatedAt)
+                    .Take(50) // Limit to last 50 activities
+                    .Select(a => new
+                    {
+                        appointmentId = a.AppointmentId,
+                        studentId = a.StudentId,
+                        studentName = a.StudentName,
+                        programSection = a.ProgramSection,
+                        reason = a.Reason,
+                        date = a.Date,
+                        time = a.Time,
+                        status = a.Status,
+                        rejectionReason = a.RejectionReason,
+                        createdAt = a.CreatedAt,
+                        updatedAt = a.UpdatedAt
+                    })
+                    .ToListAsync();
+
+                return Ok(recentActivity);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error fetching recent activity: {ex.Message}");
+                return StatusCode(500, new { message = "Error fetching recent activity", error = ex.Message });
+            }
+        }
+
+        // GET: api/guidanceappointment/approved-appointments
+        [HttpGet("approved-appointments")]
+        public async Task<IActionResult> GetApprovedAppointments()
+        {
+            try
+            {
+                var approvedAppointments = await _context.GuidanceAppointments
+                    .Where(a => a.Status.ToLower() == "approved")
+                    .OrderByDescending(a => a.UpdatedAt ?? a.CreatedAt)
+                    .ToListAsync();
+
+                return Ok(approvedAppointments);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error fetching approved appointments: {ex.Message}");
+                return StatusCode(500, new { message = "Error fetching approved appointments", error = ex.Message });
+            }
+        }
+
+        // GET: api/guidanceappointment/activity-summary
+        [HttpGet("activity-summary")]
+        public async Task<IActionResult> GetActivitySummary()
+        {
+            try
+            {
+                var today = GetPhilippinesTime().Date;
+                var thisWeek = today.AddDays(-7);
+                var thisMonth = today.AddDays(-30);
+
+                var summary = new
+                {
+                    totalAppointments = await _context.GuidanceAppointments.CountAsync(),
+                    pendingAppointments = await _context.GuidanceAppointments.CountAsync(a => a.Status.ToLower() == "pending"),
+                    approvedAppointments = await _context.GuidanceAppointments.CountAsync(a => a.Status.ToLower() == "approved"),
+                    rejectedAppointments = await _context.GuidanceAppointments.CountAsync(a => a.Status.ToLower() == "rejected"),
+
+                    todayAppointments = await _context.GuidanceAppointments.CountAsync(a => a.CreatedAt.Date == today),
+                    thisWeekAppointments = await _context.GuidanceAppointments.CountAsync(a => a.CreatedAt.Date >= thisWeek),
+                    thisMonthAppointments = await _context.GuidanceAppointments.CountAsync(a => a.CreatedAt.Date >= thisMonth),
+
+                    lastUpdated = GetPhilippinesTime()
+                };
+
+                return Ok(summary);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error fetching activity summary: {ex.Message}");
+                return StatusCode(500, new { message = "Error fetching activity summary", error = ex.Message });
+            }
+        }
     }
 
     // Helper class for status updates
