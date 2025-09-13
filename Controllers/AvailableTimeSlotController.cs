@@ -338,7 +338,7 @@ namespace GuidanceOfficeAPI.Controllers
             });
         }
 
-        // Add this method to AvailableTimeSlotController
+        // In AvailableTimeSlotController.cs - GetAllTimeSlotsForAdmin method
         [HttpGet("admin/all-slots")]
         public async Task<IActionResult> GetAllTimeSlotsForAdmin()
         {
@@ -349,14 +349,22 @@ namespace GuidanceOfficeAPI.Controllers
                 .ThenBy(s => s.Time)
                 .ToListAsync();
 
-            // Update counts for each slot
+            // Update counts for each slot - ONLY count approved appointments
             foreach (var slot in slots)
             {
-                var currentCount = await _context.GuidanceAppointments
+                var approvedCount = await _context.GuidanceAppointments
                     .CountAsync(a => a.Date == slot.Date.ToString("yyyy-MM-dd") && a.Time == slot.Time &&
-                                    (a.Status.ToLower() == "pending" || a.Status.ToLower() == "approved"));
+                                    a.Status.ToLower() == "approved");
 
-                slot.CurrentAppointmentCount = currentCount;
+                var pendingCount = await _context.GuidanceAppointments
+                    .CountAsync(a => a.Date == slot.Date.ToString("yyyy-MM-dd") && a.Time == slot.Time &&
+                                    a.Status.ToLower() == "pending");
+
+                // Set the current count to approved only for display
+                slot.CurrentAppointmentCount = approvedCount;
+
+                // You can add a separate property for pending if needed
+                // slot.PendingAppointmentCount = pendingCount;
             }
 
             await _context.SaveChangesAsync();
