@@ -337,39 +337,30 @@ namespace GuidanceOfficeAPI.Controllers
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(date) || string.IsNullOrWhiteSpace(time))
-                {
-                    Console.WriteLine("Date or time is null or empty");
-                    return false;
-                }
+                if (string.IsNullOrWhiteSpace(date) || string.IsNullOrWhiteSpace(time)) return false;
+                if (!DateTime.TryParse(date, out DateTime targetDate)) return false;
 
-                if (!DateTime.TryParse(date, out DateTime targetDate))
+                // Disallow past times in Philippines time
+                var nowPh = GetPhilippinesTime();
+                if (targetDate.Date < nowPh.Date) return false;
+                if (targetDate.Date == nowPh.Date &&
+                    DateTime.TryParseExact(time, "h:mm tt", null, System.Globalization.DateTimeStyles.None, out var requestedTime))
                 {
-                    Console.WriteLine($"Invalid date format: {date}");
-                    return false;
+                    var slotDateTime = targetDate.Date.Add(requestedTime.TimeOfDay);
+                    if (slotDateTime <= nowPh) return false;
                 }
 
                 var slot = await _context.AvailableTimeSlots
                     .FirstOrDefaultAsync(s => s.Date.Date == targetDate.Date && s.Time == time && s.IsActive);
+                if (slot == null) return false;
 
-                if (slot == null)
-                {
-                    Console.WriteLine($"No active slot found for {date} at {time}");
-                    return false;
-                }
-
-                // Count ONLY approved appointments (not pending ones)
                 var approvedCount = await _context.GuidanceAppointments
-                    .CountAsync(a => a.Date == date && a.Time == time &&
-                                    a.Status.ToLower() == "approved");
-
-                Console.WriteLine($"Slot {date} {time}: Approved count = {approvedCount}, Max = {slot.MaxAppointments}");
+                    .CountAsync(a => a.Date == date && a.Time == time && a.Status.ToLower() == "approved");
 
                 return approvedCount < slot.MaxAppointments;
             }
-            catch (Exception ex)
+            catch
             {
-                Console.WriteLine($"Error checking time slot availability: {ex.Message}");
                 return false;
             }
         }

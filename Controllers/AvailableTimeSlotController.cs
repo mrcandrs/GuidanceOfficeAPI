@@ -27,6 +27,7 @@ namespace GuidanceOfficeAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAvailableTimeSlots()
         {
+            await ExpirePastTodaySlots();
             var today = GetPhilippinesTime().Date;
             var slots = await _context.AvailableTimeSlots
                 .Where(s => s.Date >= today && s.IsActive)
@@ -41,6 +42,7 @@ namespace GuidanceOfficeAPI.Controllers
         [HttpGet("date/{date}")]
         public async Task<IActionResult> GetAvailableTimeSlotsByDate(string date)
         {
+            await ExpirePastTodaySlots();
             if (!DateTime.TryParse(date, out DateTime targetDate))
             {
                 return BadRequest(new { message = "Invalid date format" });
@@ -261,6 +263,7 @@ namespace GuidanceOfficeAPI.Controllers
         [HttpGet("available-for-students")]
         public async Task<IActionResult> GetAvailableSlotsForStudents()
         {
+            await ExpirePastTodaySlots();
             var today = GetPhilippinesTime().Date;
             var availableSlots = new List<object>();
 
@@ -299,6 +302,7 @@ namespace GuidanceOfficeAPI.Controllers
         [HttpGet("available-for-students/date/{date}")]
         public async Task<IActionResult> GetAvailableSlotsForStudentsByDate(string date)
         {
+            await ExpirePastTodaySlots();
             if (!DateTime.TryParse(date, out DateTime targetDate))
             {
                 return BadRequest(new { message = "Invalid date format" });
@@ -397,6 +401,7 @@ namespace GuidanceOfficeAPI.Controllers
         [HttpGet("admin/all-slots")]
         public async Task<IActionResult> GetAllTimeSlotsForAdmin()
         {
+            await ExpirePastTodaySlots();
             var today = GetPhilippinesTime().Date;
             var slots = await _context.AvailableTimeSlots
                 .Where(s => s.Date >= today) // Only show future slots
@@ -414,7 +419,7 @@ namespace GuidanceOfficeAPI.Controllers
                 var pendingCount = await _context.GuidanceAppointments
                     .CountAsync(a => a.Date == slot.Date.ToString("yyyy-MM-dd") && a.Time == slot.Time &&
                                     a.Status.ToLower() == "pending");
-
+                    
                 // Set the current count to approved only for display
                 slot.CurrentAppointmentCount = approvedCount;
 
@@ -425,6 +430,41 @@ namespace GuidanceOfficeAPI.Controllers
             await _context.SaveChangesAsync();
 
             return Ok(slots);
+        }
+
+        // Add helper to parse "h:mm tt"
+        private bool TryParseSlotTime(string time, out DateTime parsed)
+        {
+            return DateTime.TryParseExact(time, "h:mm tt", null, System.Globalization.DateTimeStyles.None, out parsed);
+        }
+
+        // Deactivate today's past slots
+        private async Task<int> ExpirePastTodaySlots()
+        {
+            var now = GetPhilippinesTime();
+            var today = now.Date;
+            var changed = 0;
+
+            var todaysActive = await _context.AvailableTimeSlots
+                .Where(s => s.IsActive && s.Date == today)
+                .ToListAsync();
+
+            foreach (var slot in todaysActive)
+            {
+                if (TryParseSlotTime(slot.Time, out var t))
+                {
+                    var slotDateTime = today.Add(t.TimeOfDay);
+                    if (slotDateTime <= now)
+                    {
+                        slot.IsActive = false;
+                        slot.UpdatedAt = now;
+                        changed++;
+                    }
+                }
+            }
+
+            if (changed > 0) await _context.SaveChangesAsync();
+            return changed;
         }
     }
 
