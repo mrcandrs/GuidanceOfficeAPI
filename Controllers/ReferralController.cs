@@ -142,11 +142,15 @@ namespace GuidanceOfficeAPI.Controllers
                         StudentId = r.StudentId,
                         SubmissionDate = r.SubmissionDate,
 
+                        // Canonical student (who submitted)
                         StudentFullName = studentInfo?.FullName ?? r.FullName,
                         StudentNumber = studentInfo?.StudentNumber ?? r.StudentNumber,
-                        Program = studentInfo?.Program ?? r.Program,
+                        StudentProgram = studentInfo?.Program ?? r.Program,  // Changed
+                        Section = studentInfo?.Section ?? string.Empty,
 
+                        // Referral form data (who is being referred)
                         FullName = r.FullName,
+                        Program = r.Program,  // No duplicate now
                         PersonWhoReferred = r.PersonWhoReferred,
                         DateReferred = r.DateReferred,
                         CounselorFeedbackStudentName = r.CounselorFeedbackStudentName,

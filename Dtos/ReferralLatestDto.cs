@@ -9,11 +9,12 @@
         // canonical student fields
         public string StudentFullName { get; set; }
         public string StudentNumber { get; set; }
-        public string Program { get; set; }
-        public string Section { get; set; } // from CareerPlanningForm
+        public string StudentProgram { get; set; }  // Changed from Program
+        public string Section { get; set; }
 
         // referral fields you still use
         public string FullName { get; set; }
+        public string Program { get; set; }         // Keep this for referral form
         public string PersonWhoReferred { get; set; }
         public DateTime DateReferred { get; set; }
         public string CounselorFeedbackStudentName { get; set; }
