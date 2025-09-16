@@ -1,4 +1,5 @@
 ﻿using GuidanceOfficeAPI.Data;
+using GuidanceOfficeAPI.Dtos;
 using GuidanceOfficeAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -70,6 +71,35 @@ namespace GuidanceOfficeAPI.Controllers
                 return NotFound(new { message = "No referral form found for this student." });
 
             return Ok(latestReferral);
+        }
+
+        //PUT
+        [HttpPut("{referralId}/feedback")]
+        public IActionResult UpdateFeedback(int referralId, [FromBody] ReferralFeedbackDto dto)
+        {
+            var form = _context.ReferralForms.FirstOrDefault(r => r.ReferralId == referralId);
+            if (form == null) return NotFound(new { message = "Referral not found." });
+
+            form.CounselorFeedbackStudentName = dto.CounselorFeedbackStudentName ?? form.CounselorFeedbackStudentName;
+            form.CounselorFeedbackDateReferred = dto.CounselorFeedbackDateReferred ?? form.CounselorFeedbackDateReferred;
+            form.CounselorSessionDate = dto.CounselorSessionDate ?? form.CounselorSessionDate;
+            form.CounselorActionsTaken = dto.CounselorActionsTaken ?? form.CounselorActionsTaken;
+            form.CounselorName = dto.CounselorName ?? form.CounselorName;
+
+            _context.SaveChanges();
+            return Ok(new { message = "Feedback saved." });
+        }
+
+        //Optional convenience endpoint if you prefer “latest for student”:
+        [HttpGet("latest-per-student")]
+        public IActionResult GetLatestPerStudent()
+        {
+            var forms = _context.ReferralForms
+              .GroupBy(r => r.StudentId)
+              .Select(g => g.OrderByDescending(r => r.SubmissionDate).First())
+              .OrderByDescending(r => r.SubmissionDate)
+              .ToList();
+            return Ok(forms);
         }
     }
 }
