@@ -124,7 +124,7 @@ namespace GuidanceOfficeAPI.Controllers
             }
 
             // Important: mark the appointment as completed/closed so the student is unblocked
-            appointment.Status = "pending"; // or "closed", but be consistent with the rest of your app
+            appointment.Status = "completed"; // or "closed", but be consistent with the rest of your app
 
             await _context.SaveChangesAsync();
             return Ok(new { message = "Time slot deactivated and appointment marked completed." });
