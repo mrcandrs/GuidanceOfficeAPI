@@ -116,7 +116,50 @@ namespace GuidanceOfficeAPI.Controllers
                 }
             }
 
-            return Ok(latest.OrderByDescending(r => r.SubmissionDate));
+            // Get student and career planning data
+            var studentData = _context.Students
+                .Where(s => studentIds.Contains(s.StudentId))
+                .Join(_context.CareerPlanningForms,
+                      s => s.StudentId,
+                      c => c.StudentId,
+                      (s, c) => new {
+                          StudentId = s.StudentId,
+                          FullName = s.FullName,
+                          StudentNumber = s.StudentNumber,
+                          Program = s.Program,
+                          Section = c.Section
+                      })
+                .ToDictionary(x => x.StudentId);
+
+            var result = latest
+                .OrderByDescending(r => r.SubmissionDate)
+                .Select(r =>
+                {
+                    studentData.TryGetValue(r.StudentId, out var studentInfo);
+                    return new ReferralLatestDto
+                    {
+                        ReferralId = r.ReferralId,
+                        StudentId = r.StudentId,
+                        SubmissionDate = r.SubmissionDate,
+
+                        StudentFullName = studentInfo?.FullName ?? r.FullName,
+                        StudentNumber = studentInfo?.StudentNumber ?? r.StudentNumber,
+                        Program = studentInfo?.Program ?? r.Program,
+                        Section = studentInfo?.Section ?? string.Empty,
+
+                        FullName = r.FullName,
+                        PersonWhoReferred = r.PersonWhoReferred,
+                        DateReferred = r.DateReferred,
+                        CounselorFeedbackStudentName = r.CounselorFeedbackStudentName,
+                        CounselorFeedbackDateReferred = r.CounselorFeedbackDateReferred,
+                        CounselorSessionDate = r.CounselorSessionDate,
+                        CounselorActionsTaken = r.CounselorActionsTaken,
+                        CounselorName = r.CounselorName
+                    };
+                })
+                .ToList();
+
+            return Ok(result);
         }
     }
 }
