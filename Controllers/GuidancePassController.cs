@@ -42,7 +42,8 @@ namespace GuidanceOfficeAPI.Controllers
             var guidancePass = await _context.GuidancePasses
                 .Include(gp => gp.Counselor)
                 .Include(gp => gp.Appointment)
-                .Where(gp => gp.Appointment.StudentId == studentId)
+                .Where(gp => gp.Appointment.StudentId == studentId
+                             && gp.Appointment.Status.ToLower() == "approved") // added
                 .OrderByDescending(gp => gp.IssuedDate)
                 .FirstOrDefaultAsync();
 
@@ -50,6 +51,25 @@ namespace GuidanceOfficeAPI.Controllers
                 return NotFound();
 
             return guidancePass;
+        }
+
+        // GET: api/guidancepass
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<GuidancePass>>> GetGuidancePasses([FromQuery] int? studentId = null)
+        {
+            var query = _context.GuidancePasses
+                .Include(gp => gp.Counselor)
+                .Include(gp => gp.Appointment)
+                .Where(gp => gp.Appointment.Status.ToLower() == "approved"); // added
+
+            if (studentId.HasValue)
+                query = query.Where(gp => gp.Appointment.StudentId == studentId.Value);
+
+            var passes = await query
+                .OrderByDescending(gp => gp.IssuedDate)
+                .ToListAsync();
+
+            return Ok(passes);
         }
 
         // POST: api/guidancepass
@@ -125,31 +145,12 @@ namespace GuidanceOfficeAPI.Controllers
 
             // Important: mark the appointment as completed/closed so the student is unblocked
             appointment.Status = "completed"; // or "closed", but be consistent with the rest of your app
+            appointment.UpdatedAt = DateTime.UtcNow;
 
             await _context.SaveChangesAsync();
             return Ok(new { message = "Time slot deactivated and appointment marked completed." });
         }
 
-        // GET: api/guidancepass
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<GuidancePass>>> GetGuidancePasses([FromQuery] int? studentId = null)
-        {
-            var query = _context.GuidancePasses
-                .Include(gp => gp.Counselor)
-                .Include(gp => gp.Appointment)
-                .AsQueryable();
-
-            if (studentId.HasValue)
-            {
-                query = query.Where(gp => gp.Appointment.StudentId == studentId.Value);
-            }
-
-            var passes = await query
-                .OrderByDescending(gp => gp.IssuedDate)
-                .ToListAsync();
-
-            return Ok(passes);
-        }
     }
 
     public class CreateGuidancePassRequest

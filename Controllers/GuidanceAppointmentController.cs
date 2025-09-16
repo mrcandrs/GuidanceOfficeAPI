@@ -326,7 +326,7 @@ namespace GuidanceOfficeAPI.Controllers
         {
             var appointments = _context.GuidanceAppointments
                 .Where(a => a.StudentId == studentId)
-                .OrderByDescending(a => a.CreatedAt)
+                .OrderByDescending(a => a.UpdatedAt ?? a.CreatedAt) // changed
                 .ToList();
 
             return Ok(appointments);
