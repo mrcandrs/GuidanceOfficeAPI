@@ -103,8 +103,6 @@ namespace GuidanceOfficeAPI.Controllers
             if (!string.Equals(appointment.Status, "approved", StringComparison.OrdinalIgnoreCase))
                 return BadRequest("Can only deactivate slots for approved appointments");
 
-            // appointment.Date is a string like "yyyy-MM-dd"
-            // Normalize it to DateTime (date-only) before comparing with ts.Date (DateTime)
             if (!DateTime.TryParseExact(
                     appointment.Date,
                     "yyyy-MM-dd",
@@ -123,10 +121,34 @@ namespace GuidanceOfficeAPI.Controllers
             if (timeSlot != null)
             {
                 timeSlot.IsActive = false;
-                await _context.SaveChangesAsync();
             }
 
-            return Ok(new { message = "Time slot deactivated successfully" });
+            // Important: mark the appointment as completed/closed so the student is unblocked
+            appointment.Status = "pending"; // or "closed", but be consistent with the rest of your app
+
+            await _context.SaveChangesAsync();
+            return Ok(new { message = "Time slot deactivated and appointment marked completed." });
+        }
+
+        // GET: api/guidancepass
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<GuidancePass>>> GetGuidancePasses([FromQuery] int? studentId = null)
+        {
+            var query = _context.GuidancePasses
+                .Include(gp => gp.Counselor)
+                .Include(gp => gp.Appointment)
+                .AsQueryable();
+
+            if (studentId.HasValue)
+            {
+                query = query.Where(gp => gp.Appointment.StudentId == studentId.Value);
+            }
+
+            var passes = await query
+                .OrderByDescending(gp => gp.IssuedDate)
+                .ToListAsync();
+
+            return Ok(passes);
         }
     }
 
