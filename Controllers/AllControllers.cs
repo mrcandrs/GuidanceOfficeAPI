@@ -47,12 +47,12 @@ namespace GuidanceOfficeAPI.Controllers
         public AppointmentRequestController(AppDbContext context) : base(context) { }
     }*/
 
-    [ApiController]
+    /*[ApiController]
     [Route("api/[controller]")]
     public class GuidancePassController : CrudController<GuidancePass>
     {
         public GuidancePassController(AppDbContext context) : base(context) { }
-    }
+    }*/
 
     [ApiController]
     [Route("api/[controller]")]
