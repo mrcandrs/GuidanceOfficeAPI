@@ -145,7 +145,6 @@ namespace GuidanceOfficeAPI.Controllers
                         StudentFullName = studentInfo?.FullName ?? r.FullName,
                         StudentNumber = studentInfo?.StudentNumber ?? r.StudentNumber,
                         Program = studentInfo?.Program ?? r.Program,
-                        Section = studentInfo?.Section ?? string.Empty,
 
                         FullName = r.FullName,
                         PersonWhoReferred = r.PersonWhoReferred,
