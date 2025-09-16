@@ -94,12 +94,27 @@ namespace GuidanceOfficeAPI.Controllers
         [HttpGet("latest-per-student")]
         public IActionResult GetLatestPerStudent()
         {
-            var forms = _context.ReferralForms
-              .GroupBy(r => r.StudentId)
-              .Select(g => g.OrderByDescending(r => r.SubmissionDate).First())
-              .OrderByDescending(r => r.SubmissionDate)
-              .ToList();
-            return Ok(forms);
+            var studentIds = _context.ReferralForms
+                .Select(r => r.StudentId)
+                .Distinct()
+                .ToList();
+
+            var latest = new List<ReferralForm>();
+
+            foreach (var studentId in studentIds)
+            {
+                var latestForStudent = _context.ReferralForms
+                    .Where(r => r.StudentId == studentId)
+                    .OrderByDescending(r => r.SubmissionDate)
+                    .FirstOrDefault();
+
+                if (latestForStudent != null)
+                {
+                    latest.Add(latestForStudent);
+                }
+            }
+
+            return Ok(latest.OrderByDescending(r => r.SubmissionDate));
         }
     }
 }
