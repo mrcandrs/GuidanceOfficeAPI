@@ -64,6 +64,9 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 }
 
 app.UseHttpsRedirection();
+
+app.UseRouting();
+
 app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
