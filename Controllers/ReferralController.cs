@@ -80,7 +80,9 @@ namespace GuidanceOfficeAPI.Controllers
             var form = _context.ReferralForms.FirstOrDefault(r => r.ReferralId == referralId);
             if (form == null) return NotFound(new { message = "Referral not found." });
 
-            form.CounselorFeedbackStudentName = dto.CounselorFeedbackStudentName ?? form.CounselorFeedbackStudentName;
+            form.CounselorFeedbackStudentName = string.IsNullOrWhiteSpace(dto.CounselorFeedbackStudentName)
+            ? form.FullName
+            : dto.CounselorFeedbackStudentName;
             form.CounselorFeedbackDateReferred = dto.CounselorFeedbackDateReferred ?? form.CounselorFeedbackDateReferred;
             form.CounselorSessionDate = dto.CounselorSessionDate ?? form.CounselorSessionDate;
             form.CounselorActionsTaken = dto.CounselorActionsTaken ?? form.CounselorActionsTaken;
