@@ -92,29 +92,21 @@ namespace GuidanceOfficeAPI.Controllers
             return Ok(new { message = "Feedback saved." });
         }
 
-        //Optional convenience endpoint if you prefer “latest for student”:
+        //Get all referrals (not just latest per student)
         [HttpGet("latest-per-student")]
         public IActionResult GetLatestPerStudent()
         {
-            var studentIds = _context.ReferralForms
-                .Select(r => r.StudentId)
-                .Distinct()
+            // Get all referrals instead of just latest per student
+            var allReferrals = _context.ReferralForms
+                .OrderByDescending(r => r.SubmissionDate)
                 .ToList();
 
-            var latest = new List<ReferralForm>();
-
-            foreach (var studentId in studentIds)
+            if (!allReferrals.Any())
             {
-                var latestForStudent = _context.ReferralForms
-                    .Where(r => r.StudentId == studentId)
-                    .OrderByDescending(r => r.SubmissionDate)
-                    .FirstOrDefault();
-
-                if (latestForStudent != null)
-                {
-                    latest.Add(latestForStudent);
-                }
+                return Ok(new List<ReferralLatestDto>());
             }
+
+            var studentIds = allReferrals.Select(r => r.StudentId).Distinct().ToList();
 
             // Get student and career planning data
             var studentData = _context.Students
@@ -131,8 +123,7 @@ namespace GuidanceOfficeAPI.Controllers
                       })
                 .ToDictionary(x => x.StudentId);
 
-            var result = latest
-                .OrderByDescending(r => r.SubmissionDate)
+            var result = allReferrals
                 .Select(r =>
                 {
                     studentData.TryGetValue(r.StudentId, out var studentInfo);
@@ -145,12 +136,12 @@ namespace GuidanceOfficeAPI.Controllers
                         // Canonical student (who submitted)
                         StudentFullName = studentInfo?.FullName ?? r.FullName,
                         StudentNumber = studentInfo?.StudentNumber ?? r.StudentNumber,
-                        StudentProgram = studentInfo?.Program ?? r.Program,  // Changed
+                        StudentProgram = studentInfo?.Program ?? r.Program,
                         Section = studentInfo?.Section ?? string.Empty,
 
                         // Referral form data (who is being referred)
                         FullName = r.FullName,
-                        Program = r.Program,  // No duplicate now
+                        Program = r.Program,
                         PersonWhoReferred = r.PersonWhoReferred,
                         DateReferred = r.DateReferred,
                         CounselorFeedbackStudentName = r.CounselorFeedbackStudentName,
