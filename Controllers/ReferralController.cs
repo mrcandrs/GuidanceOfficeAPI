@@ -73,7 +73,7 @@ namespace GuidanceOfficeAPI.Controllers
             return Ok(latestReferral);
         }
 
-        //PUT
+        //PUT:
         [HttpPut("{referralId}/feedback")]
         public IActionResult UpdateFeedback(int referralId, [FromBody] ReferralFeedbackDto dto)
         {
@@ -90,6 +90,18 @@ namespace GuidanceOfficeAPI.Controllers
 
             _context.SaveChanges();
             return Ok(new { message = "Feedback saved." });
+        }
+
+        //GET: api/referral/student/{studentId}/all
+        [HttpGet("student/{studentId}/all")]
+        public IActionResult GetAllReferralsForStudent(int studentId)
+        {
+            var referrals = _context.ReferralForms
+                .Where(r => r.StudentId == studentId)
+                .OrderByDescending(r => r.SubmissionDate)
+                .ToList();
+
+            return Ok(referrals);
         }
 
         //Get all referrals (not just latest per student)
