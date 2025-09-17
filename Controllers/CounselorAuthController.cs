@@ -24,6 +24,7 @@ namespace GuidanceOfficeAPI.Controllers
         }
 
         [HttpPost("login")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] CounselorLoginDto dto)
         {
             try
