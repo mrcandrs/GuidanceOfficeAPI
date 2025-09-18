@@ -1,4 +1,5 @@
-﻿using GuidanceOfficeAPI.Data;
+﻿using System.Numerics;
+using GuidanceOfficeAPI.Data;
 using GuidanceOfficeAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -156,7 +157,44 @@ namespace GuidanceOfficeAPI.Controllers
 
             await _context.SaveChangesAsync();
 
+            if (!slot.IsActive)
+            {
+                await CompleteApprovedAppointmentsForSlot(slot);
+            }
+
             return Ok(new { message = $"Time slot {(slot.IsActive ? "activated" : "deactivated")} successfully", slot });
+        }
+
+        //Make auto-expiry also complete appointments:
+        private async Task<int> ExpirePastTodaySlots()
+        {
+            var now = GetPhilippinesTime();
+            var today = now.Date;
+            var changed = 0;
+
+            var todaysActive = await _context.AvailableTimeSlots
+                .Where(s => s.IsActive && s.Date == today)
+                .ToListAsync();
+
+            foreach (var slot in todaysActive)
+            {
+                if (TryParseSlotTime(slot.Time, out var t))
+                {
+                    var slotDateTime = today.Add(t.TimeOfDay);
+                    if (slotDateTime <= now)
+                    {
+                        slot.IsActive = false;
+                        slot.UpdatedAt = now;
+                        changed++;
+
+                        // complete any remaining approved appointments for this slot
+                        await CompleteApprovedAppointmentsForSlot(slot);
+                    }
+                }
+            }
+
+            if (changed > 0) await _context.SaveChangesAsync();
+            return changed;
         }
 
         // POST: api/availabletimeslot/bulk
@@ -430,6 +468,29 @@ namespace GuidanceOfficeAPI.Controllers
             await _context.SaveChangesAsync();
 
             return Ok(slots);
+        }
+
+        private async Task<int> CompleteApprovedAppointmentsForSlot(AvailableTimeSlot slot)
+        {
+            var dateKey = slot.Date.ToString("yyyy-MM-dd");
+            var now = GetPhilippinesTime();
+
+            var approved = await _context.GuidanceAppointments
+                .Where(a => a.Date == dateKey && a.Time == slot.Time && a.Status.ToLower() == "approved")
+                .ToListAsync();
+
+            foreach (var appt in approved)
+            {
+                appt.Status = "completed";
+                appt.UpdatedAt = now;
+            }
+
+            if (approved.Count > 0)
+            {
+                await _context.SaveChangesAsync();
+            }
+
+            return approved.Count;
         }
 
         // Add helper to parse "h:mm tt"
