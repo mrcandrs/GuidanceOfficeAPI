@@ -165,38 +165,6 @@ namespace GuidanceOfficeAPI.Controllers
             return Ok(new { message = $"Time slot {(slot.IsActive ? "activated" : "deactivated")} successfully", slot });
         }
 
-        //Make auto-expiry also complete appointments:
-        private async Task<int> ExpirePastTodaySlots()
-        {
-            var now = GetPhilippinesTime();
-            var today = now.Date;
-            var changed = 0;
-
-            var todaysActive = await _context.AvailableTimeSlots
-                .Where(s => s.IsActive && s.Date == today)
-                .ToListAsync();
-
-            foreach (var slot in todaysActive)
-            {
-                if (TryParseSlotTime(slot.Time, out var t))
-                {
-                    var slotDateTime = today.Add(t.TimeOfDay);
-                    if (slotDateTime <= now)
-                    {
-                        slot.IsActive = false;
-                        slot.UpdatedAt = now;
-                        changed++;
-
-                        // complete any remaining approved appointments for this slot
-                        await CompleteApprovedAppointmentsForSlot(slot);
-                    }
-                }
-            }
-
-            if (changed > 0) await _context.SaveChangesAsync();
-            return changed;
-        }
-
         // POST: api/availabletimeslot/bulk
         [HttpPost("bulk")]
         public async Task<IActionResult> CreateBulkTimeSlots([FromBody] BulkTimeSlotRequest request)
@@ -520,6 +488,9 @@ namespace GuidanceOfficeAPI.Controllers
                         slot.IsActive = false;
                         slot.UpdatedAt = now;
                         changed++;
+
+                        // complete any remaining approved appointments for this slot
+                        await CompleteApprovedAppointmentsForSlot(slot);
                     }
                 }
             }
