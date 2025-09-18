@@ -167,5 +167,18 @@ namespace GuidanceOfficeAPI.Controllers
 
             return Ok(result);
         }
+
+        //GET: api/referral/{referralId}
+        [HttpGet("{referralId}")]
+        public IActionResult GetReferralById(int referralId)
+        {
+            var referral = _context.ReferralForms
+                .FirstOrDefault(r => r.ReferralId == referralId);
+
+            if (referral == null)
+                return NotFound(new { message = "Referral not found." });
+
+            return Ok(referral);
+        }
     }
 }
