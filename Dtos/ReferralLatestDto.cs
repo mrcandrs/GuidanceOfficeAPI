@@ -24,7 +24,7 @@
         public string ActionRequested { get; set; }
         public string ActionRequestedOtherDetail { get; set; }
         public string PriorityLevel { get; set; }
-        public string PriorityDate { get; set; }
+        public DateTime? PriorityDate { get; set; }
         public string ActionsTakenBefore { get; set; }
         public string ReferralReasons { get; set; }
         public string CounselorInitialAction { get; set; }

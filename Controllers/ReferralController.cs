@@ -160,7 +160,10 @@ namespace GuidanceOfficeAPI.Controllers
                         CounselorFeedbackDateReferred = r.CounselorFeedbackDateReferred,
                         CounselorSessionDate = r.CounselorSessionDate,
                         CounselorActionsTaken = r.CounselorActionsTaken,
-                        CounselorName = r.CounselorName
+                        CounselorName = r.CounselorName,
+
+                        PriorityLevel = r.PriorityLevel,
+                        PriorityDate = r.PriorityDate
                     };
                 })
                 .ToList();
