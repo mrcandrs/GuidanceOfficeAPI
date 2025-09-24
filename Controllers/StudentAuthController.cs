@@ -394,6 +394,19 @@ namespace GuidanceOfficeAPI.Controllers
             return Ok(careerForm);
         }
 
+        // GET: api/student/{id}/exit-interview-form
+        [HttpGet("{id}/exit-interview-form")]
+        public async Task<IActionResult> GetExitInterviewForm(int id)
+        {
+            var form = await _context.ExitInterviewForms
+                .FirstOrDefaultAsync(e => e.StudentId == id);
+
+            if (form == null)
+                return NotFound(new { message = "No exit interview form found for this student" });
+
+            return Ok(form);
+        }
+
         // GET: api/student
         [HttpGet]
         public async Task<IActionResult> GetAllStudents()
