@@ -86,8 +86,42 @@
                 HighMin = 7,
                 IsActive = true
             });
-        }
 
+            modelBuilder.Entity<DictionaryItem>()
+            .HasIndex(x => new { x.Group, x.Value }).IsUnique();
+
+            modelBuilder.Entity<MobileConfig>().HasData(new MobileConfig { Id = 1 });
+
+            modelBuilder.Entity<DictionaryItem>().HasData(
+                // gradeYears
+                new DictionaryItem { Id = 1, Group = "gradeYears", Value = "Grade 11", IsActive = true },
+                new DictionaryItem { Id = 2, Group = "gradeYears", Value = "Grade 12", IsActive = true },
+                new DictionaryItem { Id = 3, Group = "gradeYears", Value = "1st Year", IsActive = true },
+                // genders
+                new DictionaryItem { Id = 10, Group = "genders", Value = "Male", IsActive = true },
+                new DictionaryItem { Id = 11, Group = "genders", Value = "Female", IsActive = true },
+                // academicLevels
+                new DictionaryItem { Id = 20, Group = "academicLevels", Value = "Junior High", IsActive = true },
+                new DictionaryItem { Id = 21, Group = "academicLevels", Value = "Senior High", IsActive = true },
+                // referredBy
+                new DictionaryItem { Id = 30, Group = "referredBy", Value = "Student", IsActive = true },
+                new DictionaryItem { Id = 31, Group = "referredBy", Value = "Parent", IsActive = true },
+                // areasOfConcern
+                new DictionaryItem { Id = 40, Group = "areasOfConcern", Value = "Academic", IsActive = true },
+                new DictionaryItem { Id = 41, Group = "areasOfConcern", Value = "Behavioral", IsActive = true },
+                // actionRequested
+                new DictionaryItem { Id = 50, Group = "actionRequested", Value = "Counseling", IsActive = true },
+                new DictionaryItem { Id = 51, Group = "actionRequested", Value = "Classroom Observation", IsActive = true },
+                // referralPriorities
+                new DictionaryItem { Id = 60, Group = "referralPriorities", Value = "Emergency", IsActive = true },
+                new DictionaryItem { Id = 61, Group = "referralPriorities", Value = "ASAP", IsActive = true },
+                new DictionaryItem { Id = 62, Group = "referralPriorities", Value = "Before Date", IsActive = true },
+                // moodLevels
+                new DictionaryItem { Id = 70, Group = "moodLevels", Value = "MILD", IsActive = true },
+                new DictionaryItem { Id = 71, Group = "moodLevels", Value = "MODERATE", IsActive = true },
+                new DictionaryItem { Id = 72, Group = "moodLevels", Value = "HIGH", IsActive = true }
+            );
+        }
 
         public DbSet<ReferralForm> ReferralForms { get; set; }
         public DbSet<EndorsementCustodyForm> EndorsementCustodyForms { get; set; }
@@ -106,6 +140,9 @@
         public DbSet<ReferralCategory> ReferralCategories { get; set; }
         public DbSet<TimeSlotDefaults> TimeSlotDefaults { get; set; }
         public DbSet<MoodThresholds> MoodThresholds { get; set; }
+        public DbSet<MobileConfig> MobileConfigs { get; set; }
+        public DbSet<Quote> Quotes { get; set; }
+        public DbSet<DictionaryItem> DictionaryItems { get; set; }
     }
 
 }

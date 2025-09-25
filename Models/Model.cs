@@ -667,4 +667,33 @@ namespace GuidanceOfficeAPI.Models
         public int HighMin { get; set; } = 7;
         public bool IsActive { get; set; } = true;
     }
+
+    public class MobileConfig
+    {
+        [Key] 
+        public int Id { get; set; } = 1;
+        public int Version { get; set; } = 1;
+        public int MoodCooldownHours { get; set; } = 24;
+        public string StudentNumberRegex { get; set; } = @"^\d{11}$";
+        public string PhoneRegex { get; set; } = @"^\d{11}$";
+        public string PasswordRegex { get; set; } = @"^(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{6,}$";
+        public int MaxSiblings { get; set; } = 5;
+        public int MaxWorkExperience { get; set; } = 5;
+        public int NotificationCooldownMs { get; set; } = 10000;
+    }
+
+    public class Quote
+    {
+        [Key] public int Id { get; set; }
+        [Required, MaxLength(300)] public string Text { get; set; } = string.Empty;
+        [MaxLength(120)] public string Author { get; set; } = "Unknown";
+    }
+
+    public class DictionaryItem
+    {
+        [Key] public int Id { get; set; }
+        [Required, MaxLength(50)] public string Group { get; set; } = string.Empty; // e.g., 'gradeYears'
+        [Required, MaxLength(120)] public string Value { get; set; } = string.Empty;
+        public bool IsActive { get; set; } = true;
+    }
 }

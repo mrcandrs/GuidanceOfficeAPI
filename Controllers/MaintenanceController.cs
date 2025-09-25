@@ -84,5 +84,70 @@ namespace GuidanceOfficeAPI.Controllers
 
         [HttpPut("mood-thresholds/{id:int}")]
         public async Task<IActionResult> UpdateThresholds(int id, [FromBody] MoodThresholds e) { e.Id = 1; _ctx.MoodThresholds.Update(e); await _ctx.SaveChangesAsync(); return Ok(e); }
+
+        // Dictionaries aggregate
+        [HttpGet("dictionaries")]
+        public async Task<IActionResult> GetDictionaries()
+        {
+            var all = await _ctx.DictionaryItems.Where(d => d.IsActive).ToListAsync();
+            object group(string g) => all.Where(x => x.Group == g).Select(x => x.Value).OrderBy(x => x).ToList();
+
+            // AppointmentReasons are already maintained; include here too
+            var reasons = await _ctx.AppointmentReasons.Where(r => r.IsActive).OrderBy(r => r.Code).Select(r => r.Name).ToListAsync();
+
+            return Ok(new
+            {
+                gradeYears = group("gradeYears"),
+                genders = group("genders"),
+                academicLevels = group("academicLevels"),
+                referredBy = group("referredBy"),
+                areasOfConcern = group("areasOfConcern"),
+                actionRequested = group("actionRequested"),
+                referralPriorities = group("referralPriorities"),
+                appointmentReasons = reasons,
+                moodLevels = group("moodLevels")
+            });
+        }
+
+        // Mobile config single row
+        [HttpGet("mobile-config")]
+        public async Task<IActionResult> GetMobileConfig()
+            => Ok(await _ctx.MobileConfigs.FirstOrDefaultAsync() ?? new MobileConfig { Id = 1 });
+
+        [HttpPost("mobile-config")]
+        public async Task<IActionResult> UpsertMobileConfig([FromBody] MobileConfig cfg)
+        {
+            cfg.Id = 1;
+            if (!await _ctx.MobileConfigs.AnyAsync()) _ctx.MobileConfigs.Add(cfg);
+            else _ctx.MobileConfigs.Update(cfg);
+            await _ctx.SaveChangesAsync();
+            return Ok(cfg);
+        }
+
+        // Quotes
+        [HttpGet("quotes")]
+        public async Task<IActionResult> GetQuotes() => Ok(await _ctx.Quotes.OrderByDescending(q => q.Id).ToListAsync());
+
+        [HttpPost("quotes")]
+        public async Task<IActionResult> CreateQuote([FromBody] Quote q) { _ctx.Quotes.Add(q); await _ctx.SaveChangesAsync(); return Ok(q); }
+
+        [HttpPut("quotes/{id:int}")]
+        public async Task<IActionResult> UpdateQuote(int id, [FromBody] Quote q) { q.Id = id; _ctx.Entry(q).State = EntityState.Modified; await _ctx.SaveChangesAsync(); return Ok(q); }
+
+        [HttpDelete("quotes/{id:int}")]
+        public async Task<IActionResult> DeleteQuote(int id) { var q = await _ctx.Quotes.FindAsync(id); if (q == null) return NotFound(); _ctx.Quotes.Remove(q); await _ctx.SaveChangesAsync(); return Ok(); }
+
+        // Dictionary items CRUD (optional UI)
+        [HttpGet("dictionary-items")]
+        public async Task<IActionResult> GetDictionaryItems() => Ok(await _ctx.DictionaryItems.OrderBy(d => d.Group).ThenBy(d => d.Value).ToListAsync());
+
+        [HttpPost("dictionary-items")]
+        public async Task<IActionResult> CreateDictionaryItem([FromBody] DictionaryItem d) { _ctx.DictionaryItems.Add(d); await _ctx.SaveChangesAsync(); return Ok(d); }
+
+        [HttpPut("dictionary-items/{id:int}")]
+        public async Task<IActionResult> UpdateDictionaryItem(int id, [FromBody] DictionaryItem d) { d.Id = id; _ctx.Entry(d).State = EntityState.Modified; await _ctx.SaveChangesAsync(); return Ok(d); }
+
+        [HttpDelete("dictionary-items/{id:int}")]
+        public async Task<IActionResult> DeleteDictionaryItem(int id) { var d = await _ctx.DictionaryItems.FindAsync(id); if (d == null) return NotFound(); _ctx.DictionaryItems.Remove(d); await _ctx.SaveChangesAsync(); return Ok(); }
     }
 }
