@@ -52,6 +52,40 @@
                 entity.Property(e => e.RejectionReason).HasMaxLength(500);
                 entity.Property(e => e.CreatedAt).IsRequired().HasDefaultValueSql("GETDATE()");
             });
+
+            // inside OnModelCreating(ModelBuilder modelBuilder), after base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<ProgramEntity>()
+                .HasIndex(x => x.Code)
+                .IsUnique();
+
+            modelBuilder.Entity<SectionEntity>()
+                .HasIndex(x => new { x.ProgramCode, x.Name })
+                .IsUnique();
+
+            modelBuilder.Entity<AppointmentReason>()
+                .HasIndex(x => x.Code)
+                .IsUnique();
+
+            modelBuilder.Entity<ReferralCategory>()
+                .HasIndex(x => x.Code)
+                .IsUnique();
+
+            // seed singletons so GET returns a row
+            modelBuilder.Entity<TimeSlotDefaults>().HasData(new TimeSlotDefaults
+            {
+                Id = 1,
+                MaxAppointments = 3,
+                DefaultTimesCsv = "9:00 AM, 10:00 AM, 1:00 PM",
+                IsActive = true
+            });
+            modelBuilder.Entity<MoodThresholds>().HasData(new MoodThresholds
+            {
+                Id = 1,
+                MildMax = 3,
+                ModerateMax = 6,
+                HighMin = 7,
+                IsActive = true
+            });
         }
 
 
@@ -63,6 +97,15 @@
         public DbSet<JournalEntry> JournalEntries { get; set; }
 
         public DbSet<AvailableTimeSlot> AvailableTimeSlots { get; set; }
+
+        // Data/AppDbContext.cs (add DbSets + constraints)
+        // inside AppDbContext class (DbSets)
+        public DbSet<ProgramEntity> Programs { get; set; }
+        public DbSet<SectionEntity> Sections { get; set; }
+        public DbSet<AppointmentReason> AppointmentReasons { get; set; }
+        public DbSet<ReferralCategory> ReferralCategories { get; set; }
+        public DbSet<TimeSlotDefaults> TimeSlotDefaults { get; set; }
+        public DbSet<MoodThresholds> MoodThresholds { get; set; }
     }
 
 }

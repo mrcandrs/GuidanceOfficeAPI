@@ -597,4 +597,74 @@ namespace GuidanceOfficeAPI.Models
 
         public DateTime? UpdatedAt { get; set; }
     }
+
+    public class ProgramEntity
+    {
+        [Key]
+        public int Id { get; set; }
+
+        [Required, MaxLength(20)]
+        public string Code { get; set; } = string.Empty;
+
+        [Required, MaxLength(100)]
+        public string Name { get; set; } = string.Empty;
+
+        public bool IsActive { get; set; } = true;
+    }
+
+    public class SectionEntity
+    {
+        [Key]
+        public int Id { get; set; }
+        [Required, MaxLength(20)]
+        public string ProgramCode { get; set; } = string.Empty; // FK by code
+        [Required, MaxLength(50)]
+        public string Name { get; set; } = string.Empty;
+        public bool IsActive { get; set; } = true;
+    }
+
+    public class AppointmentReason
+    {
+        [Key]
+        public int Id { get; set; }
+        [Required, MaxLength(20)]
+        public string Code { get; set; } = string.Empty;
+        [Required, MaxLength(100)]
+        public string Name { get; set; } = string.Empty;
+        public bool IsActive { get; set; } = true;
+    }
+
+    public class ReferralCategory
+    {
+        [Key]
+        public int Id { get; set; }
+        [Required, MaxLength(30)]
+        public string Code { get; set; } = string.Empty;
+        [Required, MaxLength(100)]
+        public string Label { get; set; } = string.Empty;
+        [Required, MaxLength(30)]
+        public string DefaultPriority { get; set; } = "ASAP"; // EMERGENCY|ASAP|BEFORE_DATE
+        public bool IsActive { get; set; } = true;
+    }
+
+    // Single-row settings
+    public class TimeSlotDefaults
+    {
+        [Key]
+        public int Id { get; set; } = 1;
+        public int MaxAppointments { get; set; } = 3;
+        [MaxLength(500)]
+        public string DefaultTimesCsv { get; set; } = "9:00 AM, 10:00 AM, 1:00 PM";
+        public bool IsActive { get; set; } = true;
+    }
+
+    public class MoodThresholds
+    {
+        [Key]
+        public int Id { get; set; } = 1;
+        public int MildMax { get; set; } = 3;
+        public int ModerateMax { get; set; } = 6;
+        public int HighMin { get; set; } = 7;
+        public bool IsActive { get; set; } = true;
+    }
 }
