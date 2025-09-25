@@ -92,8 +92,14 @@ namespace GuidanceOfficeAPI.Controllers
             var all = await _ctx.DictionaryItems.Where(d => d.IsActive).ToListAsync();
             object group(string g) => all.Where(x => x.Group == g).Select(x => x.Value).OrderBy(x => x).ToList();
 
-            // AppointmentReasons are already maintained; include here too
             var reasons = await _ctx.AppointmentReasons.Where(r => r.IsActive).OrderBy(r => r.Code).Select(r => r.Name).ToListAsync();
+            var programs = await _ctx.Programs.Where(p => p.IsActive).OrderBy(p => p.Code).Select(p => new { p.Code, p.Name }).ToListAsync();
+            var sections = await _ctx.Sections.Where(s => s.IsActive).OrderBy(s => s.ProgramCode).ThenBy(s => s.Name).ToListAsync();
+
+            // Build sectionsByProgram: { "BSIT": ["4A","4B"], ... }
+            var sectionsByProgram = sections
+                .GroupBy(s => s.ProgramCode)
+                .ToDictionary(g => g.Key, g => g.Select(x => x.Name).OrderBy(x => x).ToList());
 
             return Ok(new
             {
@@ -105,7 +111,9 @@ namespace GuidanceOfficeAPI.Controllers
                 actionRequested = group("actionRequested"),
                 referralPriorities = group("referralPriorities"),
                 appointmentReasons = reasons,
-                moodLevels = group("moodLevels")
+                moodLevels = group("moodLevels"),
+                programs = programs,               // [{code,name}]
+                sectionsByProgram = sectionsByProgram
             });
         }
 
