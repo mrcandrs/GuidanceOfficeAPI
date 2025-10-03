@@ -1,4 +1,5 @@
 ﻿using GuidanceOfficeAPI.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,6 +7,7 @@ namespace GuidanceOfficeAPI.Controllers
 {
     [ApiController]
     [Route("api/reports")]
+    [Authorize] // Requires authentication
     public class ReportsController : ControllerBase
     {
         private readonly AppDbContext _ctx;
@@ -32,8 +34,6 @@ namespace GuidanceOfficeAPI.Controllers
 
             return Ok(new { total, pending, approved, rejected, completed, byDay });
         }
-
-        // Add these methods to your existing ReportsController.cs
 
         [HttpGet("referrals")]
         public async Task<IActionResult> Referrals([FromQuery] DateTime? from, [FromQuery] DateTime? to)
@@ -67,13 +67,13 @@ namespace GuidanceOfficeAPI.Controllers
 
             // Group by counseling nature
             var byNature = new List<object>
-    {
-        new { type = "Academic", count = await q.CountAsync(n => n.IsAcademic) },
-        new { type = "Behavioral", count = await q.CountAsync(n => n.IsBehavioral) },
-        new { type = "Personal", count = await q.CountAsync(n => n.IsPersonal) },
-        new { type = "Social", count = await q.CountAsync(n => n.IsSocial) },
-        new { type = "Career", count = await q.CountAsync(n => n.IsCareer) }
-    };
+            {
+                new { type = "Academic", count = await q.CountAsync(n => n.IsAcademic) },
+                new { type = "Behavioral", count = await q.CountAsync(n => n.IsBehavioral) },
+                new { type = "Personal", count = await q.CountAsync(n => n.IsPersonal) },
+                new { type = "Social", count = await q.CountAsync(n => n.IsSocial) },
+                new { type = "Career", count = await q.CountAsync(n => n.IsCareer) }
+            };
 
             return Ok(new { total, byNature });
         }
