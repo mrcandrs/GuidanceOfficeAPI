@@ -1,6 +1,7 @@
 ﻿using GuidanceOfficeAPI.Data;
 using GuidanceOfficeAPI.Dtos;
 using GuidanceOfficeAPI.Models;
+using GuidanceOfficeAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GuidanceOfficeAPI.Controllers
@@ -10,10 +11,12 @@ namespace GuidanceOfficeAPI.Controllers
     public class ReferralController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly IActivityLogger _activityLogger;
 
-        public ReferralController(AppDbContext context)
+        public ReferralController(AppDbContext context, IActivityLogger activityLogger)
         {
             _context = context;
+            _activityLogger = activityLogger;
         }
 
         //POST: api/referral/submit-referral
@@ -75,7 +78,7 @@ namespace GuidanceOfficeAPI.Controllers
 
         //PUT:
         [HttpPut("{referralId}/feedback")]
-        public IActionResult UpdateFeedback(int referralId, [FromBody] ReferralFeedbackDto dto)
+        public async Task<IActionResult> UpdateFeedback(int referralId, [FromBody] ReferralFeedbackDto dto)
         {
             var form = _context.ReferralForms.FirstOrDefault(r => r.ReferralId == referralId);
             if (form == null) return NotFound(new { message = "Referral not found." });
@@ -88,7 +91,12 @@ namespace GuidanceOfficeAPI.Controllers
             form.CounselorActionsTaken = dto.CounselorActionsTaken ?? form.CounselorActionsTaken;
             form.CounselorName = dto.CounselorName ?? form.CounselorName;
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
+            await _activityLogger.LogAsync("referral", form.ReferralId, "feedback_saved", "counselor", null, new
+            {
+                counselorName = form.CounselorName
+            });
+
             return Ok(new { message = "Feedback saved." });
         }
 

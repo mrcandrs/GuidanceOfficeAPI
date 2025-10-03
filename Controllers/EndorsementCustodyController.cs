@@ -5,6 +5,7 @@ using System.Security.Claims;
 using GuidanceOfficeAPI.Data;
 using GuidanceOfficeAPI.Models;
 using GuidanceOfficeAPI.Dtos;
+using GuidanceOfficeAPI.Services;
 
 namespace GuidanceOfficeAPI.Controllers
 {
@@ -14,11 +15,13 @@ namespace GuidanceOfficeAPI.Controllers
     {
         private readonly AppDbContext _context;
         private readonly TimeZoneInfo _manilaTimeZone;
+        private readonly IActivityLogger _activityLogger;
 
-        public EndorsementCustodyController(AppDbContext context)
+        public EndorsementCustodyController(AppDbContext context, IActivityLogger activityLogger)
         {
             _context = context;
             _manilaTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Asia/Manila");
+            _activityLogger = activityLogger;
         }
 
         // Helper method to convert UTC to Manila time
@@ -198,6 +201,11 @@ namespace GuidanceOfficeAPI.Controllers
                 _context.EndorsementCustodyForms.Add(form);
                 await _context.SaveChangesAsync();
 
+                await _activityLogger.LogAsync("endorsement", form.CustodyId, "created", "counselor", counselorId, new
+                {
+                    studentId = form.StudentId
+                });
+
                 // Fetch the created form with related data
                 var createdFormFromDb = await _context.EndorsementCustodyForms
                     .Include(f => f.Student)
@@ -307,6 +315,8 @@ namespace GuidanceOfficeAPI.Controllers
 
                 await _context.SaveChangesAsync();
 
+                await _activityLogger.LogAsync("endorsement", form.CustodyId, "updated", "counselor", counselorId, null);
+
                 // Return success response with message
                 return Ok(new
                 {
@@ -348,6 +358,8 @@ namespace GuidanceOfficeAPI.Controllers
 
                 _context.EndorsementCustodyForms.Remove(form);
                 await _context.SaveChangesAsync();
+
+                await _activityLogger.LogAsync("endorsement", form.CustodyId, "deleted", "counselor", counselorId, null);
 
                 return NoContent();
             }

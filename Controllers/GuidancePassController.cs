@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Globalization;
 using GuidanceOfficeAPI.Data;
 using GuidanceOfficeAPI.Models;
+using GuidanceOfficeAPI.Services;
 
 namespace GuidanceOfficeAPI.Controllers
 {
@@ -14,10 +15,12 @@ namespace GuidanceOfficeAPI.Controllers
     public class GuidancePassController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly IActivityLogger _activityLogger;
 
-        public GuidancePassController(AppDbContext context)
+        public GuidancePassController(AppDbContext context, IActivityLogger activityLogger)
         {
             _context = context;
+            _activityLogger = activityLogger;
         }
 
         // GET: api/guidancepass/{id}
@@ -101,6 +104,10 @@ namespace GuidanceOfficeAPI.Controllers
 
             _context.GuidancePasses.Add(guidancePass);
             await _context.SaveChangesAsync();
+            await _activityLogger.LogAsync("guidancepass", guidancePass.PassId, "created", "counselor", guidancePass.CounselorId, new
+            {
+                appointmentId = guidancePass.AppointmentId
+            });
 
             var createdPass = await _context.GuidancePasses
                 .Include(gp => gp.Counselor)

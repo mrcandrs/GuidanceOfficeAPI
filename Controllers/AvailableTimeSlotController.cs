@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
 using GuidanceOfficeAPI.Data;
 using GuidanceOfficeAPI.Models;
+using GuidanceOfficeAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,10 +12,12 @@ namespace GuidanceOfficeAPI.Controllers
     public class AvailableTimeSlotController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly IActivityLogger _activityLogger;
 
-        public AvailableTimeSlotController(AppDbContext context)
+        public AvailableTimeSlotController(AppDbContext context, IActivityLogger activityLogger)
         {
             _context = context;
+            _activityLogger = activityLogger;
         }
 
         // Helper method to get Philippines time
@@ -156,6 +159,12 @@ namespace GuidanceOfficeAPI.Controllers
             slot.UpdatedAt = GetPhilippinesTime();
 
             await _context.SaveChangesAsync();
+
+            await _activityLogger.LogAsync("timeslot", slot.SlotId, slot.IsActive ? "activated" : "deactivated", "counselor", null, new
+            {
+                date = slot.Date,
+                time = slot.Time
+            });
 
             if (!slot.IsActive)
             {
@@ -371,6 +380,11 @@ namespace GuidanceOfficeAPI.Controllers
 
             _context.AvailableTimeSlots.Remove(slot);
             await _context.SaveChangesAsync();
+            await _activityLogger.LogAsync("timeslot", slot.SlotId, "deleted", "counselor", null, new
+            {
+                date = slot.Date,
+                time = slot.Time
+            });
 
             return Ok(new { message = "Time slot deleted successfully" });
         }

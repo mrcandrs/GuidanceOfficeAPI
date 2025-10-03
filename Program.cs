@@ -21,6 +21,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     )
 );
 
+builder.Services.AddScoped<GuidanceOfficeAPI.Services.IActivityLogger, GuidanceOfficeAPI.Services.ActivityLogger>();
+
 // CORS configuration
 // Replace your CORS configuration with this temporarily
 builder.Services.AddCors(options =>

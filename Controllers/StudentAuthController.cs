@@ -7,6 +7,7 @@ using GuidanceOfficeAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using GuidanceOfficeAPI.Services;
 
 namespace GuidanceOfficeAPI.Controllers
 {
@@ -16,11 +17,13 @@ namespace GuidanceOfficeAPI.Controllers
     {
         private readonly AppDbContext _context;
         private readonly ILogger<StudentAuthController> _logger;
+        private readonly IActivityLogger _activityLogger;
 
-        public StudentAuthController(AppDbContext context, ILogger<StudentAuthController> logger)
+        public StudentAuthController(AppDbContext context, ILogger<StudentAuthController> logger, IActivityLogger activityLogger)
         {
             _context = context;
             _logger = logger;
+            _activityLogger = activityLogger;
         }
 
         private static DateTime ConvertToManilaTime(DateTime utcDateTime)
@@ -489,7 +492,7 @@ namespace GuidanceOfficeAPI.Controllers
         public async Task<IActionResult> DeleteStudent(int id)
         {
             var authHeader = Request.Headers["Authorization"].FirstOrDefault();
-            if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
+            if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer ")) 
             {
                 return Unauthorized(new { message = "Missing or invalid authorization header" });
             }
@@ -517,6 +520,10 @@ namespace GuidanceOfficeAPI.Controllers
                 // Finally delete the student
                 _context.Students.Remove(student);
                 await _context.SaveChangesAsync();
+                await _activityLogger.LogAsync("student", id, "deleted", "admin", null, new
+                {
+                    studentName = student.FullName
+                });
 
                 return Ok(new { message = "Student and related records deleted successfully" });
             }

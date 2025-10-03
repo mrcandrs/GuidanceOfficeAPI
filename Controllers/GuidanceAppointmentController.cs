@@ -1,5 +1,6 @@
 ﻿using GuidanceOfficeAPI.Data;
 using GuidanceOfficeAPI.Models;
+using GuidanceOfficeAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,9 +12,12 @@ namespace GuidanceOfficeAPI.Controllers
     {
         private readonly AppDbContext _context;
 
-        public GuidanceAppointmentController(AppDbContext context)
+        private readonly IActivityLogger _activityLogger;
+
+        public GuidanceAppointmentController(AppDbContext context, IActivityLogger activityLogger)
         {
             _context = context;
+            _activityLogger = activityLogger;
         }
 
         // Helper method to get Philippines time
@@ -256,6 +260,14 @@ namespace GuidanceOfficeAPI.Controllers
                 }
 
                 await _context.SaveChangesAsync();
+                // Add this after line: await _context.SaveChangesAsync();
+                await _activityLogger.LogAsync("appointment", appointment.AppointmentId, "approved", "counselor", null, new
+                {
+                    studentId = appointment.StudentId,
+                    studentName = appointment.StudentName,
+                    date = appointment.Date,
+                    time = appointment.Time
+                });
 
                 // Update the appointment count for this time slot
                 await UpdateAppointmentCount(appointment.Date, appointment.Time);
@@ -302,6 +314,11 @@ namespace GuidanceOfficeAPI.Controllers
             appointment.UpdatedAt = GetPhilippinesTime();
 
             await _context.SaveChangesAsync();
+            await _activityLogger.LogAsync("appointment", appointment.AppointmentId, "rejected", "counselor", null, new
+            {
+                reason = appointment.RejectionReason,
+                studentName = appointment.StudentName
+            });
 
             // Update the appointment count for this time slot
             await UpdateAppointmentCount(appointment.Date, appointment.Time);

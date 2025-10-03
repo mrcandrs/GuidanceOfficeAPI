@@ -4,6 +4,7 @@ using GuidanceOfficeAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
+using GuidanceOfficeAPI.Services;
 
 namespace GuidanceOfficeAPI.Controllers
 {
@@ -13,11 +14,13 @@ namespace GuidanceOfficeAPI.Controllers
     {
         private readonly AppDbContext _context;
         private readonly TimeZoneInfo _manilaTimeZone;
+        private readonly IActivityLogger _activityLogger;
 
-        public GuidanceNotesController(AppDbContext context)
+        public GuidanceNotesController(AppDbContext context, IActivityLogger activityLogger)
         {
             _context = context;
             _manilaTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Asia/Manila");
+            _activityLogger = activityLogger;
         }
 
         // Helper method to convert UTC to Manila time
@@ -289,6 +292,11 @@ namespace GuidanceOfficeAPI.Controllers
                 _context.GuidanceNotes.Add(note);
                 await _context.SaveChangesAsync();
 
+                await _activityLogger.LogAsync("note", note.NoteId, "created", "counselor", counselorId, new
+                {
+                    studentId = note.StudentId
+                });
+
                 // Fetch the created note with related data
                 var createdNoteFromDb = await _context.GuidanceNotes
                     .Include(n => n.Student)
@@ -468,6 +476,8 @@ namespace GuidanceOfficeAPI.Controllers
 
                 await _context.SaveChangesAsync();
 
+                await _activityLogger.LogAsync("note", note.NoteId, "updated", "counselor", counselorId, null);
+
                 return Ok(new
                 {
                     message = "Guidance note updated successfully.",
@@ -508,6 +518,8 @@ namespace GuidanceOfficeAPI.Controllers
 
                 _context.GuidanceNotes.Remove(note);
                 await _context.SaveChangesAsync();
+
+                await _activityLogger.LogAsync("note", note.NoteId, "deleted", "counselor", counselorId, null);
 
                 return NoContent();
             }
