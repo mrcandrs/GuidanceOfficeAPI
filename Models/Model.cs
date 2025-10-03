@@ -696,4 +696,16 @@ namespace GuidanceOfficeAPI.Models
         [Required, MaxLength(120)] public string Value { get; set; } = string.Empty;
         public bool IsActive { get; set; } = true;
     }
+
+    public class ActivityLog
+    {
+        [Key] public long ActivityId { get; set; }
+        public string EntityType { get; set; } = string.Empty;
+        public long? EntityId { get; set; }
+        public string Action { get; set; } = string.Empty;
+        public string ActorType { get; set; } = "system";
+        public long? ActorId { get; set; }
+        public string? DetailsJson { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    }
 }

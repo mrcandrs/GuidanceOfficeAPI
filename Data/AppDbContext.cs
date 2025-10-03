@@ -121,6 +121,12 @@
                 new DictionaryItem { Id = 71, Group = "moodLevels", Value = "MODERATE", IsActive = true },
                 new DictionaryItem { Id = 72, Group = "moodLevels", Value = "HIGH", IsActive = true }
             );
+
+            modelBuilder.Entity<ActivityLog>()
+            .HasIndex(x => new { x.EntityType, x.EntityId, x.CreatedAt });
+            modelBuilder.Entity<ActivityLog>().HasIndex(x => x.CreatedAt);
+            modelBuilder.Entity<ActivityLog>().HasIndex(x => new { x.ActorType, x.ActorId, x.CreatedAt });
+            modelBuilder.Entity<ActivityLog>().HasIndex(x => new { x.Action, x.CreatedAt });
         }
 
         public DbSet<ReferralForm> ReferralForms { get; set; }
@@ -143,6 +149,7 @@
         public DbSet<MobileConfig> MobileConfigs { get; set; }
         public DbSet<Quote> Quotes { get; set; }
         public DbSet<DictionaryItem> DictionaryItems { get; set; }
+        public DbSet<ActivityLog> ActivityLogs { get; set; }
     }
 
 }
