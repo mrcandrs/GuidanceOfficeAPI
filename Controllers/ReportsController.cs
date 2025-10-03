@@ -32,5 +32,71 @@ namespace GuidanceOfficeAPI.Controllers
 
             return Ok(new { total, pending, approved, rejected, completed, byDay });
         }
+
+        // Add these methods to your existing ReportsController.cs
+
+        [HttpGet("referrals")]
+        public async Task<IActionResult> Referrals([FromQuery] DateTime? from, [FromQuery] DateTime? to)
+        {
+            var q = _ctx.ReferralForms.AsQueryable();
+            if (from.HasValue) q = q.Where(r => r.SubmissionDate >= from.Value);
+            if (to.HasValue) q = q.Where(r => r.SubmissionDate <= to.Value);
+
+            var total = await q.CountAsync();
+            var byPriority = await q
+                .GroupBy(r => r.PriorityLevel ?? "Unknown")
+                .Select(g => new { priority = g.Key, count = g.Count() })
+                .ToListAsync();
+
+            var byCategory = await q
+                .GroupBy(r => r.AreasOfConcern ?? "Unknown")
+                .Select(g => new { category = g.Key, count = g.Count() })
+                .ToListAsync();
+
+            return Ok(new { total, byPriority, byCategory });
+        }
+
+        [HttpGet("notes")]
+        public async Task<IActionResult> Notes([FromQuery] DateTime? from, [FromQuery] DateTime? to)
+        {
+            var q = _ctx.GuidanceNotes.AsQueryable();
+            if (from.HasValue) q = q.Where(n => n.InterviewDate >= from.Value);
+            if (to.HasValue) q = q.Where(n => n.InterviewDate <= to.Value);
+
+            var total = await q.CountAsync();
+
+            // Group by counseling nature
+            var byNature = new List<object>
+    {
+        new { type = "Academic", count = await q.CountAsync(n => n.IsAcademic) },
+        new { type = "Behavioral", count = await q.CountAsync(n => n.IsBehavioral) },
+        new { type = "Personal", count = await q.CountAsync(n => n.IsPersonal) },
+        new { type = "Social", count = await q.CountAsync(n => n.IsSocial) },
+        new { type = "Career", count = await q.CountAsync(n => n.IsCareer) }
+    };
+
+            return Ok(new { total, byNature });
+        }
+
+        [HttpGet("forms-completion")]
+        public async Task<IActionResult> FormsCompletion([FromQuery] DateTime? from, [FromQuery] DateTime? to)
+        {
+            var totalStudents = await _ctx.Students.CountAsync();
+
+            var consentForms = await _ctx.ConsentForms.CountAsync();
+            var inventoryForms = await _ctx.InventoryForms.CountAsync();
+            var careerForms = await _ctx.CareerPlanningForms.CountAsync();
+
+            return Ok(new
+            {
+                totalStudents,
+                consentForms,
+                inventoryForms,
+                careerForms,
+                consentCompletionRate = totalStudents > 0 ? (double)consentForms / totalStudents * 100 : 0,
+                inventoryCompletionRate = totalStudents > 0 ? (double)inventoryForms / totalStudents * 100 : 0,
+                careerCompletionRate = totalStudents > 0 ? (double)careerForms / totalStudents * 100 : 0
+            });
+        }
     }
 }

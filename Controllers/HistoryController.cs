@@ -1,4 +1,6 @@
 ﻿using GuidanceOfficeAPI.Data;
+using GuidanceOfficeAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,36 +8,61 @@ namespace GuidanceOfficeAPI.Controllers
 {
     [ApiController]
     [Route("api/history")]
+    [Authorize] // Requires authentication
     public class HistoryController : ControllerBase
     {
-        private readonly AppDbContext _ctx;
-        public HistoryController(AppDbContext ctx) { _ctx = ctx; }
+        private readonly AppDbContext _context;
 
+        public HistoryController(AppDbContext context)
+        {
+            _context = context;
+        }
+
+        // GET: api/history
         [HttpGet]
-        public async Task<IActionResult> Get(
+        public async Task<IActionResult> GetActivityLogs(
             [FromQuery] string? entityType,
-            [FromQuery] long? entityId,
             [FromQuery] string? action,
-            [FromQuery] string? actorType,
-            [FromQuery] long? actorId,
             [FromQuery] DateTime? from,
             [FromQuery] DateTime? to,
+            [FromQuery] string? actorType,
             [FromQuery] int page = 1,
             [FromQuery] int pageSize = 20)
         {
-            var q = _ctx.ActivityLogs.AsQueryable();
-            if (!string.IsNullOrWhiteSpace(entityType)) q = q.Where(x => x.EntityType == entityType);
-            if (entityId.HasValue) q = q.Where(x => x.EntityId == entityId);
-            if (!string.IsNullOrWhiteSpace(action)) q = q.Where(x => x.Action == action);
-            if (!string.IsNullOrWhiteSpace(actorType)) q = q.Where(x => x.ActorType == actorType);
-            if (actorId.HasValue) q = q.Where(x => x.ActorId == actorId);
-            if (from.HasValue) q = q.Where(x => x.CreatedAt >= from.Value);
-            if (to.HasValue) q = q.Where(x => x.CreatedAt <= to.Value);
+            IQueryable<ActivityLog> query = _context.ActivityLogs;
 
-            q = q.OrderByDescending(x => x.CreatedAt);
-            var total = await q.CountAsync();
-            var items = await q.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
-            return Ok(new { total, page, pageSize, items });
+            if (!string.IsNullOrEmpty(entityType))
+                query = query.Where(x => x.EntityType == entityType);
+
+            if (!string.IsNullOrEmpty(action))
+                query = query.Where(x => x.Action == action);
+
+            if (from.HasValue)
+                query = query.Where(x => x.CreatedAt >= from.Value);
+
+            if (to.HasValue)
+                query = query.Where(x => x.CreatedAt <= to.Value.AddDays(1));
+
+            if (!string.IsNullOrEmpty(actorType))
+                query = query.Where(x => x.ActorType == actorType);
+
+            query = query.OrderByDescending(x => x.CreatedAt);
+
+            var totalItems = await query.CountAsync();
+
+            var logs = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return Ok(new
+            {
+                items = logs,
+                totalItems,
+                totalPages = (int)Math.Ceiling((double)totalItems / pageSize),
+                currentPage = page,
+                pageSize
+            });
         }
     }
 }
