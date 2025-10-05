@@ -26,6 +26,9 @@ namespace GuidanceOfficeAPI.Controllers
             [FromQuery] DateTime? from,
             [FromQuery] DateTime? to,
             [FromQuery] string? actorType,
+            [FromQuery] string? search,            // NEW
+            [FromQuery] long? entityId = null,     // optional
+            [FromQuery] long? actorId = null,      // optional
             [FromQuery] int page = 1,
             [FromQuery] int pageSize = 20)
         {
@@ -45,6 +48,20 @@ namespace GuidanceOfficeAPI.Controllers
 
             if (!string.IsNullOrEmpty(actorType))
                 query = query.Where(x => x.ActorType == actorType);
+
+            if (entityId.HasValue)
+                query = query.Where(x => x.EntityId == entityId.Value);
+
+            if (actorId.HasValue)
+                query = query.Where(x => x.ActorId == actorId.Value);
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                var s = search.Trim();
+                query = query.Where(x =>
+                    x.DetailsJson != null &&
+                    EF.Functions.Like(x.DetailsJson, "%" + s + "%"));
+            }
 
             query = query.OrderByDescending(x => x.CreatedAt);
 
