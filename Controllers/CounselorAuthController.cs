@@ -32,6 +32,8 @@ namespace GuidanceOfficeAPI.Controllers
             try
             {
                 Console.WriteLine($"Login attempt for {dto.Email}");
+                Console.WriteLine($"DeviceId: '{dto.DeviceId}'");
+                Console.WriteLine($"SessionId: '{dto.SessionId}'");
 
                 var counselor = await _context.Counselors
                     .FirstOrDefaultAsync(c => c.Email == dto.Email);
@@ -42,26 +44,32 @@ namespace GuidanceOfficeAPI.Controllers
                     return Unauthorized(new { message = "Invalid email or password." });
                 }
 
+                Console.WriteLine($"Found counselor with ID: {counselor.CounselorId}");
+
                 if (counselor.Password != dto.Password)
                 {
                     Console.WriteLine("Invalid password.");
                     return Unauthorized(new { message = "Invalid email or password." });
                 }
 
-                // Invalidate all other sessions for this counselor
-                if (!string.IsNullOrEmpty(dto.DeviceId))
+                // ✅ FIXED: Invalidate all other sessions for this counselor, regardless of device
+                // This will invalidate sessions from other tabs on the same device AND other devices
+                if (!string.IsNullOrEmpty(dto.SessionId))
                 {
                     var otherSessions = await _context.CounselorSessions
                         .Where(s => s.CounselorId == counselor.CounselorId &&
-                                   s.DeviceId != dto.DeviceId &&
+                                   s.SessionIdentifier != dto.SessionId && // ✅ Use SessionIdentifier instead of DeviceId
                                    s.IsActive)
                         .ToListAsync();
+
+                    Console.WriteLine($"Found {otherSessions.Count} other active sessions to invalidate");
 
                     foreach (var session in otherSessions)
                     {
                         session.IsActive = false;
                         session.InvalidatedAt = DateTime.UtcNow;
-                        session.InvalidationReason = "Logged in on another device";
+                        session.InvalidationReason = "Logged in on another session/device";
+                        Console.WriteLine($"  Invalidating session: SessionId='{session.SessionIdentifier}', DeviceId='{session.DeviceId}'");
                     }
 
                     await _context.SaveChangesAsync();
@@ -83,7 +91,7 @@ namespace GuidanceOfficeAPI.Controllers
 
                     _context.CounselorSessions.Add(newSession);
                     await _context.SaveChangesAsync();
-                    Console.WriteLine($"Created new session for counselor {counselor.CounselorId}");
+                    Console.WriteLine($"Created new session for counselor {counselor.CounselorId} with SessionId: {dto.SessionId}");
                 }
 
                 var claims = new[]
@@ -231,10 +239,10 @@ namespace GuidanceOfficeAPI.Controllers
                     return Unauthorized(new { message = "Invalid counselor authentication" });
                 }
 
-                // Invalidate all other sessions for this counselor except the current one
+                // ✅ FIXED: Invalidate all other sessions for this counselor except the current one
                 var otherSessions = await _context.CounselorSessions
                     .Where(s => s.CounselorId == counselorId &&
-                               s.DeviceId != request.CurrentDeviceId &&
+                               s.SessionIdentifier != request.CurrentSessionId && // ✅ Use SessionIdentifier instead of DeviceId
                                s.IsActive)
                     .ToListAsync();
 
@@ -242,7 +250,7 @@ namespace GuidanceOfficeAPI.Controllers
                 {
                     session.IsActive = false;
                     session.InvalidatedAt = DateTime.UtcNow;
-                    session.InvalidationReason = "Logged in on another device";
+                    session.InvalidationReason = "Logged in on another session/device";
                 }
 
                 await _context.SaveChangesAsync();
@@ -291,5 +299,7 @@ namespace GuidanceOfficeAPI.Controllers
     {
         [Required]
         public string CurrentDeviceId { get; set; }
+        [Required] // ✅ Added this
+        public string CurrentSessionId { get; set; } // ✅ Added this
     }
 }
