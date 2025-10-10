@@ -78,6 +78,187 @@ namespace GuidanceOfficeAPI.Controllers
             return Ok(new { total, byNature });
         }
 
+        [HttpGet("consultations")]
+        public async Task<IActionResult> Consultations([FromQuery] DateTime? from, [FromQuery] DateTime? to)
+        {
+            var q = _ctx.ConsultationForms.AsQueryable();
+            if (from.HasValue) q = q.Where(c => c.CreatedAt >= from.Value);
+            if (to.HasValue) q = q.Where(c => c.CreatedAt <= to.Value);
+
+            var total = await q.CountAsync();
+
+            // Group by status (you might need to add a Status field to ConsultationForm model)
+            // For now, we'll group by date ranges
+            var byMonth = await q
+                .GroupBy(c => new { c.CreatedAt.Year, c.CreatedAt.Month })
+                .Select(g => new {
+                    month = $"{g.Key.Year}-{g.Key.Month:D2}",
+                    count = g.Count()
+                })
+                .OrderBy(x => x.month)
+                .ToListAsync();
+
+            // Group by counselor
+            var byCounselor = await q
+                .Include(c => c.Counselor)
+                .GroupBy(c => c.Counselor.Name ?? "Unknown")
+                .Select(g => new { counselor = g.Key, count = g.Count() })
+                .OrderByDescending(x => x.count)
+                .ToListAsync();
+
+            // Group by grade level
+            var byGradeLevel = await q
+                .GroupBy(c => c.GradeYearLevel ?? "Unknown")
+                .Select(g => new { gradeLevel = g.Key, count = g.Count() })
+                .OrderBy(x => x.gradeLevel)
+                .ToListAsync();
+
+            return Ok(new
+            {
+                total,
+                byMonth,
+                byCounselor,
+                byGradeLevel
+            });
+        }
+
+        [HttpGet("endorsements")]
+        public async Task<IActionResult> Endorsements([FromQuery] DateTime? from, [FromQuery] DateTime? to)
+        {
+            var q = _ctx.EndorsementCustodyForms.AsQueryable();
+            if (from.HasValue) q = q.Where(e => e.CreatedAt >= from.Value);
+            if (to.HasValue) q = q.Where(e => e.CreatedAt <= to.Value);
+
+            var total = await q.CountAsync();
+
+            // Group by month
+            var byMonth = await q
+                .GroupBy(e => new { e.CreatedAt.Year, e.CreatedAt.Month })
+                .Select(g => new {
+                    month = $"{g.Key.Year}-{g.Key.Month:D2}",
+                    count = g.Count()
+                })
+                .OrderBy(x => x.month)
+                .ToListAsync();
+
+            // Group by counselor
+            var byCounselor = await q
+                .Include(e => e.Counselor)
+                .GroupBy(e => e.Counselor.Name ?? "Unknown")
+                .Select(g => new { counselor = g.Key, count = g.Count() })
+                .OrderByDescending(x => x.count)
+                .ToListAsync();
+
+            // Group by endorsed to
+            var byEndorsedTo = await q
+                .GroupBy(e => e.EndorsedTo ?? "Unknown")
+                .Select(g => new { endorsedTo = g.Key, count = g.Count() })
+                .OrderByDescending(x => x.count)
+                .ToListAsync();
+
+            return Ok(new
+            {
+                total,
+                byMonth,
+                byCounselor,
+                byEndorsedTo
+            });
+        }
+
+        [HttpGet("timeslots")]
+        public async Task<IActionResult> TimeSlots([FromQuery] DateTime? from, [FromQuery] DateTime? to)
+        {
+            var q = _ctx.AvailableTimeSlots.AsQueryable();
+            if (from.HasValue) q = q.Where(t => t.CreatedAt >= from.Value);
+            if (to.HasValue) q = q.Where(t => t.CreatedAt <= to.Value);
+
+            var total = await q.CountAsync();
+            var active = await q.CountAsync(t => t.IsActive);
+            var inactive = await q.CountAsync(t => !t.IsActive);
+
+            // Group by month
+            var byMonth = await q
+                .GroupBy(t => new { t.CreatedAt.Year, t.CreatedAt.Month })
+                .Select(g => new {
+                    month = $"{g.Key.Year}-{g.Key.Month:D2}",
+                    count = g.Count()
+                })
+                .OrderBy(x => x.month)
+                .ToListAsync();
+
+            // Group by time slots (morning, afternoon, evening)
+            var allSlots = await q.ToListAsync();
+            var byTimeSlot = allSlots
+                .Select(t => new {
+                    time = t.Time,
+                    isMorning = t.Time.Contains("AM") || (t.Time.Contains(":") && int.Parse(t.Time.Split(':')[0]) < 12),
+                    isAfternoon = t.Time.Contains("PM") && (t.Time.Contains(":") && int.Parse(t.Time.Split(':')[0]) >= 12 && int.Parse(t.Time.Split(':')[0]) < 6),
+                    isEvening = t.Time.Contains("PM") && (t.Time.Contains(":") && int.Parse(t.Time.Split(':')[0]) >= 6)
+                })
+                .GroupBy(t =>
+                    t.isMorning ? "Morning" :
+                    t.isAfternoon ? "Afternoon" :
+                    t.isEvening ? "Evening" : "Unknown")
+                .Select(g => new { timeSlot = g.Key, count = g.Count() })
+                .ToList();
+
+            // Average appointments per slot
+            var avgAppointmentsPerSlot = allSlots.Any() ? allSlots.Average(t => t.CurrentAppointmentCount) : 0;
+
+            return Ok(new
+            {
+                total,
+                active,
+                inactive,
+                byMonth,
+                byTimeSlot,
+                avgAppointmentsPerSlot = Math.Round(avgAppointmentsPerSlot, 2)
+            });
+        }
+
+        [HttpGet("guidancepasses")]
+        public async Task<IActionResult> GuidancePasses([FromQuery] DateTime? from, [FromQuery] DateTime? to)
+        {
+            var q = _ctx.GuidancePasses.AsQueryable();
+            if (from.HasValue) q = q.Where(g => g.IssuedDate >= from.Value);
+            if (to.HasValue) q = q.Where(g => g.IssuedDate <= to.Value);
+
+            var total = await q.CountAsync();
+
+            // Group by month
+            var byMonth = await q
+                .GroupBy(g => new { g.IssuedDate.Year, g.IssuedDate.Month })
+                .Select(g => new {
+                    month = $"{g.Key.Year}-{g.Key.Month:D2}",
+                    count = g.Count()
+                })
+                .OrderBy(x => x.month)
+                .ToListAsync();
+
+            // Group by counselor
+            var byCounselor = await q
+                .Include(g => g.Counselor)
+                .GroupBy(g => g.Counselor.Name ?? "Unknown")
+                .Select(g => new { counselor = g.Key, count = g.Count() })
+                .OrderByDescending(x => x.count)
+                .ToListAsync();
+
+            // Group by appointment status (through the related appointment)
+            var byAppointmentStatus = await q
+                .Include(g => g.Appointment)
+                .GroupBy(g => g.Appointment.Status ?? "Unknown")
+                .Select(g => new { status = g.Key, count = g.Count() })
+                .ToListAsync();
+
+            return Ok(new
+            {
+                total,
+                byMonth,
+                byCounselor,
+                byAppointmentStatus
+            });
+        }
+
         [HttpGet("forms-completion")]
         public async Task<IActionResult> FormsCompletion([FromQuery] DateTime? from, [FromQuery] DateTime? to)
         {
