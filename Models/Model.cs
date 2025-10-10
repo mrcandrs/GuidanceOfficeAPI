@@ -494,10 +494,21 @@ namespace GuidanceOfficeAPI.Models
 
         [Required, MaxLength(255)]
         public string Email { get; set; }
+
+        [Required, MaxLength(255)]
         public string Name { get; set; }
 
         [Required, MaxLength(255)]
         public string Password { get; set; }
+
+        public byte[]? ProfileImage { get; set; } // Profile image as byte array
+
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        public DateTime? LastLogin { get; set; }
+
+        // Navigation properties
+        public virtual ICollection<CounselorSession> Sessions { get; set; } = new List<CounselorSession>();
     }
 
     public class GuidanceNote

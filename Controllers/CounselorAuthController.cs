@@ -52,6 +52,10 @@ namespace GuidanceOfficeAPI.Controllers
                     return Unauthorized(new { message = "Invalid email or password." });
                 }
 
+                // Update last login
+                counselor.LastLogin = DateTime.UtcNow;
+                await _context.SaveChangesAsync();
+
                 // ✅ FIXED: Invalidate all other sessions for this counselor, regardless of device
                 // This will invalidate sessions from other tabs on the same device AND other devices
                 if (!string.IsNullOrEmpty(dto.SessionId))
@@ -121,7 +125,8 @@ namespace GuidanceOfficeAPI.Controllers
                     {
                         id = counselor.CounselorId,
                         name = counselor.Name,
-                        email = counselor.Email
+                        email = counselor.Email,
+                        profileImage = counselor.ProfileImage != null ? Convert.ToBase64String(counselor.ProfileImage) : null
                     }
                 });
             }
@@ -150,6 +155,9 @@ namespace GuidanceOfficeAPI.Controllers
                         id = c.CounselorId,
                         email = c.Email,
                         name = c.Name,
+                        profileImage = c.ProfileImage != null ? Convert.ToBase64String(c.ProfileImage) : null,
+                        createdAt = c.CreatedAt,
+                        lastLogin = c.LastLogin
                     })
                     .FirstOrDefaultAsync();
 
@@ -284,6 +292,157 @@ namespace GuidanceOfficeAPI.Controllers
 
             return Ok(new { message = $"Cleaned up {oldSessions.Count} old sessions" });
         }
+
+        // Profile Management Endpoints
+        [HttpPut("profile")]
+        public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileRequest request)
+        {
+            try
+            {
+                var counselorIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(counselorIdClaim) || !int.TryParse(counselorIdClaim, out int counselorId))
+                {
+                    return Unauthorized(new { message = "Invalid counselor authentication" });
+                }
+
+                var counselor = await _context.Counselors
+                    .FirstOrDefaultAsync(c => c.CounselorId == counselorId);
+
+                if (counselor == null)
+                {
+                    return NotFound(new { message = "Counselor not found" });
+                }
+
+                // Check if email is already taken by another counselor
+                if (request.Email != counselor.Email)
+                {
+                    var existingCounselor = await _context.Counselors
+                        .FirstOrDefaultAsync(c => c.Email == request.Email && c.CounselorId != counselorId);
+
+                    if (existingCounselor != null)
+                    {
+                        return BadRequest(new { message = "Email is already in use by another counselor" });
+                    }
+                }
+
+                // Update counselor information
+                counselor.Name = request.Name;
+                counselor.Email = request.Email;
+
+                await _context.SaveChangesAsync();
+
+                return Ok(new
+                {
+                    id = counselor.CounselorId,
+                    name = counselor.Name,
+                    email = counselor.Email,
+                    profileImage = counselor.ProfileImage != null ? Convert.ToBase64String(counselor.ProfileImage) : null
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error updating profile", error = ex.Message });
+            }
+        }
+
+        [HttpPut("password")]
+        public async Task<IActionResult> UpdatePassword([FromBody] UpdatePasswordRequest request)
+        {
+            try
+            {
+                var counselorIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(counselorIdClaim) || !int.TryParse(counselorIdClaim, out int counselorId))
+                {
+                    return Unauthorized(new { message = "Invalid counselor authentication" });
+                }
+
+                var counselor = await _context.Counselors
+                    .FirstOrDefaultAsync(c => c.CounselorId == counselorId);
+
+                if (counselor == null)
+                {
+                    return NotFound(new { message = "Counselor not found" });
+                }
+
+                // Verify current password
+                if (counselor.Password != request.CurrentPassword)
+                {
+                    return BadRequest(new { message = "Current password is incorrect" });
+                }
+
+                // Update password
+                counselor.Password = request.NewPassword;
+
+                await _context.SaveChangesAsync();
+
+                return Ok(new { message = "Password updated successfully" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error updating password", error = ex.Message });
+            }
+        }
+
+        [HttpPut("photo")]
+        public async Task<IActionResult> UpdatePhoto()
+        {
+            try
+            {
+                var counselorIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(counselorIdClaim) || !int.TryParse(counselorIdClaim, out int counselorId))
+                {
+                    return Unauthorized(new { message = "Invalid counselor authentication" });
+                }
+
+                var counselor = await _context.Counselors
+                    .FirstOrDefaultAsync(c => c.CounselorId == counselorId);
+
+                if (counselor == null)
+                {
+                    return NotFound(new { message = "Counselor not found" });
+                }
+
+                var file = Request.Form.Files.FirstOrDefault();
+                if (file == null)
+                {
+                    return BadRequest(new { message = "No file provided" });
+                }
+
+                // Validate file type
+                if (!file.ContentType.StartsWith("image/"))
+                {
+                    return BadRequest(new { message = "File must be an image" });
+                }
+
+                // Validate file size (5MB limit)
+                if (file.Length > 5 * 1024 * 1024)
+                {
+                    return BadRequest(new { message = "File size must be less than 5MB" });
+                }
+
+                // Convert image to byte array
+                using var memoryStream = new MemoryStream();
+                await file.CopyToAsync(memoryStream);
+                var imageBytes = memoryStream.ToArray();
+
+                // Update counselor photo
+                counselor.ProfileImage = imageBytes;
+
+                await _context.SaveChangesAsync();
+
+                return Ok(new
+                {
+                    id = counselor.CounselorId,
+                    name = counselor.Name,
+                    email = counselor.Email,
+                    profileImage = Convert.ToBase64String(imageBytes)
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error updating photo", error = ex.Message });
+            }
+        }
     }
 
     // Request models
@@ -299,7 +458,29 @@ namespace GuidanceOfficeAPI.Controllers
     {
         [Required]
         public string CurrentDeviceId { get; set; }
-        [Required] // ✅ Added this
-        public string CurrentSessionId { get; set; } // ✅ Added this
+        [Required]
+        public string CurrentSessionId { get; set; }
+    }
+
+    public class UpdateProfileRequest
+    {
+        [Required]
+        [MaxLength(255)]
+        public string Name { get; set; } = string.Empty;
+
+        [Required]
+        [EmailAddress]
+        [MaxLength(255)]
+        public string Email { get; set; } = string.Empty;
+    }
+
+    public class UpdatePasswordRequest
+    {
+        [Required]
+        public string CurrentPassword { get; set; } = string.Empty;
+
+        [Required]
+        [MinLength(6)]
+        public string NewPassword { get; set; } = string.Empty;
     }
 }
