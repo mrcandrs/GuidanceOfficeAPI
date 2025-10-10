@@ -87,39 +87,15 @@ namespace GuidanceOfficeAPI.Controllers
 
             var total = await q.CountAsync();
 
-            // Group by status (you might need to add a Status field to ConsultationForm model)
-            // For now, we'll group by date ranges
-            var byMonth = await q
-                .GroupBy(c => new { c.CreatedAt.Year, c.CreatedAt.Month })
-                .Select(g => new {
-                    month = $"{g.Key.Year}-{g.Key.Month:D2}",
-                    count = g.Count()
-                })
-                .OrderBy(x => x.month)
-                .ToListAsync();
-
-            // Group by counselor
-            var byCounselor = await q
-                .Include(c => c.Counselor)
-                .GroupBy(c => c.Counselor.Name ?? "Unknown")
-                .Select(g => new { counselor = g.Key, count = g.Count() })
-                .OrderByDescending(x => x.count)
-                .ToListAsync();
-
-            // Group by grade level
-            var byGradeLevel = await q
-                .GroupBy(c => c.GradeYearLevel ?? "Unknown")
-                .Select(g => new { gradeLevel = g.Key, count = g.Count() })
-                .OrderBy(x => x.gradeLevel)
-                .ToListAsync();
-
-            return Ok(new
+            // Create byStatus array - since ConsultationForm doesn't have a Status field,
+            // we'll create a simple status based on whether it has remarks or not
+            var byStatus = new List<object>
             {
-                total,
-                byMonth,
-                byCounselor,
-                byGradeLevel
-            });
+                new { status = "Completed", count = await q.CountAsync(c => !string.IsNullOrEmpty(c.Remarks)) },
+                new { status = "In Progress", count = await q.CountAsync(c => string.IsNullOrEmpty(c.Remarks)) }
+            };
+
+            return Ok(new { total, byStatus });
         }
 
         [HttpGet("endorsements")]
@@ -131,38 +107,14 @@ namespace GuidanceOfficeAPI.Controllers
 
             var total = await q.CountAsync();
 
-            // Group by month
-            var byMonth = await q
-                .GroupBy(e => new { e.CreatedAt.Year, e.CreatedAt.Month })
-                .Select(g => new {
-                    month = $"{g.Key.Year}-{g.Key.Month:D2}",
-                    count = g.Count()
-                })
-                .OrderBy(x => x.month)
-                .ToListAsync();
-
-            // Group by counselor
-            var byCounselor = await q
-                .Include(e => e.Counselor)
-                .GroupBy(e => e.Counselor.Name ?? "Unknown")
-                .Select(g => new { counselor = g.Key, count = g.Count() })
-                .OrderByDescending(x => x.count)
-                .ToListAsync();
-
-            // Group by endorsed to
-            var byEndorsedTo = await q
+            // Group by endorsed to (treating this as "type")
+            var byType = await q
                 .GroupBy(e => e.EndorsedTo ?? "Unknown")
-                .Select(g => new { endorsedTo = g.Key, count = g.Count() })
+                .Select(g => new { type = g.Key, count = g.Count() })
                 .OrderByDescending(x => x.count)
                 .ToListAsync();
 
-            return Ok(new
-            {
-                total,
-                byMonth,
-                byCounselor,
-                byEndorsedTo
-            });
+            return Ok(new { total, byType });
         }
 
         [HttpGet("timeslots")]
@@ -176,44 +128,14 @@ namespace GuidanceOfficeAPI.Controllers
             var active = await q.CountAsync(t => t.IsActive);
             var inactive = await q.CountAsync(t => !t.IsActive);
 
-            // Group by month
-            var byMonth = await q
-                .GroupBy(t => new { t.CreatedAt.Year, t.CreatedAt.Month })
-                .Select(g => new {
-                    month = $"{g.Key.Year}-{g.Key.Month:D2}",
-                    count = g.Count()
-                })
-                .OrderBy(x => x.month)
-                .ToListAsync();
-
-            // Group by time slots (morning, afternoon, evening)
-            var allSlots = await q.ToListAsync();
-            var byTimeSlot = allSlots
-                .Select(t => new {
-                    time = t.Time,
-                    isMorning = t.Time.Contains("AM") || (t.Time.Contains(":") && int.Parse(t.Time.Split(':')[0]) < 12),
-                    isAfternoon = t.Time.Contains("PM") && (t.Time.Contains(":") && int.Parse(t.Time.Split(':')[0]) >= 12 && int.Parse(t.Time.Split(':')[0]) < 6),
-                    isEvening = t.Time.Contains("PM") && (t.Time.Contains(":") && int.Parse(t.Time.Split(':')[0]) >= 6)
-                })
-                .GroupBy(t =>
-                    t.isMorning ? "Morning" :
-                    t.isAfternoon ? "Afternoon" :
-                    t.isEvening ? "Evening" : "Unknown")
-                .Select(g => new { timeSlot = g.Key, count = g.Count() })
-                .ToList();
-
-            // Average appointments per slot
-            var avgAppointmentsPerSlot = allSlots.Any() ? allSlots.Average(t => t.CurrentAppointmentCount) : 0;
-
-            return Ok(new
+            // Create byStatus array
+            var byStatus = new List<object>
             {
-                total,
-                active,
-                inactive,
-                byMonth,
-                byTimeSlot,
-                avgAppointmentsPerSlot = Math.Round(avgAppointmentsPerSlot, 2)
-            });
+                new { status = "Active", count = active },
+                new { status = "Inactive", count = inactive }
+            };
+
+            return Ok(new { total, byStatus });
         }
 
         [HttpGet("guidancepasses")]
@@ -225,38 +147,14 @@ namespace GuidanceOfficeAPI.Controllers
 
             var total = await q.CountAsync();
 
-            // Group by month
-            var byMonth = await q
-                .GroupBy(g => new { g.IssuedDate.Year, g.IssuedDate.Month })
-                .Select(g => new {
-                    month = $"{g.Key.Year}-{g.Key.Month:D2}",
-                    count = g.Count()
-                })
-                .OrderBy(x => x.month)
-                .ToListAsync();
-
-            // Group by counselor
-            var byCounselor = await q
-                .Include(g => g.Counselor)
-                .GroupBy(g => g.Counselor.Name ?? "Unknown")
-                .Select(g => new { counselor = g.Key, count = g.Count() })
-                .OrderByDescending(x => x.count)
-                .ToListAsync();
-
             // Group by appointment status (through the related appointment)
-            var byAppointmentStatus = await q
+            var byStatus = await q
                 .Include(g => g.Appointment)
                 .GroupBy(g => g.Appointment.Status ?? "Unknown")
                 .Select(g => new { status = g.Key, count = g.Count() })
                 .ToListAsync();
 
-            return Ok(new
-            {
-                total,
-                byMonth,
-                byCounselor,
-                byAppointmentStatus
-            });
+            return Ok(new { total, byStatus });
         }
 
         [HttpGet("forms-completion")]
