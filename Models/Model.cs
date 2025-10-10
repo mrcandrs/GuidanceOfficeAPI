@@ -708,4 +708,34 @@ namespace GuidanceOfficeAPI.Models
         public string? DetailsJson { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
+
+    public class CounselorSession
+    {
+        [Key]
+        public int Id { get; set; }
+
+        public int CounselorId { get; set; }
+
+        [Required]
+        [MaxLength(100)]
+        public string DeviceId { get; set; }
+
+        [Required]
+        [MaxLength(100)]
+        public string SessionIdentifier { get; set; }
+
+        public DateTime CreatedAt { get; set; }
+
+        public DateTime LastActivity { get; set; }
+
+        public bool IsActive { get; set; }
+
+        public DateTime? InvalidatedAt { get; set; }
+
+        [MaxLength(200)]
+        public string? InvalidationReason { get; set; }
+
+        // Navigation property
+        public virtual Counselor Counselor { get; set; }
+    }
 }

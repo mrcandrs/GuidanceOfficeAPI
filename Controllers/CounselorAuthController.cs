@@ -1,9 +1,11 @@
 ﻿using GuidanceOfficeAPI.Data;
 using GuidanceOfficeAPI.Dtos;
+using GuidanceOfficeAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -46,12 +48,50 @@ namespace GuidanceOfficeAPI.Controllers
                     return Unauthorized(new { message = "Invalid email or password." });
                 }
 
+                // Invalidate all other sessions for this counselor
+                if (!string.IsNullOrEmpty(dto.DeviceId))
+                {
+                    var otherSessions = await _context.CounselorSessions
+                        .Where(s => s.CounselorId == counselor.CounselorId &&
+                                   s.DeviceId != dto.DeviceId &&
+                                   s.IsActive)
+                        .ToListAsync();
+
+                    foreach (var session in otherSessions)
+                    {
+                        session.IsActive = false;
+                        session.InvalidatedAt = DateTime.UtcNow;
+                        session.InvalidationReason = "Logged in on another device";
+                    }
+
+                    await _context.SaveChangesAsync();
+                    Console.WriteLine($"Invalidated {otherSessions.Count} other sessions for counselor {counselor.CounselorId}");
+                }
+
+                // Create new session record
+                if (!string.IsNullOrEmpty(dto.DeviceId) && !string.IsNullOrEmpty(dto.SessionId))
+                {
+                    var newSession = new CounselorSession
+                    {
+                        CounselorId = counselor.CounselorId,
+                        DeviceId = dto.DeviceId,
+                        SessionIdentifier = dto.SessionId,
+                        CreatedAt = DateTime.UtcNow,
+                        LastActivity = DateTime.UtcNow,
+                        IsActive = true
+                    };
+
+                    _context.CounselorSessions.Add(newSession);
+                    await _context.SaveChangesAsync();
+                    Console.WriteLine($"Created new session for counselor {counselor.CounselorId}");
+                }
+
                 var claims = new[]
                 {
-            new Claim(ClaimTypes.NameIdentifier, counselor.CounselorId.ToString()),
-            new Claim(ClaimTypes.Email, counselor.Email),
-            new Claim(ClaimTypes.Name, counselor.Name)
-        };
+                    new Claim(ClaimTypes.NameIdentifier, counselor.CounselorId.ToString()),
+                    new Claim(ClaimTypes.Email, counselor.Email),
+                    new Claim(ClaimTypes.Name, counselor.Name)
+                };
 
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
                 var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -116,5 +156,140 @@ namespace GuidanceOfficeAPI.Controllers
             }
         }
 
+        [HttpPost("validate-session")]
+        public async Task<IActionResult> ValidateSession([FromBody] SessionValidationRequest request)
+        {
+            try
+            {
+                // Get counselor ID from JWT token
+                var counselorIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(counselorIdClaim) || !int.TryParse(counselorIdClaim, out int counselorId))
+                {
+                    return Unauthorized(new { message = "Invalid counselor authentication" });
+                }
+
+                // Check if session exists and is valid
+                var activeSession = await _context.CounselorSessions
+                    .FirstOrDefaultAsync(s =>
+                        s.CounselorId == counselorId &&
+                        s.SessionIdentifier == request.SessionId &&
+                        s.DeviceId == request.DeviceId &&
+                        s.IsActive);
+
+                if (activeSession == null)
+                {
+                    return Ok(new
+                    {
+                        isValid = false,
+                        reason = "Session not found or invalidated"
+                    });
+                }
+
+                // Check if session has expired (older than 30 minutes)
+                var sessionAge = DateTime.UtcNow - activeSession.CreatedAt;
+                if (sessionAge.TotalMinutes > 30)
+                {
+                    // Mark session as inactive
+                    activeSession.IsActive = false;
+                    await _context.SaveChangesAsync();
+
+                    return Ok(new
+                    {
+                        isValid = false,
+                        reason = "Session expired"
+                    });
+                }
+
+                // Update last activity
+                activeSession.LastActivity = DateTime.UtcNow;
+                await _context.SaveChangesAsync();
+
+                return Ok(new
+                {
+                    isValid = true
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    message = "Error validating session",
+                    error = ex.Message
+                });
+            }
+        }
+
+        [HttpPost("invalidate-other-sessions")]
+        public async Task<IActionResult> InvalidateOtherSessions([FromBody] InvalidateSessionsRequest request)
+        {
+            try
+            {
+                // Get counselor ID from JWT token
+                var counselorIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(counselorIdClaim) || !int.TryParse(counselorIdClaim, out int counselorId))
+                {
+                    return Unauthorized(new { message = "Invalid counselor authentication" });
+                }
+
+                // Invalidate all other sessions for this counselor except the current one
+                var otherSessions = await _context.CounselorSessions
+                    .Where(s => s.CounselorId == counselorId &&
+                               s.DeviceId != request.CurrentDeviceId &&
+                               s.IsActive)
+                    .ToListAsync();
+
+                foreach (var session in otherSessions)
+                {
+                    session.IsActive = false;
+                    session.InvalidatedAt = DateTime.UtcNow;
+                    session.InvalidationReason = "Logged in on another device";
+                }
+
+                await _context.SaveChangesAsync();
+
+                return Ok(new
+                {
+                    message = "Other sessions invalidated successfully",
+                    invalidatedCount = otherSessions.Count
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    message = "Error invalidating sessions",
+                    error = ex.Message
+                });
+            }
+        }
+
+        [HttpPost("cleanup-sessions")]
+        public async Task<IActionResult> CleanupOldSessions()
+        {
+            var cutoffDate = DateTime.UtcNow.AddDays(-7);
+            var oldSessions = await _context.CounselorSessions
+                .Where(s => !s.IsActive && s.CreatedAt < cutoffDate)
+                .ToListAsync();
+
+            _context.CounselorSessions.RemoveRange(oldSessions);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = $"Cleaned up {oldSessions.Count} old sessions" });
+        }
+    }
+
+    // Request models
+    public class SessionValidationRequest
+    {
+        [Required]
+        public string SessionId { get; set; }
+        [Required]
+        public string DeviceId { get; set; }
+    }
+
+    public class InvalidateSessionsRequest
+    {
+        [Required]
+        public string CurrentDeviceId { get; set; }
     }
 }
