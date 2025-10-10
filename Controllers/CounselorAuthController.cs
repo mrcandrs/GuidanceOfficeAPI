@@ -443,6 +443,44 @@ namespace GuidanceOfficeAPI.Controllers
                 return StatusCode(500, new { message = "Error updating photo", error = ex.Message });
             }
         }
+
+        [HttpDelete("photo")]
+        public async Task<IActionResult> DeletePhoto()
+        {
+            try
+            {
+                var counselorIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(counselorIdClaim) || !int.TryParse(counselorIdClaim, out int counselorId))
+                {
+                    return Unauthorized(new { message = "Invalid counselor authentication" });
+                }
+
+                var counselor = await _context.Counselors
+                    .FirstOrDefaultAsync(c => c.CounselorId == counselorId);
+
+                if (counselor == null)
+                {
+                    return NotFound(new { message = "Counselor not found" });
+                }
+
+                // Remove profile image
+                counselor.ProfileImage = null;
+
+                await _context.SaveChangesAsync();
+
+                return Ok(new
+                {
+                    id = counselor.CounselorId,
+                    name = counselor.Name,
+                    email = counselor.Email,
+                    profileImage = (string)null
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error deleting photo", error = ex.Message });
+            }
+        }
     }
 
     // Request models
