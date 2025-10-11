@@ -73,7 +73,8 @@ namespace GuidanceOfficeAPI.Controllers
                     .FirstOrDefaultAsync();
 
                 var philippinesNow = GetPhilippinesNow();
-                var cooldownPeriod = TimeSpan.FromHours(24); // 24-hour cooldown
+                //var cooldownPeriod = TimeSpan.FromHours(24); // 24-hour cooldown
+                var cooldownPeriod = TimeSpan.FromSeconds(30); // 30 sec for testing
 
                 if (lastMoodEntry == null)
                 {
