@@ -59,6 +59,71 @@ namespace GuidanceOfficeAPI.Controllers
             }
         }
 
+        // GET: api/moodtracker/cooldown/{studentId}
+        // Check if student can take mood tracker (24-hour cooldown)
+        [HttpGet("cooldown/{studentId}")]
+        public async Task<IActionResult> CheckCooldown(int studentId)
+        {
+            try
+            {
+                // Get the most recent mood tracker entry for this student
+                var lastMoodEntry = await _context.MoodTrackers
+                    .Where(m => m.StudentId == studentId)
+                    .OrderByDescending(m => m.EntryDate)
+                    .FirstOrDefaultAsync();
+
+                var philippinesNow = GetPhilippinesNow();
+                var cooldownPeriod = TimeSpan.FromHours(24); // 24-hour cooldown
+
+                if (lastMoodEntry == null)
+                {
+                    // Student has never taken mood tracker
+                    return Ok(new
+                    {
+                        canTakeMoodTracker = true,
+                        lastMoodTimestamp = 0L,
+                        timeRemaining = 0L,
+                        message = "Mood Tracker available"
+                    });
+                }
+
+                // Convert last entry date to Philippines timezone for comparison
+                var lastEntryPhilippinesTime = TimeZoneInfo.ConvertTimeFromUtc(lastMoodEntry.EntryDate, _philippinesTimeZone);
+                var timeSinceLastEntry = philippinesNow - lastEntryPhilippinesTime;
+
+                if (timeSinceLastEntry >= cooldownPeriod)
+                {
+                    // Cooldown period has passed
+                    return Ok(new
+                    {
+                        canTakeMoodTracker = true,
+                        lastMoodTimestamp = ((DateTimeOffset)lastMoodEntry.EntryDate).ToUnixTimeMilliseconds(),
+                        timeRemaining = 0L,
+                        message = "Mood Tracker available"
+                    });
+                }
+                else
+                {
+                    // Still in cooldown period
+                    var timeRemaining = cooldownPeriod - timeSinceLastEntry;
+                    var hoursRemaining = (int)timeRemaining.TotalHours;
+                    var minutesRemaining = timeRemaining.Minutes;
+
+                    return Ok(new
+                    {
+                        canTakeMoodTracker = false,
+                        lastMoodTimestamp = ((DateTimeOffset)lastMoodEntry.EntryDate).ToUnixTimeMilliseconds(),
+                        timeRemaining = (long)timeRemaining.TotalMilliseconds,
+                        message = $"Mood Tracker available in {hoursRemaining}h {minutesRemaining}m"
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Server error: {ex.Message}");
+            }
+        }
+
         // GET: api/moodtracker/distribution
         [HttpGet("distribution")]
         public async Task<IActionResult> GetMoodDistribution()
