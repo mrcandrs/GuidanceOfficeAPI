@@ -481,6 +481,41 @@ namespace GuidanceOfficeAPI.Controllers
                 return StatusCode(500, new { message = "Error deleting photo", error = ex.Message });
             }
         }
+
+        [HttpPost("forgot-password")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
+        {
+            try
+            {
+                // Find counselor by username (email)
+                var counselor = await _context.Counselors
+                    .FirstOrDefaultAsync(c => c.Email == request.Username);
+
+                if (counselor == null)
+                {
+                    return BadRequest(new { message = "Username not found." });
+                }
+
+                // Validate new password
+                if (string.IsNullOrEmpty(request.NewPassword) || request.NewPassword.Length < 6)
+                {
+                    return BadRequest(new { message = "Password must be at least 6 characters long." });
+                }
+
+                // Update password
+                counselor.Password = request.NewPassword;
+                // Note: You might want to add an UpdatedAt field to your Counselor model if it doesn't exist
+
+                await _context.SaveChangesAsync();
+
+                return Ok(new { message = "Password updated successfully." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Server error", error = ex.Message });
+            }
+        }
     }
 
     // Request models
