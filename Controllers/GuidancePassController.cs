@@ -46,7 +46,8 @@ namespace GuidanceOfficeAPI.Controllers
                 .Include(gp => gp.Counselor)
                 .Include(gp => gp.Appointment)
                 .Where(gp => gp.Appointment.StudentId == studentId
-                             && gp.Appointment.Status.ToLower() == "approved") // added
+                             && (gp.Appointment.Status.ToLower() == "approved" ||
+                                 gp.Appointment.Status.ToLower() == "completed")) // Include completed
                 .OrderByDescending(gp => gp.IssuedDate)
                 .FirstOrDefaultAsync();
 
@@ -63,7 +64,8 @@ namespace GuidanceOfficeAPI.Controllers
             var query = _context.GuidancePasses
                 .Include(gp => gp.Counselor)
                 .Include(gp => gp.Appointment)
-                .Where(gp => gp.Appointment.Status.ToLower() == "approved"); // added
+                .Where(gp => gp.Appointment.Status.ToLower() == "approved" ||
+                             gp.Appointment.Status.ToLower() == "completed"); // Include completed appointments
 
             if (studentId.HasValue)
                 query = query.Where(gp => gp.Appointment.StudentId == studentId.Value);
