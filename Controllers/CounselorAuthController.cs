@@ -488,13 +488,13 @@ namespace GuidanceOfficeAPI.Controllers
         {
             try
             {
-                // Find counselor by username (email)
+                // Find counselor by email
                 var counselor = await _context.Counselors
-                    .FirstOrDefaultAsync(c => c.Email == request.Username);
+                    .FirstOrDefaultAsync(c => c.Email == request.Email);
 
                 if (counselor == null)
                 {
-                    return BadRequest(new { message = "Username not found." });
+                    return BadRequest(new { message = "Email not found." });
                 }
 
                 // Validate new password
@@ -505,7 +505,6 @@ namespace GuidanceOfficeAPI.Controllers
 
                 // Update password
                 counselor.Password = request.NewPassword;
-                // Note: You might want to add an UpdatedAt field to your Counselor model if it doesn't exist
 
                 await _context.SaveChangesAsync();
 
