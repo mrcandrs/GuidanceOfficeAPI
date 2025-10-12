@@ -59,31 +59,44 @@ namespace GuidanceOfficeAPI.Controllers
             {
                 var s = search.Trim().ToLower();
                 query = query.Where(x =>
-                    // Search in EntityType (Record Type column)
+                    // Basic field searches
                     EF.Functions.Like(x.EntityType.ToLower(), "%" + s + "%") ||
-
-                    // Search in Action (Action column)
                     EF.Functions.Like(x.Action.ToLower(), "%" + s + "%") ||
-
-                    // Search in ActorType (Performed By column)
                     EF.Functions.Like(x.ActorType.ToLower(), "%" + s + "%") ||
-
-                    // Search in EntityId (Record Type column - ID numbers)
                     (x.EntityId.HasValue && EF.Functions.Like(x.EntityId.ToString(), "%" + s + "%")) ||
-
-                    // Search in ActorId (Performed By column - ID numbers)
                     (x.ActorId.HasValue && EF.Functions.Like(x.ActorId.ToString(), "%" + s + "%")) ||
 
-                    // Search in DetailsJson (Student names, titles, descriptions)
-                    (x.DetailsJson != null && EF.Functions.Like(x.DetailsJson.ToLower(), "%" + s + "%")) ||
-
-                    // Search in formatted date/time (Date/Time column)
+                    // Enhanced date/time search
+                    EF.Functions.Like(x.CreatedAt.ToString("MM/dd/yyyy, h:mm:ss tt"), "%" + s + "%") ||
+                    EF.Functions.Like(x.CreatedAt.ToString("MM/dd/yyyy"), "%" + s + "%") ||
+                    EF.Functions.Like(x.CreatedAt.ToString("M/d/yyyy"), "%" + s + "%") ||
                     EF.Functions.Like(x.CreatedAt.ToString("MM/dd/yyyy HH:mm:ss"), "%" + s + "%") ||
                     EF.Functions.Like(x.CreatedAt.ToString("MMMM dd, yyyy"), "%" + s + "%") ||
                     EF.Functions.Like(x.CreatedAt.ToString("MMM dd, yyyy"), "%" + s + "%") ||
                     EF.Functions.Like(x.CreatedAt.ToString("yyyy-MM-dd"), "%" + s + "%") ||
                     EF.Functions.Like(x.CreatedAt.ToString("HH:mm"), "%" + s + "%") ||
-                    EF.Functions.Like(x.CreatedAt.ToString("h:mm tt"), "%" + s + "%")
+                    EF.Functions.Like(x.CreatedAt.ToString("h:mm tt"), "%" + s + "%") ||
+                    EF.Functions.Like(x.CreatedAt.ToString("h:mm"), "%" + s + "%") ||
+                    EF.Functions.Like(x.CreatedAt.ToString("h tt"), "%" + s + "%") ||
+                    EF.Functions.Like(x.CreatedAt.ToString("HH:mm:ss"), "%" + s + "%") ||
+
+                    // Enhanced DetailsJson search - parse JSON for specific fields
+                    (x.DetailsJson != null && (
+                        // Raw JSON search (fallback)
+                        EF.Functions.Like(x.DetailsJson.ToLower(), "%" + s + "%") ||
+
+                        // Search for student names in JSON
+                        EF.Functions.Like(x.DetailsJson.ToLower(), "%\"studentName\":\"" + s + "%") ||
+                        EF.Functions.Like(x.DetailsJson.ToLower(), "%\"studentName\": \"" + s + "%") ||
+
+                        // Search for titles in JSON
+                        EF.Functions.Like(x.DetailsJson.ToLower(), "%\"title\":\"" + s + "%") ||
+                        EF.Functions.Like(x.DetailsJson.ToLower(), "%\"title\": \"" + s + "%") ||
+
+                        // Search for descriptions in JSON
+                        EF.Functions.Like(x.DetailsJson.ToLower(), "%\"description\":\"" + s + "%") ||
+                        EF.Functions.Like(x.DetailsJson.ToLower(), "%\"description\": \"" + s + "%")
+                    ))
                 );
             }
 
