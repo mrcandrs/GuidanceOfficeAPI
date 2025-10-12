@@ -57,10 +57,34 @@ namespace GuidanceOfficeAPI.Controllers
 
             if (!string.IsNullOrWhiteSpace(search))
             {
-                var s = search.Trim();
+                var s = search.Trim().ToLower();
                 query = query.Where(x =>
-                    x.DetailsJson != null &&
-                    EF.Functions.Like(x.DetailsJson, "%" + s + "%"));
+                    // Search in EntityType (Record Type column)
+                    EF.Functions.Like(x.EntityType.ToLower(), "%" + s + "%") ||
+
+                    // Search in Action (Action column)
+                    EF.Functions.Like(x.Action.ToLower(), "%" + s + "%") ||
+
+                    // Search in ActorType (Performed By column)
+                    EF.Functions.Like(x.ActorType.ToLower(), "%" + s + "%") ||
+
+                    // Search in EntityId (Record Type column - ID numbers)
+                    (x.EntityId.HasValue && EF.Functions.Like(x.EntityId.ToString(), "%" + s + "%")) ||
+
+                    // Search in ActorId (Performed By column - ID numbers)
+                    (x.ActorId.HasValue && EF.Functions.Like(x.ActorId.ToString(), "%" + s + "%")) ||
+
+                    // Search in DetailsJson (Student names, titles, descriptions)
+                    (x.DetailsJson != null && EF.Functions.Like(x.DetailsJson.ToLower(), "%" + s + "%")) ||
+
+                    // Search in formatted date/time (Date/Time column)
+                    EF.Functions.Like(x.CreatedAt.ToString("MM/dd/yyyy HH:mm:ss"), "%" + s + "%") ||
+                    EF.Functions.Like(x.CreatedAt.ToString("MMMM dd, yyyy"), "%" + s + "%") ||
+                    EF.Functions.Like(x.CreatedAt.ToString("MMM dd, yyyy"), "%" + s + "%") ||
+                    EF.Functions.Like(x.CreatedAt.ToString("yyyy-MM-dd"), "%" + s + "%") ||
+                    EF.Functions.Like(x.CreatedAt.ToString("HH:mm"), "%" + s + "%") ||
+                    EF.Functions.Like(x.CreatedAt.ToString("h:mm tt"), "%" + s + "%")
+                );
             }
 
             query = query.OrderByDescending(x => x.CreatedAt);
