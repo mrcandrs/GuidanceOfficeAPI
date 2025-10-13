@@ -70,6 +70,10 @@
                 .HasIndex(x => x.Code)
                 .IsUnique();
 
+            modelBuilder.Entity<JournalEntry>()
+                .HasIndex(j => new { j.StudentId, j.Date })
+                .IsUnique();
+
             // seed singletons so GET returns a row
             modelBuilder.Entity<TimeSlotDefaults>().HasData(new TimeSlotDefaults
             {
