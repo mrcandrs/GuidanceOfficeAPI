@@ -7,6 +7,7 @@ using System.Globalization;
 using GuidanceOfficeAPI.Data;
 using GuidanceOfficeAPI.Models;
 using GuidanceOfficeAPI.Services;
+using System.Security.Claims;
 
 namespace GuidanceOfficeAPI.Controllers
 {
@@ -21,6 +22,12 @@ namespace GuidanceOfficeAPI.Controllers
         {
             _context = context;
             _activityLogger = activityLogger;
+        }
+
+        private int? GetCurrentCounselorId()
+        {
+            var claim = User.FindFirst(ClaimTypes.NameIdentifier);
+            return int.TryParse(claim?.Value, out var id) ? id : (int?)null;
         }
 
         // GET: api/guidancepass/{id}
@@ -157,6 +164,54 @@ namespace GuidanceOfficeAPI.Controllers
             appointment.UpdatedAt = DateTime.UtcNow;
 
             await _context.SaveChangesAsync();
+
+            // Counselor who performed the action
+            var actorId = GetCurrentCounselorId();
+
+            // 1) Log appointment completion
+            await _activityLogger.LogAsync(
+                "appointment",
+                appointment.AppointmentId,
+                "completed",
+                "counselor",
+                actorId,
+                new
+                {
+                    studentId = appointment.StudentId,
+                    date = appointment.Date,
+                    time = appointment.Time,
+                    previousStatus = "approved",
+                    newStatus = "completed"
+                }
+            );
+
+            // 2) Log against the related guidance pass (this is what makes it show under Guidance Passes in History)
+            var pass = await _context.GuidancePasses
+                .FirstOrDefaultAsync(gp => gp.AppointmentId == appointmentId);
+
+            if (pass != null)
+            {
+                var passActorId = actorId ?? pass.CounselorId; // fallback if token didn’t have the claim
+
+                await _activityLogger.LogAsync(
+                    "guidancepass",
+                    pass.PassId,
+                    "completed",
+                    "counselor",
+                    passActorId,
+                    new
+                    {
+                        appointmentId = appointment.AppointmentId,
+                        passId = pass.PassId,
+                        studentId = appointment.StudentId
+                    }
+                );
+            }
+
+            // Optional: also log the timeslot change
+            // if (timeSlot != null) await _activityLogger.LogAsync("timeslot", timeSlot.Id, "deactivated", "system", null, new { date = timeSlot.Date, time = timeSlot.Time });
+
+
             return Ok(new { message = "Time slot deactivated and appointment marked completed." });
         }
 
