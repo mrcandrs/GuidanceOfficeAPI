@@ -11,11 +11,19 @@ namespace GuidanceOfficeAPI.Controllers
     [Authorize] // Requires authentication
     public class HistoryController : ControllerBase
     {
+        private readonly TimeZoneInfo _manilaTimeZone;
         private readonly AppDbContext _context;
 
         public HistoryController(AppDbContext context)
         {
             _context = context;
+            _manilaTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Asia/Manila");
+        }
+
+        // Helper method to convert UTC to Manila time
+        private DateTime ConvertToManilaTime(DateTime utcDateTime)
+        {
+            return TimeZoneInfo.ConvertTimeFromUtc(utcDateTime, _manilaTimeZone);
         }
 
         // GET: api/history
@@ -109,9 +117,22 @@ namespace GuidanceOfficeAPI.Controllers
                 .Take(pageSize)
                 .ToListAsync();
 
+            // Convert timestamps to Manila time before returning
+            var logsWithManilaTime = logs.Select(log => new
+            {
+                log.ActivityId,
+                log.EntityType,
+                log.EntityId,
+                log.Action,
+                log.ActorType,
+                log.ActorId,
+                log.DetailsJson,
+                CreatedAt = ConvertToManilaTime(log.CreatedAt) // Convert to Manila time
+            }).ToList();
+
             return Ok(new
             {
-                items = logs,
+                items = logsWithManilaTime,
                 totalItems,
                 totalPages = (int)Math.Ceiling((double)totalItems / pageSize),
                 currentPage = page,
