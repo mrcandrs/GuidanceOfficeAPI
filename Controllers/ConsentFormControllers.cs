@@ -89,64 +89,61 @@ namespace GuidanceOfficeAPI.Controllers
                 using (var pdf = new PdfDocument(reader, writer))
                 {
                     var acroForm = PdfAcroForm.GetAcroForm(pdf, true);
+                    if (acroForm == null) return BadRequest("The PDF template does not contain fillable form fields.");
 
-                    if (acroForm == null)
-                    {
-                        return BadRequest("The PDF template does not contain fillable form fields.");
-                    }
-
-                    // For iText 7.2.5 - this method works
                     var fields = acroForm.GetFormFields();
 
-                    // Create font for filling fields
+                    // Ensure text renders
+                    acroForm.SetNeedAppearances(true);
+                    acroForm.SetGenerateAppearance(true);
+
+                    // Declare font BEFORE using it anywhere
                     var font = PdfFontFactory.CreateFont(StandardFonts.HELVETICA, PdfEncodings.WINANSI);
-                    acroForm.SetGenerateAppearance(true); 
 
-                    // Helper function to safely set field values
-                    void TrySet(string fieldName, string value, float size = 11f)
+                    // Optional: log actual field names so you can align LibreOffice names
+                    foreach (var kv in fields)
                     {
-                        if (fields.TryGetValue(fieldName, out var field) && !string.IsNullOrWhiteSpace(value))
+                        Console.WriteLine($"PDF field: '{kv.Key}' type={kv.Value.GetFormType()}");
+                    }
+
+                    // Helper: try aliases and then case-insensitive match
+                    void TrySetAny(string[] names, string value, float size = 11f)
+                    {
+                        if (string.IsNullOrWhiteSpace(value)) return;
+
+                        foreach (var n in names)
                         {
-                            try
+                            if (fields.TryGetValue(n, out var f))
                             {
-                                field.SetValue(value, font, size);
+                                try { f.SetValue(value, font, size); return; } catch { /* try next */ }
                             }
-                            catch (Exception ex)
-                            {
-                                // Log the error but continue processing other fields
-                                Console.WriteLine($"Error setting field {fieldName}: {ex.Message}");
-                            }
+                        }
+
+                        var match = fields.Keys.FirstOrDefault(k => string.Equals(k, names[0], StringComparison.OrdinalIgnoreCase));
+                        if (match != null)
+                        {
+                            try { fields[match].SetValue(value, font, size); } catch { }
                         }
                     }
 
-                    // Set field values
-                    TrySet("StudentName", studentName);
-                    TrySet("StudentNumber", studentNumber);
-                    TrySet("ParentName", parentName);
-                    TrySet("CounselorName", counselorName);
-                    TrySet("SignedDate", signedDate);
-                    TrySet("StudentId", studentId);
-                    TrySet("ConsentId", consentId);
+                    // Fill fields (add/adjust aliases to match your LibreOffice field names)
+                    TrySetAny(new[] { "StudentName", "Student_Name", "Name_Student", "Text_StudentName" }, studentName);
+                    TrySetAny(new[] { "StudentNumber", "StudentNo", "Student_Number" }, studentNumber);
+                    TrySetAny(new[] { "ParentName", "Parent_Guardian_Name" }, parentName);
+                    TrySetAny(new[] { "CounselorName", "Counselor_Name" }, counselorName);
+                    TrySetAny(new[] { "SignedDate", "DateSigned", "Date_Signed" }, signedDate);
+                    TrySetAny(new[] { "StudentId", "Student_ID" }, studentId);
+                    TrySetAny(new[] { "ConsentId", "Consent_ID" }, consentId);
 
-                    // Handle checkbox for agreement
-                    if (fields.TryGetValue("IsAgreed", out var agreeField))
+                    // Checkbox: pick real "on" value from appearance states (compatible with your iText)
+                    if (fields.TryGetValue("IsAgreed", out var agreeField) && agreeField is PdfButtonFormField cb)
                     {
-                        try
-                        {
-                            if (agreeField is PdfButtonFormField checkbox)
-                            {
-                                // Try different possible values for the checkbox
-                                var checkValue = form.IsAgreed ? "Yes" : "Off";
-                                checkbox.SetValue(checkValue);
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            Console.WriteLine($"Error setting checkbox: {ex.Message}");
-                        }
+                        var states = cb.GetAppearanceStates(); // e.g. ["Off","Yes"] or ["Off","On"]
+                        var onValue = states?.FirstOrDefault(s => !string.Equals(s, "Off", StringComparison.OrdinalIgnoreCase)) ?? "Yes";
+                        try { cb.SetValue(form.IsAgreed ? onValue : "Off"); } catch { }
                     }
 
-                    // 4) Flatten the form to make it non-editable
+                    // Make non-editable
                     acroForm.FlattenFields();
                 }
 
