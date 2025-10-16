@@ -218,13 +218,16 @@ namespace GuidanceOfficeAPI.Controllers
                 TrySetText(fields, font, "ProgramExpectation", form.ProgramExpectation);
                 TrySetText(fields, font, "EnrollmentReason", form.EnrollmentReason);
                 TrySetText(fields, font, "FutureVision", form.FutureVision);
-                TrySetText(fields, font, "WhoseChoice", form.ProgramChoiceReason);
+                // PDF uses ProgramChoiceReason (not WhoseChoice)
+                TrySetText(fields, font, "ProgramChoiceReason", form.ProgramChoiceReason);
                 // optional extra texts if your template has these fields
                 TrySetText(fields, font, "EmploymentNature", form.EmploymentNature);
                 TrySetText(fields, font, "CurrentWorkNature", form.CurrentWorkNature);
 
                 // ---------- Radios (Option Buttons with Group name + Reference value) ----------
-                SetRadio(fields, "FirstChoice", NormalizeYesNo(form.FirstChoice)); // FirstChoice stored as string
+                // Template exposes FirstChoice_Yes checkbox instead of a radio group
+                var firstChoiceYes = string.Equals(NormalizeYesNo(form.FirstChoice), "Yes", StringComparison.OrdinalIgnoreCase);
+                SetCheckbox(fields, "FirstChoice_Yes", firstChoiceYes);
 
                 // ---------- Main plan (radio group preferred; checkbox fallback) ----------
                 var mainPlan = form.MainPlan; // ContinueSchooling|GetEmployed|ContinueCurrentWork|GoIntoBusiness
