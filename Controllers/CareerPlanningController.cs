@@ -232,14 +232,15 @@ namespace GuidanceOfficeAPI.Controllers
                 var firstChoiceYes = string.Equals(NormalizeYesNo(form.FirstChoice), "Yes", StringComparison.OrdinalIgnoreCase);
                 SetCheckbox(fields, "FirstChoice_Yes", firstChoiceYes);
 
-                // "Did you choose this program?" → checkbox DidChooseProgram_Yes
-                // Heuristic: if ProgramChoiceReason is empty, assume "Yes"; otherwise "No"
+                // "Did you choose this program?" → option buttons DidChooseProgram_Yes / DidChooseProgram_No
+                // Heuristic: if ProgramChoiceReason is empty or "Me", assume Yes; otherwise No
                 var didChooseYes = string.IsNullOrWhiteSpace(form.ProgramChoiceReason) ||
                                    string.Equals(form.ProgramChoiceReason.Trim(), "Me", StringComparison.OrdinalIgnoreCase);
                 SetCheckbox(fields, "DidChooseProgram_Yes", didChooseYes);
+                SetCheckbox(fields, "DidChooseProgram_No", !didChooseYes);
 
                 // ---------- Main plan (radio group preferred; checkbox fallback) ----------
-                var mainPlan = form.MainPlan; // ContinueSchooling|GetEmployed|ContinueCurrentWork|GoIntoBusiness
+                var mainPlan = NormalizeMainPlan(form.MainPlan); // ContinueSchooling|GetEmployed|ContinueCurrentWork|GoIntoBusiness
                 // Try to tick the appropriate single-choice checkbox if they exist in the template
                 SetSingleChoiceCheckboxes(fields, "ContinueSchooling", "GetEmployed", "ContinueCurrentWork", "GoIntoBusiness", mainPlan);
 
@@ -262,12 +263,17 @@ namespace GuidanceOfficeAPI.Controllers
 
                 // Optional footer
                 // AssessedBy = Counselor Name (ephemeral: from auth claims; no DB change)
-                var counselorName =
-                    User?.FindFirst("name")?.Value ??           // OIDC standard
-                    User?.FindFirst("given_name")?.Value + " " + User?.FindFirst("family_name")?.Value ??
-                    User?.FindFirst("preferred_username")?.Value ??
-                    User?.Identity?.Name ??
-                    "";
+                var counselorNameQuery = Request?.Query["assessedBy"].ToString();
+                var counselorName = !string.IsNullOrWhiteSpace(counselorNameQuery)
+                    ? counselorNameQuery
+                    : (
+                        User?.FindFirst("name")?.Value ??
+                        (User?.FindFirst("given_name")?.Value + " " + User?.FindFirst("family_name")?.Value) ??
+                        User?.FindFirst("preferred_username")?.Value ??
+                        User?.FindFirst(System.Security.Claims.ClaimTypes.Name)?.Value ??
+                        User?.Identity?.Name ??
+                        "Guidance Counselor"
+                    );
 
                 TrySetText(fields, font, "AssessedBy", counselorName?.Trim());
                 TrySetText(fields, font, "DateSigned", form.SubmittedAt.ToString("MMMM dd, yyyy"));
@@ -318,6 +324,18 @@ namespace GuidanceOfficeAPI.Controllers
             var s = v.Trim().ToLowerInvariant();
             if (s is "yes" or "y" or "true" or "1") return "Yes";
             if (s is "no" or "n" or "false" or "0") return "No";
+            return v;
+        }
+
+        private static string NormalizeMainPlan(string? v)
+        {
+            if (string.IsNullOrWhiteSpace(v)) return "";
+            var s = v.Trim().Replace(" ", string.Empty, StringComparison.OrdinalIgnoreCase);
+            // Accept variants with spaces or different casing
+            if (s.Equals("continueschooling", StringComparison.OrdinalIgnoreCase)) return "ContinueSchooling";
+            if (s.Equals("getemployed", StringComparison.OrdinalIgnoreCase)) return "GetEmployed";
+            if (s.Equals("continuewithcurrentwork", StringComparison.OrdinalIgnoreCase) || s.Equals("continuecurrentwork", StringComparison.OrdinalIgnoreCase)) return "ContinueCurrentWork";
+            if (s.Equals("gointobusiness", StringComparison.OrdinalIgnoreCase)) return "GoIntoBusiness";
             return v;
         }
     }
