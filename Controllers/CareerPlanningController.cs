@@ -196,6 +196,7 @@ namespace GuidanceOfficeAPI.Controllers
                 TrySetText(fields, font, "Section", form.Section);
                 TrySetText(fields, font, "ContactNumber", form.ContactNumber);
                 TrySetText(fields, font, "Birthday", form.Birthday);
+                TrySetText(fields, font, "Gender", form.Gender);
 
                 TrySetText(fields, font, "TopValue1", form.TopValue1);
                 TrySetText(fields, font, "TopValue2", form.TopValue2);
@@ -220,6 +221,8 @@ namespace GuidanceOfficeAPI.Controllers
                 TrySetText(fields, font, "FutureVision", form.FutureVision);
                 // PDF uses ProgramChoiceReason (not WhoseChoice)
                 TrySetText(fields, font, "ProgramChoiceReason", form.ProgramChoiceReason);
+                // Signature name field at bottom (duplicate name in template)
+                TrySetText(fields, font, "FullName_2", form.FullName);
                 // optional extra texts if your template has these fields
                 TrySetText(fields, font, "EmploymentNature", form.EmploymentNature);
                 TrySetText(fields, font, "CurrentWorkNature", form.CurrentWorkNature);
@@ -229,12 +232,16 @@ namespace GuidanceOfficeAPI.Controllers
                 var firstChoiceYes = string.Equals(NormalizeYesNo(form.FirstChoice), "Yes", StringComparison.OrdinalIgnoreCase);
                 SetCheckbox(fields, "FirstChoice_Yes", firstChoiceYes);
 
+                // "Did you choose this program?" → checkbox DidChooseProgram_Yes
+                // Heuristic: if ProgramChoiceReason is empty, assume "Yes"; otherwise "No"
+                var didChooseYes = string.IsNullOrWhiteSpace(form.ProgramChoiceReason) ||
+                                   string.Equals(form.ProgramChoiceReason.Trim(), "Me", StringComparison.OrdinalIgnoreCase);
+                SetCheckbox(fields, "DidChooseProgram_Yes", didChooseYes);
+
                 // ---------- Main plan (radio group preferred; checkbox fallback) ----------
                 var mainPlan = form.MainPlan; // ContinueSchooling|GetEmployed|ContinueCurrentWork|GoIntoBusiness
-                if (!SetRadio(fields, "MainPlan", mainPlan))
-                {
-                    SetSingleChoiceCheckboxes(fields, "ContinueSchooling", "GetEmployed", "ContinueCurrentWork", "GoIntoBusiness", mainPlan);
-                }
+                // Try to tick the appropriate single-choice checkbox if they exist in the template
+                SetSingleChoiceCheckboxes(fields, "ContinueSchooling", "GetEmployed", "ContinueCurrentWork", "GoIntoBusiness", mainPlan);
 
                 // ---------- Sub-options (independent checkboxes + texts) ----------
                 SetCheckbox(fields, "AnotherCourse", form.AnotherCourse);
