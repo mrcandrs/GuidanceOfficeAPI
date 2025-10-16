@@ -239,14 +239,18 @@ namespace GuidanceOfficeAPI.Controllers
                 // Prefer radio group if present
                 if (!SetRadio(fields, "DidChooseProgram", didChooseYes ? "Yes" : "No"))
                 {
-                    SetCheckbox(fields, "DidChooseProgram_Yes", didChooseYes);
-                    SetCheckbox(fields, "DidChooseProgram_No", !didChooseYes);
+                    SetOptionAcrossVariants(fields, "DidChooseProgram_Yes", didChooseYes);
+                    SetOptionAcrossVariants(fields, "DidChooseProgram_No", !didChooseYes);
                 }
 
                 // ---------- Main plan (radio group preferred; checkbox fallback) ----------
                 var mainPlan = NormalizeMainPlan(form.MainPlan); // ContinueSchooling|GetEmployed|ContinueCurrentWork|GoIntoBusiness
                 // Try to tick the appropriate single-choice checkbox if they exist in the template
-                SetSingleChoiceCheckboxes(fields, "ContinueSchooling", "GetEmployed", "ContinueCurrentWork", "GoIntoBusiness", mainPlan);
+                var allMainPlans = new[] { "ContinueSchooling", "GetEmployed", "ContinueCurrentWork", "GoIntoBusiness" };
+                foreach (var mp in allMainPlans)
+                {
+                    SetOptionAcrossVariants(fields, mp, string.Equals(mp, mainPlan, StringComparison.OrdinalIgnoreCase));
+                }
 
                 // ---------- Sub-options (independent checkboxes + texts) ----------
                 SetCheckbox(fields, "AnotherCourse", form.AnotherCourse);
@@ -342,6 +346,17 @@ namespace GuidanceOfficeAPI.Controllers
             if (s.Equals("continuewithcurrentwork", StringComparison.OrdinalIgnoreCase) || s.Equals("continuecurrentwork", StringComparison.OrdinalIgnoreCase)) return "ContinueCurrentWork";
             if (s.Equals("gointobusiness", StringComparison.OrdinalIgnoreCase)) return "GoIntoBusiness";
             return v;
+        }
+
+        // Robustly set an option that may be duplicated as name, name.1, name.2, ...
+        private static void SetOptionAcrossVariants(IDictionary<string, PdfFormField> fields, string baseName, bool on)
+        {
+            var candidates = new List<string> { baseName };
+            for (int i = 1; i <= 6; i++) candidates.Add(baseName + "." + i);
+            foreach (var candidate in candidates)
+            {
+                SetCheckbox(fields, candidate, on);
+            }
         }
     }
 
