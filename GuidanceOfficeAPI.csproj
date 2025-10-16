@@ -23,4 +23,10 @@
 	<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.25" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="wwwroot\pdf-templates\CareerPlanningFormTemplate.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>
