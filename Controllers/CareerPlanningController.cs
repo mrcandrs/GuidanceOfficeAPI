@@ -128,9 +128,9 @@ namespace GuidanceOfficeAPI.Controllers
 
                 // ---------- Text ----------
                 TrySetText(fields, font, "StudentNo", form.StudentNo);
-                TrySetText(fields, font, "Name", form.FullName);
+                TrySetText(fields, font, "FullName", form.FullName);
                 TrySetText(fields, font, "Program", form.Program);
-                TrySetText(fields, font, "GradeYearSection", form.GradeYear);
+                TrySetText(fields, font, "GradeYear", form.GradeYear);
                 TrySetText(fields, font, "Section", form.Section);
                 TrySetText(fields, font, "ContactNumber", form.ContactNumber);
                 TrySetText(fields, font, "Birthday", form.Birthday);
