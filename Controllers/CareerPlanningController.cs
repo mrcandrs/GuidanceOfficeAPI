@@ -10,6 +10,9 @@ using iText.Forms;
 using iText.IO.Font.Constants;
 using iText.Kernel.Font;
 using iText.Kernel.Pdf;
+using System;
+using System.Collections.Generic;
+using System.Reflection;
 
 namespace GuidanceOfficeAPI.Controllers
 {
@@ -22,6 +25,65 @@ namespace GuidanceOfficeAPI.Controllers
         public CareerPlanningController(AppDbContext context)
         {
             _context = context;
+        }
+
+        // GET: api/careerplanning/debug/field-names
+        [HttpGet("debug/field-names")]
+        public IActionResult GetDebugFieldNames()
+        {
+            // 1) Model properties via reflection
+            var modelProps = typeof(CareerPlanningForm)
+                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .Select(p => new { p.Name, Type = p.PropertyType.Name })
+                .OrderBy(p => p.Name)
+                .ToArray();
+
+            // 2) Field names the controller tries to populate (hard-coded list)
+            var controllerFieldNames = new[]
+            {
+                // text fields
+                "StudentNo","FullName","Program","GradeYear","Section","ContactNumber","Birthday",
+                "TopValue1","TopValue2","TopValue3",
+                "TopStrength1","TopStrength2","TopStrength3",
+                "TopSkill1","TopSkill2","TopSkill3",
+                "TopInterest1","TopInterest2","TopInterest3",
+                "ProgramChoice","OriginalChoice","ProgramExpectation","EnrollmentReason","FutureVision",
+                "WhoseChoice","EmploymentNature","CurrentWorkNature",
+                // radios / groups
+                "FirstChoice","MainPlan",
+                // checkboxes + extra texts
+                "AnotherCourse","MastersProgram","CourseField",
+                "LocalEmployment","WorkAbroad","NatureJob1",
+                "AimPromotion","CurrentWorkAbroad","NatureJob2",
+                "BusinessNature",
+                // footer (optional)
+                "AssessedBy","DateSigned"
+            };
+
+            // 3) Actual PDF field names discovered from the template (if available)
+            var templatePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "pdf-templates", "CareerPlanningFormTemplate.pdf");
+            string[] pdfFieldNames;
+            if (System.IO.File.Exists(templatePath))
+            {
+                using var reader = new PdfReader(templatePath);
+                using var pdfDoc = new PdfDocument(reader);
+                var acro = PdfAcroForm.GetAcroForm(pdfDoc, false);
+                var fields = acro?.GetFormFields();
+                pdfFieldNames = fields?.Keys?.OrderBy(k => k).ToArray() ?? Array.Empty<string>();
+            }
+            else
+            {
+                pdfFieldNames = Array.Empty<string>();
+            }
+
+            return Ok(new
+            {
+                modelProperties = modelProps,
+                controllerFields = controllerFieldNames,
+                pdfFields = pdfFieldNames,
+                templateFound = System.IO.File.Exists(templatePath),
+                templatePath
+            });
         }
 
         // GET: api/careerplanning/5

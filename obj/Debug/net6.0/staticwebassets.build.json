@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "UbZwdLB9JEtoE9bEws4RaZPYeXJDIEpVZaANRUpUQoo=",
+  "Hash": "2LeJEEMHTu+yAXp4Bt5/vSgerbBUhuryGpP1ojMHYjs=",
   "Source": "GuidanceOfficeAPI",
   "BasePath": "_content/GuidanceOfficeAPI",
   "Mode": "Default",
@@ -17,6 +17,27 @@
   ],
   "Assets": [
     {
+      "Identity": "C:\\Users\\Windows 10\\source\\repos\\GuidanceOfficeAPI\\wwwroot\\pdf-templates\\CareerPlanningFormTemplate.pdf",
+      "SourceId": "GuidanceOfficeAPI",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Windows 10\\source\\repos\\GuidanceOfficeAPI\\wwwroot\\",
+      "BasePath": "_content/GuidanceOfficeAPI",
+      "RelativePath": "pdf-templates/CareerPlanningFormTemplate#[.{fingerprint}]?.pdf",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "4f4vam34lr",
+      "Integrity": "ILqXgAxeqydAKVk3Ilt/GNg1cmb/pj71iHIvmnI+jgU=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\pdf-templates\\CareerPlanningFormTemplate.pdf"
+    },
+    {
       "Identity": "C:\\Users\\Windows 10\\source\\repos\\GuidanceOfficeAPI\\wwwroot\\pdf-templates\\ConsentFormTemplate.pdf",
       "SourceId": "GuidanceOfficeAPI",
       "SourceType": "Discovered",
@@ -31,14 +52,141 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "qi151t4d4r",
-      "Integrity": "DrSomd6Oc3j02TtMiwSIzaPUpJQ5vgnW7QxjB3snHWI=",
+      "Fingerprint": "95knogoi04",
+      "Integrity": "Q+ID9uJFcsfki4vleXrkIVVt6UMw8gEC9E0yZf3KVPA=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\pdf-templates\\ConsentFormTemplate.pdf"
     }
   ],
   "Endpoints": [
+    {
+      "Route": "pdf-templates/CareerPlanningFormTemplate.4f4vam34lr.pdf",
+      "AssetFile": "C:\\Users\\Windows 10\\source\\repos\\GuidanceOfficeAPI\\wwwroot\\pdf-templates\\CareerPlanningFormTemplate.pdf",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "215927"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/pdf"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"ILqXgAxeqydAKVk3Ilt/GNg1cmb/pj71iHIvmnI+jgU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 16 Oct 2025 18:21:05 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "4f4vam34lr"
+        },
+        {
+          "Name": "label",
+          "Value": "pdf-templates/CareerPlanningFormTemplate.pdf"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-ILqXgAxeqydAKVk3Ilt/GNg1cmb/pj71iHIvmnI+jgU="
+        }
+      ]
+    },
+    {
+      "Route": "pdf-templates/CareerPlanningFormTemplate.pdf",
+      "AssetFile": "C:\\Users\\Windows 10\\source\\repos\\GuidanceOfficeAPI\\wwwroot\\pdf-templates\\CareerPlanningFormTemplate.pdf",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "215927"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/pdf"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"ILqXgAxeqydAKVk3Ilt/GNg1cmb/pj71iHIvmnI+jgU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 16 Oct 2025 18:21:05 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-ILqXgAxeqydAKVk3Ilt/GNg1cmb/pj71iHIvmnI+jgU="
+        }
+      ]
+    },
+    {
+      "Route": "pdf-templates/ConsentFormTemplate.95knogoi04.pdf",
+      "AssetFile": "C:\\Users\\Windows 10\\source\\repos\\GuidanceOfficeAPI\\wwwroot\\pdf-templates\\ConsentFormTemplate.pdf",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "133335"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/pdf"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Q+ID9uJFcsfki4vleXrkIVVt6UMw8gEC9E0yZf3KVPA=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 15 Oct 2025 20:17:57 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "95knogoi04"
+        },
+        {
+          "Name": "label",
+          "Value": "pdf-templates/ConsentFormTemplate.pdf"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-Q+ID9uJFcsfki4vleXrkIVVt6UMw8gEC9E0yZf3KVPA="
+        }
+      ]
+    },
     {
       "Route": "pdf-templates/ConsentFormTemplate.pdf",
       "AssetFile": "C:\\Users\\Windows 10\\source\\repos\\GuidanceOfficeAPI\\wwwroot\\pdf-templates\\ConsentFormTemplate.pdf",
@@ -50,7 +198,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "131476"
+          "Value": "133335"
         },
         {
           "Name": "Content-Type",
@@ -58,11 +206,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"DrSomd6Oc3j02TtMiwSIzaPUpJQ5vgnW7QxjB3snHWI=\""
+          "Value": "\"Q+ID9uJFcsfki4vleXrkIVVt6UMw8gEC9E0yZf3KVPA=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 04 Sep 2025 03:31:37 GMT"
+          "Value": "Wed, 15 Oct 2025 20:17:57 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -72,52 +220,7 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-DrSomd6Oc3j02TtMiwSIzaPUpJQ5vgnW7QxjB3snHWI="
-        }
-      ]
-    },
-    {
-      "Route": "pdf-templates/ConsentFormTemplate.qi151t4d4r.pdf",
-      "AssetFile": "C:\\Users\\Windows 10\\source\\repos\\GuidanceOfficeAPI\\wwwroot\\pdf-templates\\ConsentFormTemplate.pdf",
-      "Selectors": [],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "131476"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "application/pdf"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"DrSomd6Oc3j02TtMiwSIzaPUpJQ5vgnW7QxjB3snHWI=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Thu, 04 Sep 2025 03:31:37 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "max-age=31536000, immutable"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "fingerprint",
-          "Value": "qi151t4d4r"
-        },
-        {
-          "Name": "label",
-          "Value": "pdf-templates/ConsentFormTemplate.pdf"
-        },
-        {
-          "Name": "integrity",
-          "Value": "sha256-DrSomd6Oc3j02TtMiwSIzaPUpJQ5vgnW7QxjB3snHWI="
+          "Value": "sha256-Q+ID9uJFcsfki4vleXrkIVVt6UMw8gEC9E0yZf3KVPA="
         }
       ]
     }

@@ -3,6 +3,133 @@
   "ManifestType": "Build",
   "Endpoints": [
     {
+      "Route": "pdf-templates/CareerPlanningFormTemplate.4f4vam34lr.pdf",
+      "AssetFile": "pdf-templates/CareerPlanningFormTemplate.pdf",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "215927"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/pdf"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"ILqXgAxeqydAKVk3Ilt/GNg1cmb/pj71iHIvmnI+jgU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 16 Oct 2025 18:21:05 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "4f4vam34lr"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-ILqXgAxeqydAKVk3Ilt/GNg1cmb/pj71iHIvmnI+jgU="
+        },
+        {
+          "Name": "label",
+          "Value": "pdf-templates/CareerPlanningFormTemplate.pdf"
+        }
+      ]
+    },
+    {
+      "Route": "pdf-templates/CareerPlanningFormTemplate.pdf",
+      "AssetFile": "pdf-templates/CareerPlanningFormTemplate.pdf",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "215927"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/pdf"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"ILqXgAxeqydAKVk3Ilt/GNg1cmb/pj71iHIvmnI+jgU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 16 Oct 2025 18:21:05 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-ILqXgAxeqydAKVk3Ilt/GNg1cmb/pj71iHIvmnI+jgU="
+        }
+      ]
+    },
+    {
+      "Route": "pdf-templates/ConsentFormTemplate.95knogoi04.pdf",
+      "AssetFile": "pdf-templates/ConsentFormTemplate.pdf",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "133335"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/pdf"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Q+ID9uJFcsfki4vleXrkIVVt6UMw8gEC9E0yZf3KVPA=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 15 Oct 2025 20:17:57 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "95knogoi04"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-Q+ID9uJFcsfki4vleXrkIVVt6UMw8gEC9E0yZf3KVPA="
+        },
+        {
+          "Name": "label",
+          "Value": "pdf-templates/ConsentFormTemplate.pdf"
+        }
+      ]
+    },
+    {
       "Route": "pdf-templates/ConsentFormTemplate.pdf",
       "AssetFile": "pdf-templates/ConsentFormTemplate.pdf",
       "Selectors": [],
@@ -17,7 +144,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "131476"
+          "Value": "133335"
         },
         {
           "Name": "Content-Type",
@@ -25,62 +152,17 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"DrSomd6Oc3j02TtMiwSIzaPUpJQ5vgnW7QxjB3snHWI=\""
+          "Value": "\"Q+ID9uJFcsfki4vleXrkIVVt6UMw8gEC9E0yZf3KVPA=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 04 Sep 2025 03:31:37 GMT"
+          "Value": "Wed, 15 Oct 2025 20:17:57 GMT"
         }
       ],
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-DrSomd6Oc3j02TtMiwSIzaPUpJQ5vgnW7QxjB3snHWI="
-        }
-      ]
-    },
-    {
-      "Route": "pdf-templates/ConsentFormTemplate.qi151t4d4r.pdf",
-      "AssetFile": "pdf-templates/ConsentFormTemplate.pdf",
-      "Selectors": [],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "max-age=31536000, immutable"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "131476"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "application/pdf"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"DrSomd6Oc3j02TtMiwSIzaPUpJQ5vgnW7QxjB3snHWI=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Thu, 04 Sep 2025 03:31:37 GMT"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "fingerprint",
-          "Value": "qi151t4d4r"
-        },
-        {
-          "Name": "integrity",
-          "Value": "sha256-DrSomd6Oc3j02TtMiwSIzaPUpJQ5vgnW7QxjB3snHWI="
-        },
-        {
-          "Name": "label",
-          "Value": "pdf-templates/ConsentFormTemplate.pdf"
+          "Value": "sha256-Q+ID9uJFcsfki4vleXrkIVVt6UMw8gEC9E0yZf3KVPA="
         }
       ]
     }

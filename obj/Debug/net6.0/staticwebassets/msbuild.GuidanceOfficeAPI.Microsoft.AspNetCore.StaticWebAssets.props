@@ -1,5 +1,23 @@
 ﻿<Project>
   <ItemGroup>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\pdf-templates\CareerPlanningFormTemplate.pdf'))">
+      <SourceType>Package</SourceType>
+      <SourceId>GuidanceOfficeAPI</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/GuidanceOfficeAPI</BasePath>
+      <RelativePath>pdf-templates/CareerPlanningFormTemplate.pdf</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>4f4vam34lr</Fingerprint>
+      <Integrity>ILqXgAxeqydAKVk3Ilt/GNg1cmb/pj71iHIvmnI+jgU=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\pdf-templates\CareerPlanningFormTemplate.pdf'))</OriginalItemSpec>
+    </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\pdf-templates\ConsentFormTemplate.pdf'))">
       <SourceType>Package</SourceType>
       <SourceId>GuidanceOfficeAPI</SourceId>
@@ -12,8 +30,8 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>qi151t4d4r</Fingerprint>
-      <Integrity>DrSomd6Oc3j02TtMiwSIzaPUpJQ5vgnW7QxjB3snHWI=</Integrity>
+      <Fingerprint>95knogoi04</Fingerprint>
+      <Integrity>Q+ID9uJFcsfki4vleXrkIVVt6UMw8gEC9E0yZf3KVPA=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\pdf-templates\ConsentFormTemplate.pdf'))</OriginalItemSpec>

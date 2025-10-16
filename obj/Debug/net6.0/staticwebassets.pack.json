@@ -1,6 +1,10 @@
 {
   "Files": [
     {
+      "Id": "C:\\Users\\Windows 10\\source\\repos\\GuidanceOfficeAPI\\wwwroot\\pdf-templates\\CareerPlanningFormTemplate.pdf",
+      "PackagePath": "staticwebassets\\pdf-templates\\CareerPlanningFormTemplate.pdf"
+    },
+    {
       "Id": "C:\\Users\\Windows 10\\source\\repos\\GuidanceOfficeAPI\\wwwroot\\pdf-templates\\ConsentFormTemplate.pdf",
       "PackagePath": "staticwebassets\\pdf-templates\\ConsentFormTemplate.pdf"
     },

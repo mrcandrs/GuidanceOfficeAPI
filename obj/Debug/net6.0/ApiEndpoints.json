@@ -1,5 +1,194 @@
 [
   {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.AvailableTimeSlotController",
+    "Method": "GetAvailableTimeSlots",
+    "RelativePath": "api/AvailableTimeSlot",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.AvailableTimeSlotController",
+    "Method": "CreateAvailableTimeSlot",
+    "RelativePath": "api/AvailableTimeSlot",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "GuidanceOfficeAPI.Controllers.AvailableTimeSlotRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.AvailableTimeSlotController",
+    "Method": "UpdateAvailableTimeSlot",
+    "RelativePath": "api/AvailableTimeSlot/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "GuidanceOfficeAPI.Controllers.AvailableTimeSlotRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.AvailableTimeSlotController",
+    "Method": "DeleteAvailableTimeSlot",
+    "RelativePath": "api/AvailableTimeSlot/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.AvailableTimeSlotController",
+    "Method": "GetTimeSlotDetails",
+    "RelativePath": "api/AvailableTimeSlot/{id}/details",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.AvailableTimeSlotController",
+    "Method": "SafeDeleteTimeSlot",
+    "RelativePath": "api/AvailableTimeSlot/{id}/safe-delete",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.AvailableTimeSlotController",
+    "Method": "ToggleTimeSlot",
+    "RelativePath": "api/AvailableTimeSlot/{id}/toggle",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.AvailableTimeSlotController",
+    "Method": "GetAllTimeSlotsForAdmin",
+    "RelativePath": "api/AvailableTimeSlot/admin/all-slots",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.AvailableTimeSlotController",
+    "Method": "GetAvailableSlotsForStudents",
+    "RelativePath": "api/AvailableTimeSlot/available-for-students",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.AvailableTimeSlotController",
+    "Method": "GetAvailableSlotsForStudentsByDate",
+    "RelativePath": "api/AvailableTimeSlot/available-for-students/date/{date}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "date",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.AvailableTimeSlotController",
+    "Method": "CreateBulkTimeSlots",
+    "RelativePath": "api/AvailableTimeSlot/bulk",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "GuidanceOfficeAPI.Controllers.BulkTimeSlotRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.AvailableTimeSlotController",
+    "Method": "GetAvailableTimeSlotsByDate",
+    "RelativePath": "api/AvailableTimeSlot/date/{date}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "date",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.AvailableTimeSlotController",
+    "Method": "GetAvailableTimeSlotsWithCounts",
+    "RelativePath": "api/AvailableTimeSlot/with-counts",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "GuidanceOfficeAPI.Controllers.CareerPlanningController",
     "Method": "GetCareerPlanningForm",
     "RelativePath": "api/CareerPlanning/{studentId}",
@@ -44,6 +233,32 @@
         "IsRequired": true
       }
     ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.CareerPlanningController",
+    "Method": "GetCareerPlanningPdf",
+    "RelativePath": "api/CareerPlanning/{studentId}/pdf",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "studentId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.CareerPlanningController",
+    "Method": "GetDebugFieldNames",
+    "RelativePath": "api/CareerPlanning/debug/field-names",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
     "ReturnTypes": []
   },
   {
@@ -265,6 +480,183 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.ConsentFormsController",
+    "Method": "GetConsentFormPdf",
+    "RelativePath": "api/consentform/{id}/pdf",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.ConsultationConferenceController",
+    "Method": "GetConsultationConferenceForms",
+    "RelativePath": "api/consultation-conference",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[GuidanceOfficeAPI.Dtos.ConsultationConferenceFormDto, GuidanceOfficeAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.ConsultationConferenceController",
+    "Method": "CreateConsultationConferenceForm",
+    "RelativePath": "api/consultation-conference",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "createDto",
+        "Type": "GuidanceOfficeAPI.Dtos.CreateConsultationConferenceFormDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "GuidanceOfficeAPI.Dtos.ConsultationConferenceFormDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.ConsultationConferenceController",
+    "Method": "GetConsultationConferenceForm",
+    "RelativePath": "api/consultation-conference/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "GuidanceOfficeAPI.Dtos.ConsultationConferenceFormDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.ConsultationConferenceController",
+    "Method": "UpdateConsultationConferenceForm",
+    "RelativePath": "api/consultation-conference/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "updateDto",
+        "Type": "GuidanceOfficeAPI.Dtos.UpdateConsultationConferenceFormDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.ConsultationConferenceController",
+    "Method": "DeleteConsultationConferenceForm",
+    "RelativePath": "api/consultation-conference/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.ConsultationConferenceController",
+    "Method": "GetCurrentCounselorDetails",
+    "RelativePath": "api/consultation-conference/current-counselor",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.ConsultationConferenceController",
+    "Method": "GetStudentDetailsFromCareerPlan",
+    "RelativePath": "api/consultation-conference/student-details/{studentId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "studentId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.ConsultationConferenceController",
+    "Method": "GetConsultationConferenceFormsByStudent",
+    "RelativePath": "api/consultation-conference/student/{studentId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "studentId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[GuidanceOfficeAPI.Dtos.ConsultationConferenceFormDto, GuidanceOfficeAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "GuidanceOfficeAPI.Controllers.CrudController\u00601[[GuidanceOfficeAPI.Models.ConsultationForm, GuidanceOfficeAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
     "Method": "GetAll",
     "RelativePath": "api/ConsultationForm",
@@ -481,6 +873,303 @@
       }
     ],
     "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.CounselorAuthController",
+    "Method": "CleanupOldSessions",
+    "RelativePath": "api/counselor/cleanup-sessions",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.CounselorAuthController",
+    "Method": "ForgotPassword",
+    "RelativePath": "api/counselor/forgot-password",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "GuidanceOfficeAPI.Dtos.ForgotPasswordRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.CounselorAuthController",
+    "Method": "InvalidateOtherSessions",
+    "RelativePath": "api/counselor/invalidate-other-sessions",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "GuidanceOfficeAPI.Controllers.InvalidateSessionsRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.CounselorAuthController",
+    "Method": "Login",
+    "RelativePath": "api/counselor/login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "GuidanceOfficeAPI.Dtos.CounselorLoginDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.CounselorAuthController",
+    "Method": "GetCurrentCounselor",
+    "RelativePath": "api/counselor/me",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.CounselorAuthController",
+    "Method": "UpdatePassword",
+    "RelativePath": "api/counselor/password",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "GuidanceOfficeAPI.Controllers.UpdatePasswordRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.CounselorAuthController",
+    "Method": "UpdatePhoto",
+    "RelativePath": "api/counselor/photo",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.CounselorAuthController",
+    "Method": "DeletePhoto",
+    "RelativePath": "api/counselor/photo",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.CounselorAuthController",
+    "Method": "UpdateProfile",
+    "RelativePath": "api/counselor/profile",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "GuidanceOfficeAPI.Controllers.UpdateProfileRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.CounselorAuthController",
+    "Method": "ValidateSession",
+    "RelativePath": "api/counselor/validate-session",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "GuidanceOfficeAPI.Controllers.SessionValidationRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.EndorsementCustodyController",
+    "Method": "GetEndorsementCustodyForms",
+    "RelativePath": "api/endorsement-custody",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[GuidanceOfficeAPI.Dtos.EndorsementCustodyFormDto, GuidanceOfficeAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.EndorsementCustodyController",
+    "Method": "CreateEndorsementCustodyForm",
+    "RelativePath": "api/endorsement-custody",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "createDto",
+        "Type": "GuidanceOfficeAPI.Dtos.CreateEndorsementCustodyFormDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "GuidanceOfficeAPI.Dtos.EndorsementCustodyFormDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.EndorsementCustodyController",
+    "Method": "GetEndorsementCustodyForm",
+    "RelativePath": "api/endorsement-custody/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "GuidanceOfficeAPI.Dtos.EndorsementCustodyFormDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.EndorsementCustodyController",
+    "Method": "UpdateEndorsementCustodyForm",
+    "RelativePath": "api/endorsement-custody/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "updateDto",
+        "Type": "GuidanceOfficeAPI.Dtos.UpdateEndorsementCustodyFormDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.EndorsementCustodyController",
+    "Method": "DeleteEndorsementCustodyForm",
+    "RelativePath": "api/endorsement-custody/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.EndorsementCustodyController",
+    "Method": "GetCurrentCounselorDetails",
+    "RelativePath": "api/endorsement-custody/current-counselor",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.EndorsementCustodyController",
+    "Method": "GetStudentDetailsFromCareerPlan",
+    "RelativePath": "api/endorsement-custody/student-details/{studentId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "studentId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.EndorsementCustodyController",
+    "Method": "GetEndorsementCustodyFormsByStudent",
+    "RelativePath": "api/endorsement-custody/student/{studentId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "studentId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[GuidanceOfficeAPI.Dtos.EndorsementCustodyFormDto, GuidanceOfficeAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "GuidanceOfficeAPI.Controllers.CrudController\u00601[[GuidanceOfficeAPI.Models.EndorsementCustodyForm, GuidanceOfficeAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
@@ -717,6 +1406,167 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.GuidanceNotesController",
+    "Method": "GetGuidanceNotes",
+    "RelativePath": "api/guidance-notes",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[GuidanceOfficeAPI.Dtos.GuidanceNoteDto, GuidanceOfficeAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.GuidanceNotesController",
+    "Method": "CreateGuidanceNote",
+    "RelativePath": "api/guidance-notes",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "createDto",
+        "Type": "GuidanceOfficeAPI.Dtos.CreateGuidanceNoteDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "GuidanceOfficeAPI.Dtos.GuidanceNoteDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.GuidanceNotesController",
+    "Method": "GetGuidanceNote",
+    "RelativePath": "api/guidance-notes/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "GuidanceOfficeAPI.Dtos.GuidanceNoteDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.GuidanceNotesController",
+    "Method": "UpdateGuidanceNote",
+    "RelativePath": "api/guidance-notes/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "updateDto",
+        "Type": "GuidanceOfficeAPI.Dtos.UpdateGuidanceNoteDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.GuidanceNotesController",
+    "Method": "DeleteGuidanceNote",
+    "RelativePath": "api/guidance-notes/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.GuidanceNotesController",
+    "Method": "GetCurrentCounselorDetails",
+    "RelativePath": "api/guidance-notes/current-counselor",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.GuidanceNotesController",
+    "Method": "GetStudentDetailsForGuidanceNote",
+    "RelativePath": "api/guidance-notes/student-details/{studentId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "studentId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.GuidanceNotesController",
+    "Method": "GetGuidanceNotesByStudent",
+    "RelativePath": "api/guidance-notes/student/{studentId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "studentId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[GuidanceOfficeAPI.Dtos.GuidanceNoteDto, GuidanceOfficeAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "GuidanceOfficeAPI.Controllers.GuidanceAppointmentController",
     "Method": "PostAppointment",
     "RelativePath": "api/GuidanceAppointment",
@@ -730,6 +1580,182 @@
         "IsRequired": true
       }
     ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.GuidanceAppointmentController",
+    "Method": "GetAppointmentById",
+    "RelativePath": "api/GuidanceAppointment/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.GuidanceAppointmentController",
+    "Method": "ApproveAppointment",
+    "RelativePath": "api/GuidanceAppointment/{id}/approve",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.GuidanceAppointmentController",
+    "Method": "RejectAppointment",
+    "RelativePath": "api/GuidanceAppointment/{id}/reject",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "GuidanceOfficeAPI.Controllers.RejectAppointmentRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.GuidanceAppointmentController",
+    "Method": "UpdateAppointmentStatus",
+    "RelativePath": "api/GuidanceAppointment/{id}/status",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "GuidanceOfficeAPI.Controllers.StatusUpdateRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.GuidanceAppointmentController",
+    "Method": "GetActivitySummary",
+    "RelativePath": "api/GuidanceAppointment/activity-summary",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.GuidanceAppointmentController",
+    "Method": "GetAllAppointments",
+    "RelativePath": "api/GuidanceAppointment/all-appointments",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.GuidanceAppointmentController",
+    "Method": "GetApprovedAppointments",
+    "RelativePath": "api/GuidanceAppointment/approved-appointments",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.GuidanceAppointmentController",
+    "Method": "GetApprovedAppointmentsBySlot",
+    "RelativePath": "api/GuidanceAppointment/approved-by-slot/{slotId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "slotId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.GuidanceAppointmentController",
+    "Method": "GetPendingAppointments",
+    "RelativePath": "api/GuidanceAppointment/pending-appointments",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.GuidanceAppointmentController",
+    "Method": "GetRecentActivity",
+    "RelativePath": "api/GuidanceAppointment/recent-activity",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.GuidanceAppointmentController",
+    "Method": "GetRejectedAppointments",
+    "RelativePath": "api/GuidanceAppointment/rejected-appointments",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.GuidanceAppointmentController",
+    "Method": "GetStudentAppointments",
+    "RelativePath": "api/GuidanceAppointment/student/{studentId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "studentId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.GuidanceAppointmentController",
+    "Method": "SyncAppointmentCounts",
+    "RelativePath": "api/GuidanceAppointment/sync-appointment-counts",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
     "ReturnTypes": []
   },
   {
@@ -842,13 +1868,19 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "GuidanceOfficeAPI.Controllers.CrudController\u00601[[GuidanceOfficeAPI.Models.GuidancePass, GuidanceOfficeAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-    "Method": "GetAll",
+    "ContainingType": "GuidanceOfficeAPI.Controllers.GuidancePassController",
+    "Method": "GetGuidancePasses",
     "RelativePath": "api/GuidancePass",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "studentId",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
     "ReturnTypes": [
       {
         "Type": "System.Collections.Generic.IEnumerable\u00601[[GuidanceOfficeAPI.Models.GuidancePass, GuidanceOfficeAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
@@ -862,16 +1894,16 @@
     ]
   },
   {
-    "ContainingType": "GuidanceOfficeAPI.Controllers.CrudController\u00601[[GuidanceOfficeAPI.Models.GuidancePass, GuidanceOfficeAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-    "Method": "Create",
+    "ContainingType": "GuidanceOfficeAPI.Controllers.GuidancePassController",
+    "Method": "CreateGuidancePass",
     "RelativePath": "api/GuidancePass",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "item",
-        "Type": "GuidanceOfficeAPI.Models.GuidancePass",
+        "Name": "request",
+        "Type": "GuidanceOfficeAPI.Controllers.CreateGuidancePassRequest",
         "IsRequired": true
       }
     ],
@@ -888,8 +1920,8 @@
     ]
   },
   {
-    "ContainingType": "GuidanceOfficeAPI.Controllers.CrudController\u00601[[GuidanceOfficeAPI.Models.GuidancePass, GuidanceOfficeAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-    "Method": "Get",
+    "ContainingType": "GuidanceOfficeAPI.Controllers.GuidancePassController",
+    "Method": "GetGuidancePass",
     "RelativePath": "api/GuidancePass/{id}",
     "HttpMethod": "GET",
     "IsController": true,
@@ -914,147 +1946,104 @@
     ]
   },
   {
-    "ContainingType": "GuidanceOfficeAPI.Controllers.CrudController\u00601[[GuidanceOfficeAPI.Models.GuidancePass, GuidanceOfficeAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-    "Method": "Update",
-    "RelativePath": "api/GuidancePass/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      },
-      {
-        "Name": "item",
-        "Type": "GuidanceOfficeAPI.Models.GuidancePass",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "GuidanceOfficeAPI.Controllers.CrudController\u00601[[GuidanceOfficeAPI.Models.GuidancePass, GuidanceOfficeAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-    "Method": "Delete",
-    "RelativePath": "api/GuidancePass/{id}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "GuidanceOfficeAPI.Controllers.CrudController\u00601[[GuidanceOfficeAPI.Models.InitialAssessmentForm, GuidanceOfficeAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-    "Method": "GetAll",
-    "RelativePath": "api/InitialAssessmentForm",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[GuidanceOfficeAPI.Models.InitialAssessmentForm, GuidanceOfficeAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "GuidanceOfficeAPI.Controllers.CrudController\u00601[[GuidanceOfficeAPI.Models.InitialAssessmentForm, GuidanceOfficeAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-    "Method": "Create",
-    "RelativePath": "api/InitialAssessmentForm",
+    "ContainingType": "GuidanceOfficeAPI.Controllers.GuidancePassController",
+    "Method": "DeactivateSlotForAppointment",
+    "RelativePath": "api/GuidancePass/deactivate-slot/{appointmentId}",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "item",
-        "Type": "GuidanceOfficeAPI.Models.InitialAssessmentForm",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "GuidanceOfficeAPI.Models.InitialAssessmentForm",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "GuidanceOfficeAPI.Controllers.CrudController\u00601[[GuidanceOfficeAPI.Models.InitialAssessmentForm, GuidanceOfficeAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-    "Method": "Get",
-    "RelativePath": "api/InitialAssessmentForm/{id}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
+        "Name": "appointmentId",
         "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "GuidanceOfficeAPI.Models.InitialAssessmentForm",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "GuidanceOfficeAPI.Controllers.CrudController\u00601[[GuidanceOfficeAPI.Models.InitialAssessmentForm, GuidanceOfficeAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-    "Method": "Update",
-    "RelativePath": "api/InitialAssessmentForm/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      },
-      {
-        "Name": "item",
-        "Type": "GuidanceOfficeAPI.Models.InitialAssessmentForm",
         "IsRequired": true
       }
     ],
     "ReturnTypes": []
   },
   {
-    "ContainingType": "GuidanceOfficeAPI.Controllers.CrudController\u00601[[GuidanceOfficeAPI.Models.InitialAssessmentForm, GuidanceOfficeAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-    "Method": "Delete",
-    "RelativePath": "api/InitialAssessmentForm/{id}",
-    "HttpMethod": "DELETE",
+    "ContainingType": "GuidanceOfficeAPI.Controllers.GuidancePassController",
+    "Method": "GetGuidancePassByStudent",
+    "RelativePath": "api/GuidancePass/student/{studentId}",
+    "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "id",
+        "Name": "studentId",
         "Type": "System.Int32",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "GuidanceOfficeAPI.Models.GuidancePass",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.HistoryController",
+    "Method": "GetActivityLogs",
+    "RelativePath": "api/history",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "entityType",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "action",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "from",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "to",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "actorType",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "search",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "entityId",
+        "Type": "System.Nullable\u00601[[System.Int64, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "actorId",
+        "Type": "System.Nullable\u00601[[System.Int64, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -1156,6 +2145,43 @@
   },
   {
     "ContainingType": "GuidanceOfficeAPI.Controllers.JournalEntryController",
+    "Method": "GetToday",
+    "RelativePath": "api/journalentry/today/{studentId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "studentId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.JournalEntryController",
+    "Method": "UpdateToday",
+    "RelativePath": "api/journalentry/update-today/{studentId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "studentId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "GuidanceOfficeAPI.Dtos.JournalEntryDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.JournalEntryController",
     "Method": "UpdateEntry",
     "RelativePath": "api/journalentry/update/{id}",
     "HttpMethod": "PUT",
@@ -1176,81 +2202,35 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "GuidanceOfficeAPI.Controllers.CrudController\u00601[[GuidanceOfficeAPI.Models.MoodSupport, GuidanceOfficeAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-    "Method": "GetAll",
-    "RelativePath": "api/MoodSupport",
+    "ContainingType": "GuidanceOfficeAPI.Controllers.MaintenanceController",
+    "Method": "GetReasons",
+    "RelativePath": "api/maintenance/appointment-reasons",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[GuidanceOfficeAPI.Models.MoodSupport, GuidanceOfficeAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
+    "ReturnTypes": []
   },
   {
-    "ContainingType": "GuidanceOfficeAPI.Controllers.CrudController\u00601[[GuidanceOfficeAPI.Models.MoodSupport, GuidanceOfficeAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-    "Method": "Create",
-    "RelativePath": "api/MoodSupport",
+    "ContainingType": "GuidanceOfficeAPI.Controllers.MaintenanceController",
+    "Method": "CreateReason",
+    "RelativePath": "api/maintenance/appointment-reasons",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "item",
-        "Type": "GuidanceOfficeAPI.Models.MoodSupport",
+        "Name": "e",
+        "Type": "GuidanceOfficeAPI.Models.AppointmentReason",
         "IsRequired": true
       }
     ],
-    "ReturnTypes": [
-      {
-        "Type": "GuidanceOfficeAPI.Models.MoodSupport",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
+    "ReturnTypes": []
   },
   {
-    "ContainingType": "GuidanceOfficeAPI.Controllers.CrudController\u00601[[GuidanceOfficeAPI.Models.MoodSupport, GuidanceOfficeAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-    "Method": "Get",
-    "RelativePath": "api/MoodSupport/{id}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "GuidanceOfficeAPI.Models.MoodSupport",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "GuidanceOfficeAPI.Controllers.CrudController\u00601[[GuidanceOfficeAPI.Models.MoodSupport, GuidanceOfficeAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-    "Method": "Update",
-    "RelativePath": "api/MoodSupport/{id}",
+    "ContainingType": "GuidanceOfficeAPI.Controllers.MaintenanceController",
+    "Method": "UpdateReason",
+    "RelativePath": "api/maintenance/appointment-reasons/{id}",
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
@@ -1261,17 +2241,17 @@
         "IsRequired": true
       },
       {
-        "Name": "item",
-        "Type": "GuidanceOfficeAPI.Models.MoodSupport",
+        "Name": "e",
+        "Type": "GuidanceOfficeAPI.Models.AppointmentReason",
         "IsRequired": true
       }
     ],
     "ReturnTypes": []
   },
   {
-    "ContainingType": "GuidanceOfficeAPI.Controllers.CrudController\u00601[[GuidanceOfficeAPI.Models.MoodSupport, GuidanceOfficeAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-    "Method": "Delete",
-    "RelativePath": "api/MoodSupport/{id}",
+    "ContainingType": "GuidanceOfficeAPI.Controllers.MaintenanceController",
+    "Method": "DeleteReason",
+    "RelativePath": "api/maintenance/appointment-reasons/{id}",
     "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
@@ -1279,6 +2259,451 @@
       {
         "Name": "id",
         "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.MaintenanceController",
+    "Method": "GetDictionaries",
+    "RelativePath": "api/maintenance/dictionaries",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.MaintenanceController",
+    "Method": "GetDictionaryItems",
+    "RelativePath": "api/maintenance/dictionary-items",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.MaintenanceController",
+    "Method": "CreateDictionaryItem",
+    "RelativePath": "api/maintenance/dictionary-items",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "d",
+        "Type": "GuidanceOfficeAPI.Models.DictionaryItem",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.MaintenanceController",
+    "Method": "UpdateDictionaryItem",
+    "RelativePath": "api/maintenance/dictionary-items/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "d",
+        "Type": "GuidanceOfficeAPI.Models.DictionaryItem",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.MaintenanceController",
+    "Method": "DeleteDictionaryItem",
+    "RelativePath": "api/maintenance/dictionary-items/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.MaintenanceController",
+    "Method": "GetMobileConfig",
+    "RelativePath": "api/maintenance/mobile-config",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.MaintenanceController",
+    "Method": "UpsertMobileConfig",
+    "RelativePath": "api/maintenance/mobile-config",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "cfg",
+        "Type": "GuidanceOfficeAPI.Models.MobileConfig",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.MaintenanceController",
+    "Method": "GetThresholds",
+    "RelativePath": "api/maintenance/mood-thresholds",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.MaintenanceController",
+    "Method": "CreateThresholds",
+    "RelativePath": "api/maintenance/mood-thresholds",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "e",
+        "Type": "GuidanceOfficeAPI.Models.MoodThresholds",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.MaintenanceController",
+    "Method": "UpdateThresholds",
+    "RelativePath": "api/maintenance/mood-thresholds/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "e",
+        "Type": "GuidanceOfficeAPI.Models.MoodThresholds",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.MaintenanceController",
+    "Method": "GetPrograms",
+    "RelativePath": "api/maintenance/programs",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.MaintenanceController",
+    "Method": "CreateProgram",
+    "RelativePath": "api/maintenance/programs",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "e",
+        "Type": "GuidanceOfficeAPI.Models.ProgramEntity",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.MaintenanceController",
+    "Method": "UpdateProgram",
+    "RelativePath": "api/maintenance/programs/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "e",
+        "Type": "GuidanceOfficeAPI.Models.ProgramEntity",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.MaintenanceController",
+    "Method": "DeleteProgram",
+    "RelativePath": "api/maintenance/programs/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.MaintenanceController",
+    "Method": "GetQuotes",
+    "RelativePath": "api/maintenance/quotes",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.MaintenanceController",
+    "Method": "CreateQuote",
+    "RelativePath": "api/maintenance/quotes",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "q",
+        "Type": "GuidanceOfficeAPI.Models.Quote",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.MaintenanceController",
+    "Method": "UpdateQuote",
+    "RelativePath": "api/maintenance/quotes/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "q",
+        "Type": "GuidanceOfficeAPI.Models.Quote",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.MaintenanceController",
+    "Method": "DeleteQuote",
+    "RelativePath": "api/maintenance/quotes/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.MaintenanceController",
+    "Method": "GetRefCats",
+    "RelativePath": "api/maintenance/referral-categories",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.MaintenanceController",
+    "Method": "CreateRefCat",
+    "RelativePath": "api/maintenance/referral-categories",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "e",
+        "Type": "GuidanceOfficeAPI.Models.ReferralCategory",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.MaintenanceController",
+    "Method": "UpdateRefCat",
+    "RelativePath": "api/maintenance/referral-categories/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "e",
+        "Type": "GuidanceOfficeAPI.Models.ReferralCategory",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.MaintenanceController",
+    "Method": "DeleteRefCat",
+    "RelativePath": "api/maintenance/referral-categories/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.MaintenanceController",
+    "Method": "GetSections",
+    "RelativePath": "api/maintenance/sections",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.MaintenanceController",
+    "Method": "CreateSection",
+    "RelativePath": "api/maintenance/sections",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "e",
+        "Type": "GuidanceOfficeAPI.Models.SectionEntity",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.MaintenanceController",
+    "Method": "UpdateSection",
+    "RelativePath": "api/maintenance/sections/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "e",
+        "Type": "GuidanceOfficeAPI.Models.SectionEntity",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.MaintenanceController",
+    "Method": "DeleteSection",
+    "RelativePath": "api/maintenance/sections/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.MaintenanceController",
+    "Method": "GetTsDefaults",
+    "RelativePath": "api/maintenance/timeslot-defaults",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.MaintenanceController",
+    "Method": "CreateTsDefaults",
+    "RelativePath": "api/maintenance/timeslot-defaults",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "e",
+        "Type": "GuidanceOfficeAPI.Models.TimeSlotDefaults",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.MaintenanceController",
+    "Method": "UpdateTsDefaults",
+    "RelativePath": "api/maintenance/timeslot-defaults/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "e",
+        "Type": "GuidanceOfficeAPI.Models.TimeSlotDefaults",
         "IsRequired": true
       }
     ],
@@ -1301,108 +2726,129 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "GuidanceOfficeAPI.Controllers.CrudController\u00601[[GuidanceOfficeAPI.Models.MotivationalQuote, GuidanceOfficeAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-    "Method": "GetAll",
-    "RelativePath": "api/MotivationalQuote",
+    "ContainingType": "GuidanceOfficeAPI.Controllers.MoodTrackerController",
+    "Method": "GetAlerts",
+    "RelativePath": "api/MoodTracker/alerts",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[GuidanceOfficeAPI.Models.MotivationalQuote, GuidanceOfficeAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
+    "ReturnTypes": []
   },
   {
-    "ContainingType": "GuidanceOfficeAPI.Controllers.CrudController\u00601[[GuidanceOfficeAPI.Models.MotivationalQuote, GuidanceOfficeAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-    "Method": "Create",
-    "RelativePath": "api/MotivationalQuote",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "item",
-        "Type": "GuidanceOfficeAPI.Models.MotivationalQuote",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "GuidanceOfficeAPI.Models.MotivationalQuote",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "GuidanceOfficeAPI.Controllers.CrudController\u00601[[GuidanceOfficeAPI.Models.MotivationalQuote, GuidanceOfficeAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-    "Method": "Get",
-    "RelativePath": "api/MotivationalQuote/{id}",
+    "ContainingType": "GuidanceOfficeAPI.Controllers.MoodTrackerController",
+    "Method": "CheckCooldown",
+    "RelativePath": "api/MoodTracker/cooldown/{studentId}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "id",
+        "Name": "studentId",
         "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "GuidanceOfficeAPI.Models.MotivationalQuote",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "GuidanceOfficeAPI.Controllers.CrudController\u00601[[GuidanceOfficeAPI.Models.MotivationalQuote, GuidanceOfficeAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-    "Method": "Update",
-    "RelativePath": "api/MotivationalQuote/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      },
-      {
-        "Name": "item",
-        "Type": "GuidanceOfficeAPI.Models.MotivationalQuote",
         "IsRequired": true
       }
     ],
     "ReturnTypes": []
   },
   {
-    "ContainingType": "GuidanceOfficeAPI.Controllers.CrudController\u00601[[GuidanceOfficeAPI.Models.MotivationalQuote, GuidanceOfficeAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-    "Method": "Delete",
-    "RelativePath": "api/MotivationalQuote/{id}",
-    "HttpMethod": "DELETE",
+    "ContainingType": "GuidanceOfficeAPI.Controllers.MoodTrackerController",
+    "Method": "GetDailyTrends",
+    "RelativePath": "api/MoodTracker/daily-trends",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.MoodTrackerController",
+    "Method": "GetMoodDistribution",
+    "RelativePath": "api/MoodTracker/distribution",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.MoodTrackerController",
+    "Method": "GetMonthlyReports",
+    "RelativePath": "api/MoodTracker/monthly-reports",
+    "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "id",
+        "Name": "month",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "year",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.ReferralController",
+    "Method": "GetReferralById",
+    "RelativePath": "api/referral/{referralId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "referralId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.ReferralController",
+    "Method": "UpdateFeedback",
+    "RelativePath": "api/referral/{referralId}/feedback",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "referralId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "GuidanceOfficeAPI.Dtos.ReferralFeedbackDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.ReferralController",
+    "Method": "GetLatestPerStudent",
+    "RelativePath": "api/referral/latest-per-student",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.ReferralController",
+    "Method": "GetAllReferralsForStudent",
+    "RelativePath": "api/referral/student/{studentId}/all",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "studentId",
         "Type": "System.Int32",
         "IsRequired": true
       }
@@ -1551,55 +2997,187 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "GuidanceOfficeAPI.Controllers.CrudController\u00601[[GuidanceOfficeAPI.Models.Student, GuidanceOfficeAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-    "Method": "GetAll",
-    "RelativePath": "api/Student",
+    "ContainingType": "GuidanceOfficeAPI.Controllers.ReportsController",
+    "Method": "Appointments",
+    "RelativePath": "api/reports/appointments",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "from",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "to",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.ReportsController",
+    "Method": "Consultations",
+    "RelativePath": "api/reports/consultations",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "from",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "to",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.ReportsController",
+    "Method": "Endorsements",
+    "RelativePath": "api/reports/endorsements",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "from",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "to",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.ReportsController",
+    "Method": "FormsCompletion",
+    "RelativePath": "api/reports/forms-completion",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "from",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "to",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.ReportsController",
+    "Method": "GuidancePasses",
+    "RelativePath": "api/reports/guidancepasses",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "from",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "to",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.ReportsController",
+    "Method": "Notes",
+    "RelativePath": "api/reports/notes",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "from",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "to",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.ReportsController",
+    "Method": "Referrals",
+    "RelativePath": "api/reports/referrals",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "from",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "to",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.ReportsController",
+    "Method": "TimeSlots",
+    "RelativePath": "api/reports/timeslots",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "from",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "to",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.StudentAuthController",
+    "Method": "GetAllStudents",
+    "RelativePath": "api/student",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[GuidanceOfficeAPI.Models.Student, GuidanceOfficeAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
+    "ReturnTypes": []
   },
   {
-    "ContainingType": "GuidanceOfficeAPI.Controllers.CrudController\u00601[[GuidanceOfficeAPI.Models.Student, GuidanceOfficeAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-    "Method": "Create",
-    "RelativePath": "api/Student",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "item",
-        "Type": "GuidanceOfficeAPI.Models.Student",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "GuidanceOfficeAPI.Models.Student",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "GuidanceOfficeAPI.Controllers.CrudController\u00601[[GuidanceOfficeAPI.Models.Student, GuidanceOfficeAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-    "Method": "Get",
-    "RelativePath": "api/Student/{id}",
+    "ContainingType": "GuidanceOfficeAPI.Controllers.StudentAuthController",
+    "Method": "GetStudentById",
+    "RelativePath": "api/student/{id}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -1607,47 +3185,112 @@
       {
         "Name": "id",
         "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "GuidanceOfficeAPI.Models.Student",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "GuidanceOfficeAPI.Controllers.CrudController\u00601[[GuidanceOfficeAPI.Models.Student, GuidanceOfficeAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-    "Method": "Update",
-    "RelativePath": "api/Student/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      },
-      {
-        "Name": "item",
-        "Type": "GuidanceOfficeAPI.Models.Student",
         "IsRequired": true
       }
     ],
     "ReturnTypes": []
   },
   {
-    "ContainingType": "GuidanceOfficeAPI.Controllers.CrudController\u00601[[GuidanceOfficeAPI.Models.Student, GuidanceOfficeAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-    "Method": "Delete",
-    "RelativePath": "api/Student/{id}",
+    "ContainingType": "GuidanceOfficeAPI.Controllers.StudentAuthController",
+    "Method": "DeleteStudent",
+    "RelativePath": "api/student/{id}",
     "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.StudentAuthController",
+    "Method": "GetCareerForm",
+    "RelativePath": "api/student/{id}/career-form",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.StudentAuthController",
+    "Method": "GetConsentForm",
+    "RelativePath": "api/student/{id}/consent-form",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.StudentAuthController",
+    "Method": "GetExitInterviewForm",
+    "RelativePath": "api/student/{id}/exit-interview-form",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.StudentAuthController",
+    "Method": "GetInventoryForm",
+    "RelativePath": "api/student/{id}/inventory-form",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.StudentAuthController",
+    "Method": "GetMoodHistory",
+    "RelativePath": "api/student/{id}/mood-history",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.StudentAuthController",
+    "Method": "GetPhoto",
+    "RelativePath": "api/student/{id}/photo",
+    "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
@@ -1762,6 +3405,16 @@
         "IsRequired": true
       }
     ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GuidanceOfficeAPI.Controllers.StudentAuthController",
+    "Method": "GetStudentsWithLastMood",
+    "RelativePath": "api/student/students-with-mood",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
     "ReturnTypes": []
   },
   {
