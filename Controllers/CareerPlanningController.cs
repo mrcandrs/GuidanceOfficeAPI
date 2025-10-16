@@ -236,8 +236,12 @@ namespace GuidanceOfficeAPI.Controllers
                 // Heuristic: if ProgramChoiceReason is empty or "Me", assume Yes; otherwise No
                 var didChooseYes = string.IsNullOrWhiteSpace(form.ProgramChoiceReason) ||
                                    string.Equals(form.ProgramChoiceReason.Trim(), "Me", StringComparison.OrdinalIgnoreCase);
-                SetCheckbox(fields, "DidChooseProgram_Yes", didChooseYes);
-                SetCheckbox(fields, "DidChooseProgram_No", !didChooseYes);
+                // Prefer radio group if present
+                if (!SetRadio(fields, "DidChooseProgram", didChooseYes ? "Yes" : "No"))
+                {
+                    SetCheckbox(fields, "DidChooseProgram_Yes", didChooseYes);
+                    SetCheckbox(fields, "DidChooseProgram_No", !didChooseYes);
+                }
 
                 // ---------- Main plan (radio group preferred; checkbox fallback) ----------
                 var mainPlan = NormalizeMainPlan(form.MainPlan); // ContinueSchooling|GetEmployed|ContinueCurrentWork|GoIntoBusiness
@@ -263,7 +267,7 @@ namespace GuidanceOfficeAPI.Controllers
 
                 // Optional footer
                 // AssessedBy = Counselor Name (ephemeral: from auth claims; no DB change)
-                var counselorNameQuery = Request?.Query["assessedBy"].ToString();
+                var counselorNameQuery = Request?.Query.ContainsKey("assessedBy") == true ? Request.Query["assessedBy"].ToString() : null;
                 var counselorName = !string.IsNullOrWhiteSpace(counselorNameQuery)
                     ? counselorNameQuery
                     : (
@@ -272,7 +276,8 @@ namespace GuidanceOfficeAPI.Controllers
                         User?.FindFirst("preferred_username")?.Value ??
                         User?.FindFirst(System.Security.Claims.ClaimTypes.Name)?.Value ??
                         User?.Identity?.Name ??
-                        "Guidance Counselor"
+                        Environment.GetEnvironmentVariable("DEFAULT_COUNSELOR_NAME") ??
+                        ""
                     );
 
                 TrySetText(fields, font, "AssessedBy", counselorName?.Trim());
