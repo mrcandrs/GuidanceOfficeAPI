@@ -349,33 +349,45 @@ namespace GuidanceOfficeAPI.Controllers
         {
             if (string.IsNullOrWhiteSpace(value)) return false;
 
-            // For radio button groups, we need to find the group and set the value
-            // Try different naming patterns that PDF forms might use for radio groups
+            // Log what we're trying to set
+            Console.WriteLine($"Attempting to set radio: Group='{groupName}', Value='{value}'");
 
+            // Try different naming patterns that PDF forms might use for radio groups
             var patterns = new[]
             {
-                groupName,                                    // Direct group name
-                $"{groupName}_{value}",                      // groupName_Yes, groupName_No
-                $"{groupName}.{value}",                      // groupName.Yes, groupName.No
-                $"{groupName}_{value}_1",                    // groupName_Yes_1
-                $"{groupName}_{value}.1",                    // groupName_Yes.1
-                value,                                       // Just the value (Yes, No)
-                $"{groupName}Group",                         // groupNameGroup
-                $"{groupName}Group_{value}"                  // groupNameGroup_Yes
-            };
+        groupName,                                    // Direct group name
+        $"{groupName}_{value}",                      // groupName_Yes, groupName_No
+        $"{groupName}.{value}",                      // groupName.Yes, groupName.No
+        $"{groupName}_{value}_1",                    // groupName_Yes_1
+        $"{groupName}_{value}.1",                    // groupName_Yes.1
+        value,                                       // Just the value (Yes, No)
+        $"{groupName}Group",                         // groupNameGroup
+        $"{groupName}Group_{value}",                 // groupNameGroup_Yes
+        $"{groupName}_{value}Button",                // groupName_YesButton
+        $"{groupName}Button_{value}",                // groupNameButton_Yes
+        $"{groupName}_{value}_Option",               // groupName_Yes_Option
+        $"{groupName}Option_{value}"                 // groupNameOption_Yes
+    };
 
             foreach (var pattern in patterns)
             {
+                Console.WriteLine($"Trying pattern: '{pattern}'");
+
                 if (fields.TryGetValue(pattern, out var field))
                 {
+                    Console.WriteLine($"Found field: '{pattern}'");
+
                     try
                     {
                         // For radio buttons, set the value directly
                         field.SetValue(value);
+                        Console.WriteLine($"Successfully set '{pattern}' to '{value}'");
                         return true;
                     }
-                    catch
+                    catch (Exception ex)
                     {
+                        Console.WriteLine($"Failed to set '{pattern}' to '{value}': {ex.Message}");
+
                         // If direct value setting fails, try setting the field as checked
                         if (field is PdfButtonFormField btn)
                         {
@@ -383,6 +395,8 @@ namespace GuidanceOfficeAPI.Controllers
                             {
                                 // Get the appearance states and set the appropriate one
                                 var states = btn.GetAppearanceStates();
+                                Console.WriteLine($"Appearance states for '{pattern}': [{string.Join(", ", states ?? new string[0])}]");
+
                                 if (states != null && states.Length > 0)
                                 {
                                     // Find a state that matches our value or use the first non-"Off" state
@@ -393,16 +407,25 @@ namespace GuidanceOfficeAPI.Controllers
                                     if (targetState != null)
                                     {
                                         btn.SetValue(targetState);
+                                        Console.WriteLine($"Successfully set '{pattern}' to state '{targetState}'");
                                         return true;
                                     }
                                 }
                             }
-                            catch { }
+                            catch (Exception ex2)
+                            {
+                                Console.WriteLine($"Failed to set appearance state for '{pattern}': {ex2.Message}");
+                            }
                         }
                     }
                 }
+                else
+                {
+                    Console.WriteLine($"Field not found: '{pattern}'");
+                }
             }
 
+            Console.WriteLine($"Failed to set radio: Group='{groupName}', Value='{value}'");
             return false;
         }
 
