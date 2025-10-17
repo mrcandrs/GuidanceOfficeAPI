@@ -13,10 +13,12 @@ using iText.Kernel.Pdf;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GuidanceOfficeAPI.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/[controller]")]
     public class CareerPlanningController : ControllerBase
     {
