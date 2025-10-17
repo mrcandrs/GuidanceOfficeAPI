@@ -86,6 +86,52 @@ namespace GuidanceOfficeAPI.Controllers
             });
         }
 
+        // GET: api/careerplanning/debug/radio-groups/{studentId}
+        [HttpGet("debug/radio-groups/{studentId}")]
+        public async Task<IActionResult> DebugRadioGroups(int studentId)
+        {
+            var form = await _context.CareerPlanningForms.FirstOrDefaultAsync(f => f.StudentId == studentId);
+            if (form == null) return NotFound();
+
+            var templatePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "pdf-templates", "CareerPlanningFormTemplate.pdf");
+            if (!System.IO.File.Exists(templatePath))
+                return NotFound("Template not found");
+
+            using var reader = new PdfReader(templatePath);
+            using var pdfDoc = new PdfDocument(reader);
+            var acro = PdfAcroForm.GetAcroForm(pdfDoc, false);
+            var fields = acro?.GetFormFields();
+
+            // Find all button fields (radio buttons and checkboxes)
+            var buttonFields = fields?.Where(f => f.Value is PdfButtonFormField)
+                                   .Select(f => new {
+                                       Name = f.Key,
+                                       FieldName = f.Value.GetFieldName(),
+                                       FieldType = f.Value.GetFormType().ToString(),
+                                       AppearanceStates = (f.Value as PdfButtonFormField)?.GetAppearanceStates()
+                                   })
+                                   .OrderBy(f => f.Name)
+                                   .ToList();
+
+            var debugInfo = new
+            {
+                StudentId = studentId,
+                FirstChoice = form.FirstChoice,
+                FirstChoiceNormalized = NormalizeYesNo(form.FirstChoice),
+                ProgramChoiceReason = form.ProgramChoiceReason,
+                DidChooseYes = string.IsNullOrWhiteSpace(form.ProgramChoiceReason) ||
+                               string.Equals(form.ProgramChoiceReason.Trim(), "Me", StringComparison.OrdinalIgnoreCase) ||
+                               string.Equals(form.ProgramChoiceReason.Trim(), "Yes", StringComparison.OrdinalIgnoreCase) ||
+                               string.Equals(form.ProgramChoiceReason.Trim(), "Myself", StringComparison.OrdinalIgnoreCase),
+                MainPlan = form.MainPlan,
+                MainPlanNormalized = NormalizeMainPlan(form.MainPlan),
+                ButtonFields = buttonFields,
+                AllFields = fields?.Keys?.OrderBy(k => k).ToArray()
+            };
+
+            return Ok(debugInfo);
+        }
+
         // GET: api/careerplanning/5
         [HttpGet("{studentId}")]
         public async Task<ActionResult<CareerPlanningForm>> GetCareerPlanningForm(int studentId)
@@ -303,50 +349,57 @@ namespace GuidanceOfficeAPI.Controllers
         {
             if (string.IsNullOrWhiteSpace(value)) return false;
 
-            // Try direct group name first
-            if (fields.TryGetValue(groupName, out var field))
-            {
-                try
-                {
-                    field.SetValue(value);
-                    return true;
-                }
-                catch
-                {
-                    // Fallback to individual radio button names
-                }
-            }
+            // For radio button groups, we need to find the group and set the value
+            // Try different naming patterns that PDF forms might use for radio groups
 
-            // Try individual radio button names (groupName_Value)
-            var radioButtonName = $"{groupName}_{value}";
-            if (fields.TryGetValue(radioButtonName, out var radioField))
+            var patterns = new[]
             {
-                try
-                {
-                    radioField.SetValue(value);
-                    return true;
-                }
-                catch { }
-            }
-
-            // Try alternative naming patterns
-            var alternativeNames = new[]
-            {
-                $"{groupName}.{value}",
-                $"{groupName}_{value}_1",
-                $"{groupName}_{value}.1"
+                groupName,                                    // Direct group name
+                $"{groupName}_{value}",                      // groupName_Yes, groupName_No
+                $"{groupName}.{value}",                      // groupName.Yes, groupName.No
+                $"{groupName}_{value}_1",                    // groupName_Yes_1
+                $"{groupName}_{value}.1",                    // groupName_Yes.1
+                value,                                       // Just the value (Yes, No)
+                $"{groupName}Group",                         // groupNameGroup
+                $"{groupName}Group_{value}"                  // groupNameGroup_Yes
             };
 
-            foreach (var altName in alternativeNames)
+            foreach (var pattern in patterns)
             {
-                if (fields.TryGetValue(altName, out var altField))
+                if (fields.TryGetValue(pattern, out var field))
                 {
                     try
                     {
-                        altField.SetValue(value);
+                        // For radio buttons, set the value directly
+                        field.SetValue(value);
                         return true;
                     }
-                    catch { }
+                    catch
+                    {
+                        // If direct value setting fails, try setting the field as checked
+                        if (field is PdfButtonFormField btn)
+                        {
+                            try
+                            {
+                                // Get the appearance states and set the appropriate one
+                                var states = btn.GetAppearanceStates();
+                                if (states != null && states.Length > 0)
+                                {
+                                    // Find a state that matches our value or use the first non-"Off" state
+                                    var targetState = states.FirstOrDefault(s =>
+                                        string.Equals(s, value, StringComparison.OrdinalIgnoreCase))
+                                        ?? states.FirstOrDefault(s => !string.Equals(s, "Off", StringComparison.OrdinalIgnoreCase));
+
+                                    if (targetState != null)
+                                    {
+                                        btn.SetValue(targetState);
+                                        return true;
+                                    }
+                                }
+                            }
+                            catch { }
+                        }
+                    }
                 }
             }
 
