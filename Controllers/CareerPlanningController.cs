@@ -294,7 +294,7 @@ namespace GuidanceOfficeAPI.Controllers
         }
 
         // ===== iText 7 helpers =====
-        private static void TrySetText(IDictionary<string, PdfFormField> fields, PdfFont font, string name, string? value, float size = 11f)
+        private static void TrySetText(IDictionary<string, PdfFormField> fields, PdfFont font, string name, string? value, float size = 8f)
         {
             if (value == null) value = "";
             if (fields.TryGetValue(name, out var f)) { try { f.SetValue(value, font, size); } catch { } }
