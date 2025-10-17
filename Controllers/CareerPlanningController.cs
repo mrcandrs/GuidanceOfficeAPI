@@ -301,21 +301,48 @@ namespace GuidanceOfficeAPI.Controllers
 
                 TrySetText(fields, font, "BusinessNature", form.BusinessNature);
 
-                // Optional footer
-                var counselorNameQuery = Request?.Query.ContainsKey("assessedBy") == true ? Request.Query["assessedBy"].ToString() : null;
-                var counselorName = !string.IsNullOrWhiteSpace(counselorNameQuery)
-                    ? counselorNameQuery
-                    : (
-                        User?.FindFirst("name")?.Value ??
-                        (User?.FindFirst("given_name")?.Value + " " + User?.FindFirst("family_name")?.Value) ??
-                        User?.FindFirst("preferred_username")?.Value ??
-                        User?.FindFirst(System.Security.Claims.ClaimTypes.Name)?.Value ??
-                        User?.Identity?.Name ??
-                        Environment.GetEnvironmentVariable("DEFAULT_COUNSELOR_NAME") ??
-                        ""
-                    );
+                // Optional footer (counselor name)
+                string? resolvedCounselorName = null;
 
-                TrySetText(fields, font, "AssessedBy", counselorName?.Trim());
+                // 1) explicit querystring
+                if (Request?.Query.TryGetValue("assessedBy", out var qv) == true && !string.IsNullOrWhiteSpace(qv))
+                    resolvedCounselorName = qv.ToString();
+
+                // 2) custom header (e.g., from your gateway)
+                if (string.IsNullOrWhiteSpace(resolvedCounselorName))
+                {
+                    var hdr = Request?.Headers["X-User-Name"].FirstOrDefault()
+                           ?? Request?.Headers["X-Authenticated-User"].FirstOrDefault()
+                           ?? Request?.Headers["X-Employee-Name"].FirstOrDefault();
+                    if (!string.IsNullOrWhiteSpace(hdr)) resolvedCounselorName = hdr;
+                }
+
+                // 3) common claim keys
+                if (string.IsNullOrWhiteSpace(resolvedCounselorName))
+                {
+                    var claimName =
+                        User?.FindFirst("name")?.Value
+                        ?? User?.FindFirst("given_name")?.Value + " " + User?.FindFirst("family_name")?.Value
+                        ?? User?.FindFirst("preferred_username")?.Value
+                        ?? User?.FindFirst(System.Security.Claims.ClaimTypes.Name)?.Value
+                        ?? User?.Identity?.Name;
+                    if (!string.IsNullOrWhiteSpace(claimName)) resolvedCounselorName = claimName;
+                }
+
+                // 4) environment fallbacks
+                if (string.IsNullOrWhiteSpace(resolvedCounselorName))
+                {
+                    resolvedCounselorName =
+                        Environment.GetEnvironmentVariable("DEFAULT_COUNSELOR_NAME")
+                        ?? Environment.GetEnvironmentVariable("USERNAME")
+                        ?? Environment.GetEnvironmentVariable("USER");
+                }
+
+                // 5) last-resort
+                if (string.IsNullOrWhiteSpace(resolvedCounselorName))
+                    resolvedCounselorName = "(Counselor)";
+
+                TrySetText(fields, font, "AssessedBy", resolvedCounselorName?.Trim());
                 TrySetText(fields, font, "DateSigned", form.SubmittedAt.ToString("MMMM dd, yyyy"));
 
                 acro.FlattenFields();
