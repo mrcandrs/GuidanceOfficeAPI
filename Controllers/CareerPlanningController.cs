@@ -188,7 +188,7 @@ namespace GuidanceOfficeAPI.Controllers
                 acro.SetGenerateAppearance(true);
                 var font = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
 
-                // ---------- Text ----------
+                // ---------- Text Fields ----------
                 TrySetText(fields, font, "StudentNo", form.StudentNo);
                 TrySetText(fields, font, "FullName", form.FullName);
                 TrySetText(fields, font, "Program", form.Program);
@@ -219,38 +219,29 @@ namespace GuidanceOfficeAPI.Controllers
                 TrySetText(fields, font, "ProgramExpectation", form.ProgramExpectation);
                 TrySetText(fields, font, "EnrollmentReason", form.EnrollmentReason);
                 TrySetText(fields, font, "FutureVision", form.FutureVision);
-                // PDF uses ProgramChoiceReason (not WhoseChoice)
                 TrySetText(fields, font, "ProgramChoiceReason", form.ProgramChoiceReason);
-                // Signature name field at bottom (duplicate name in template)
                 TrySetText(fields, font, "FullName_2", form.FullName);
-                // optional extra texts if your template has these fields
                 TrySetText(fields, font, "EmploymentNature", form.EmploymentNature);
                 TrySetText(fields, font, "CurrentWorkNature", form.CurrentWorkNature);
 
-                // ---------- Radios (Option Buttons with Group name + Reference value) ----------
-                // Template exposes FirstChoice_Yes checkbox instead of a radio group
+                // ---------- Radio Buttons (Option Button Groups) ----------
+                // "Was this your first choice?" - FirstChoice field
                 var firstChoiceYes = string.Equals(NormalizeYesNo(form.FirstChoice), "Yes", StringComparison.OrdinalIgnoreCase);
-                SetCheckbox(fields, "FirstChoice_Yes", firstChoiceYes);
+                SetRadio(fields, "FirstChoice", firstChoiceYes ? "Yes" : "No");
 
-                // "Did you choose this program?" → option buttons DidChooseProgram_Yes / DidChooseProgram_No
-                // Heuristic: if ProgramChoiceReason is empty or "Me", assume Yes; otherwise No
+                // "Did you choose this program?" - ProgramChoiceReason field
+                // Logic: If ProgramChoiceReason is empty, "Me", "Yes", "Myself" → Yes
+                // If it contains other text (like "test", "Parent", "Teacher") → No
                 var didChooseYes = string.IsNullOrWhiteSpace(form.ProgramChoiceReason) ||
-                                   string.Equals(form.ProgramChoiceReason.Trim(), "Me", StringComparison.OrdinalIgnoreCase);
-                // Prefer radio group if present
-                if (!SetRadio(fields, "DidChooseProgram", didChooseYes ? "Yes" : "No"))
-                {
-                    SetOptionAcrossVariants(fields, "DidChooseProgram_Yes", didChooseYes);
-                    SetOptionAcrossVariants(fields, "DidChooseProgram_No", !didChooseYes);
-                }
+                                   string.Equals(form.ProgramChoiceReason.Trim(), "Me", StringComparison.OrdinalIgnoreCase) ||
+                                   string.Equals(form.ProgramChoiceReason.Trim(), "Yes", StringComparison.OrdinalIgnoreCase) ||
+                                   string.Equals(form.ProgramChoiceReason.Trim(), "Myself", StringComparison.OrdinalIgnoreCase);
 
-                // ---------- Main plan (radio group preferred; checkbox fallback) ----------
-                var mainPlan = NormalizeMainPlan(form.MainPlan); // ContinueSchooling|GetEmployed|ContinueCurrentWork|GoIntoBusiness
-                // Try to tick the appropriate single-choice checkbox if they exist in the template
-                var allMainPlans = new[] { "ContinueSchooling", "GetEmployed", "ContinueCurrentWork", "GoIntoBusiness" };
-                foreach (var mp in allMainPlans)
-                {
-                    SetOptionAcrossVariants(fields, mp, string.Equals(mp, mainPlan, StringComparison.OrdinalIgnoreCase));
-                }
+                SetRadio(fields, "DidChooseProgram", didChooseYes ? "Yes" : "No");
+
+                // ---------- Main plan (radio group) ----------
+                var mainPlan = NormalizeMainPlan(form.MainPlan);
+                SetRadio(fields, "MainPlan", mainPlan);
 
                 // ---------- Sub-options (independent checkboxes + texts) ----------
                 SetCheckbox(fields, "AnotherCourse", form.AnotherCourse);
@@ -267,10 +258,7 @@ namespace GuidanceOfficeAPI.Controllers
 
                 TrySetText(fields, font, "BusinessNature", form.BusinessNature);
 
-
-
                 // Optional footer
-                // AssessedBy = Counselor Name (ephemeral: from auth claims; no DB change)
                 var counselorNameQuery = Request?.Query.ContainsKey("assessedBy") == true ? Request.Query["assessedBy"].ToString() : null;
                 var counselorName = !string.IsNullOrWhiteSpace(counselorNameQuery)
                     ? counselorNameQuery
@@ -313,18 +301,56 @@ namespace GuidanceOfficeAPI.Controllers
 
         private static bool SetRadio(IDictionary<string, PdfFormField> fields, string groupName, string? value)
         {
-            if (string.IsNullOrWhiteSpace(value)) value = "";
-            if (!fields.TryGetValue(groupName, out var field)) return false;
-            try { field.SetValue(value); return true; } catch { return false; }
-        }
+            if (string.IsNullOrWhiteSpace(value)) return false;
 
-        private static void SetSingleChoiceCheckboxes(IDictionary<string, PdfFormField> fields, string a, string b, string c, string d, string? selected)
-        {
-            var choices = new[] { a, b, c, d };
-            foreach (var name in choices)
+            // Try direct group name first
+            if (fields.TryGetValue(groupName, out var field))
             {
-                SetCheckbox(fields, name, string.Equals(name, selected, StringComparison.OrdinalIgnoreCase));
+                try
+                {
+                    field.SetValue(value);
+                    return true;
+                }
+                catch
+                {
+                    // Fallback to individual radio button names
+                }
             }
+
+            // Try individual radio button names (groupName_Value)
+            var radioButtonName = $"{groupName}_{value}";
+            if (fields.TryGetValue(radioButtonName, out var radioField))
+            {
+                try
+                {
+                    radioField.SetValue(value);
+                    return true;
+                }
+                catch { }
+            }
+
+            // Try alternative naming patterns
+            var alternativeNames = new[]
+            {
+                $"{groupName}.{value}",
+                $"{groupName}_{value}_1",
+                $"{groupName}_{value}.1"
+            };
+
+            foreach (var altName in alternativeNames)
+            {
+                if (fields.TryGetValue(altName, out var altField))
+                {
+                    try
+                    {
+                        altField.SetValue(value);
+                        return true;
+                    }
+                    catch { }
+                }
+            }
+
+            return false;
         }
 
         private static string NormalizeYesNo(string? v)
@@ -347,17 +373,5 @@ namespace GuidanceOfficeAPI.Controllers
             if (s.Equals("gointobusiness", StringComparison.OrdinalIgnoreCase)) return "GoIntoBusiness";
             return v;
         }
-
-        // Robustly set an option that may be duplicated as name, name.1, name.2, ...
-        private static void SetOptionAcrossVariants(IDictionary<string, PdfFormField> fields, string baseName, bool on)
-        {
-            var candidates = new List<string> { baseName };
-            for (int i = 1; i <= 6; i++) candidates.Add(baseName + "." + i);
-            foreach (var candidate in candidates)
-            {
-                SetCheckbox(fields, candidate, on);
-            }
-        }
     }
-
 }
