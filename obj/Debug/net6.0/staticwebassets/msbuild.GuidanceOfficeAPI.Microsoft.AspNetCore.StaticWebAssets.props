@@ -12,9 +12,9 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>4f4vam34lr</Fingerprint>
-      <Integrity>ILqXgAxeqydAKVk3Ilt/GNg1cmb/pj71iHIvmnI+jgU=</Integrity>
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Fingerprint>d3wiyp9grs</Fingerprint>
+      <Integrity>B5f6NF+Jxoi3jxxzG4qJ5pe03kCX7liCM+um9njG5W4=</Integrity>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\pdf-templates\CareerPlanningFormTemplate.pdf'))</OriginalItemSpec>
     </StaticWebAsset>

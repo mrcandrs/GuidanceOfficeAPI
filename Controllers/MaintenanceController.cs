@@ -145,6 +145,19 @@ namespace GuidanceOfficeAPI.Controllers
         [HttpDelete("quotes/{id:int}")]
         public async Task<IActionResult> DeleteQuote(int id) { var q = await _ctx.Quotes.FindAsync(id); if (q == null) return NotFound(); _ctx.Quotes.Remove(q); await _ctx.SaveChangesAsync(); return Ok(); }
 
+        // Year Levels
+        [HttpGet("year-levels")]
+        public async Task<IActionResult> GetYearLevels() => Ok(await _ctx.YearLevels.OrderBy(x => x.Value).ToListAsync());
+
+        [HttpPost("year-levels")]
+        public async Task<IActionResult> CreateYearLevel([FromBody] YearLevel e) { _ctx.YearLevels.Add(e); await _ctx.SaveChangesAsync(); return Ok(e); }
+
+        [HttpPut("year-levels/{id:int}")]
+        public async Task<IActionResult> UpdateYearLevel(int id, [FromBody] YearLevel e) { e.Id = id; _ctx.Entry(e).State = EntityState.Modified; await _ctx.SaveChangesAsync(); return Ok(e); }
+
+        [HttpDelete("year-levels/{id:int}")]
+        public async Task<IActionResult> DeleteYearLevel(int id) { var e = await _ctx.YearLevels.FindAsync(id); if (e == null) return NotFound(); _ctx.YearLevels.Remove(e); await _ctx.SaveChangesAsync(); return Ok(); }
+
         // Dictionary items CRUD (optional UI)
         [HttpGet("dictionary-items")]
         public async Task<IActionResult> GetDictionaryItems() => Ok(await _ctx.DictionaryItems.OrderBy(d => d.Group).ThenBy(d => d.Value).ToListAsync());

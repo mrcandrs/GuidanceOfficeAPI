@@ -1,16 +1,16 @@
 ﻿<Project>
   <ItemGroup>
-    <StaticWebAssetEndpoint Include="_content/GuidanceOfficeAPI/pdf-templates/CareerPlanningFormTemplate.4f4vam34lr.pdf">
+    <StaticWebAssetEndpoint Include="_content/GuidanceOfficeAPI/pdf-templates/CareerPlanningFormTemplate.d3wiyp9grs.pdf">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\pdf-templates\CareerPlanningFormTemplate.pdf'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
-      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"4f4vam34lr"},{"Name":"integrity","Value":"sha256-ILqXgAxeqydAKVk3Ilt/GNg1cmb/pj71iHIvmnI\u002BjgU="},{"Name":"label","Value":"_content/GuidanceOfficeAPI/pdf-templates/CareerPlanningFormTemplate.pdf"}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"215927"},{"Name":"Content-Type","Value":"application/pdf"},{"Name":"ETag","Value":"\u0022ILqXgAxeqydAKVk3Ilt/GNg1cmb/pj71iHIvmnI\u002BjgU=\u0022"},{"Name":"Last-Modified","Value":"Thu, 16 Oct 2025 18:21:05 GMT"}]]]></ResponseHeaders>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"d3wiyp9grs"},{"Name":"integrity","Value":"sha256-B5f6NF\u002BJxoi3jxxzG4qJ5pe03kCX7liCM\u002Bum9njG5W4="},{"Name":"label","Value":"_content/GuidanceOfficeAPI/pdf-templates/CareerPlanningFormTemplate.pdf"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"223836"},{"Name":"Content-Type","Value":"application/pdf"},{"Name":"ETag","Value":"\u0022B5f6NF\u002BJxoi3jxxzG4qJ5pe03kCX7liCM\u002Bum9njG5W4=\u0022"},{"Name":"Last-Modified","Value":"Fri, 17 Oct 2025 18:55:14 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/GuidanceOfficeAPI/pdf-templates/CareerPlanningFormTemplate.pdf">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\pdf-templates\CareerPlanningFormTemplate.pdf'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
-      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-ILqXgAxeqydAKVk3Ilt/GNg1cmb/pj71iHIvmnI\u002BjgU="}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"215927"},{"Name":"Content-Type","Value":"application/pdf"},{"Name":"ETag","Value":"\u0022ILqXgAxeqydAKVk3Ilt/GNg1cmb/pj71iHIvmnI\u002BjgU=\u0022"},{"Name":"Last-Modified","Value":"Thu, 16 Oct 2025 18:21:05 GMT"}]]]></ResponseHeaders>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-B5f6NF\u002BJxoi3jxxzG4qJ5pe03kCX7liCM\u002Bum9njG5W4="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"223836"},{"Name":"Content-Type","Value":"application/pdf"},{"Name":"ETag","Value":"\u0022B5f6NF\u002BJxoi3jxxzG4qJ5pe03kCX7liCM\u002Bum9njG5W4=\u0022"},{"Name":"Last-Modified","Value":"Fri, 17 Oct 2025 18:55:14 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/GuidanceOfficeAPI/pdf-templates/ConsentFormTemplate.95knogoi04.pdf">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\pdf-templates\ConsentFormTemplate.pdf'))</AssetFile>

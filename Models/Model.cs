@@ -749,4 +749,13 @@ namespace GuidanceOfficeAPI.Models
         // Navigation property
         public virtual Counselor Counselor { get; set; }
     }
+
+    public class YearLevel
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = string.Empty; // "1st Year", "2nd Year", etc.
+        public string Value { get; set; } = string.Empty; // "1", "2", "3", "4"
+        public string Description { get; set; } = string.Empty;
+        public bool IsActive { get; set; } = true;
+    }
 }

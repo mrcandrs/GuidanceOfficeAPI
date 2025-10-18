@@ -81,3 +81,4 @@ C:\Users\Windows 10\source\repos\GuidanceOfficeAPI\obj\Debug\net6.0\refint\Guida
 C:\Users\Windows 10\source\repos\GuidanceOfficeAPI\obj\Debug\net6.0\GuidanceOfficeAPI.pdb
 C:\Users\Windows 10\source\repos\GuidanceOfficeAPI\obj\Debug\net6.0\GuidanceOfficeAPI.genruntimeconfig.cache
 C:\Users\Windows 10\source\repos\GuidanceOfficeAPI\obj\Debug\net6.0\ref\GuidanceOfficeAPI.dll
+C:\Users\Windows 10\source\repos\GuidanceOfficeAPI\bin\Debug\net6.0\wwwroot\pdf-templates\CareerPlanningFormTemplate.pdf

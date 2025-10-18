@@ -155,6 +155,7 @@
         public DbSet<DictionaryItem> DictionaryItems { get; set; }
         public DbSet<ActivityLog> ActivityLogs { get; set; }
         public DbSet<CounselorSession> CounselorSessions { get; set; }
+        public DbSet<YearLevel> YearLevels { get; set; }
     }
 
 }
